@@ -48,18 +48,33 @@ public class FormController
         
         ComponentEntity label = new ComponentEntity();
         
-        label.setComponentName("label");
-        label.setComponentType("edit");
+        label.setName("yj");
+        label.setType("label");
+        label.setRenderType(Constants.RENDER_TYPE_HTML);
+        label.setEditable(false);
         
         ComponentEntity text = new ComponentEntity();
         
-        text.setComponentName("text");
-        text.setComponentType("edit");
+        text.setName("bz");
+        text.setType("text");
+        text.setRenderType(Constants.RENDER_TYPE_DYNAMIC);
+        text.setEditable(true);
+        
+        ComponentEntity select = new ComponentEntity();
+        
+        select.setName("lx");
+        select.setType("select");
+        select.setRenderType(Constants.RENDER_TYPE_STATICFILE);
+        select.setEditable(true);
         
         components.add(text);
         components.add(label);
+        components.add(select);
         
         request.setAttribute("components", components);
+        request.setAttribute("formId", 100001);
+        request.setAttribute("formVersion", 1);
+        request.setAttribute("formName", "testForm");
         
         return new ModelAndView("template/edit");
     }
@@ -80,20 +95,32 @@ public class FormController
         return new ModelAndView("template/list");
     }
     
-    @RequestMapping("component/page")
+    @RequestMapping("component/staticPage")
     public ModelAndView componentPage(HttpServletRequest request, HttpServletResponse response)
     {
         
-        String componentName = request.getParameter("componentName");
-        String componentType = request.getParameter("componentType");
+        String formId = request.getParameter("formId");
+        String componentName = request.getParameter("name");
+        String componentType = request.getParameter("type");
+        String displayMode = request.getParameter("displayMode");
         
         Map<String, Object> param = new HashMap<>();
         
         param.put("name", "abc");
         param.put("value", "试试看");
         
-        return new ModelAndView("component/" + componentName + "/" + componentName + "_" + componentType,
+        System.out.println(formId);
+        
+        return new ModelAndView("component/" + componentType + "/" + componentType + "_" + displayMode,
                 param);
+    }
+    
+    @RequestMapping("getData")
+    public void getData(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        response.setContentType("text/json;charset=UTF-8");
+        response.getWriter().print("{\"bz\":\"备注\"}");
     }
     
     @RequestMapping("release")
