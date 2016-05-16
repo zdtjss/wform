@@ -7,7 +7,7 @@ public class ComponentEntity
     /**
      * 中文解释
      */
-    private String title;
+    private String display;
     
     /**
      * 用做页面元素 id 或 name
@@ -16,6 +16,9 @@ public class ComponentEntity
     
     private String formId;
     
+    /**
+     * 组件子数据表名字
+     */
     private String tableName;
     
     /**
@@ -46,14 +49,14 @@ public class ComponentEntity
         this.id = id;
     }
     
-    public String getTitle()
+    public String getDisplay()
     {
-        return title;
+        return display;
     }
     
-    public void setTitle(String title)
+    public void setDisplay(String display)
     {
-        this.title = title;
+        this.display = display;
     }
     
     public String getName()

@@ -6,7 +6,7 @@
  */
 function init_text_js(formData, componentName) {
 	console.log(formData[componentName] + "  页面js");
-	$("#l_"+componentName).text("后初始化js");
+	$("#l_"+componentName).text("后初始化 js 赋值");
 }
 
 function init_text_file(formId, componentName) {

@@ -17,17 +17,23 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.nway.wform.entity.ComponentEntity;
+import com.nway.wform.entity.FormEntity;
+import com.nway.wform.service.FormService;
 
 @Controller
 @RequestMapping("form")
 public class FormController
 {
     private final Logger log = LoggerFactory.getLogger(FormController.class);
+    
+    @Autowired
+    private FormService formService;
     
     @RequestMapping("create")
     public ModelAndView create(HttpServletRequest request, HttpServletResponse response)
@@ -44,32 +50,9 @@ public class FormController
     {
         String formId = request.getParameter("formId");
         
-        List<ComponentEntity> components = new ArrayList<>();
+        FormEntity form = formService.queryForm(1001, 1);
         
-        ComponentEntity label = new ComponentEntity();
-        
-        label.setName("yj");
-        label.setType("label");
-        label.setRenderType(Constants.RENDER_TYPE_HTML);
-        label.setEditable(false);
-        
-        ComponentEntity text = new ComponentEntity();
-        
-        text.setName("bz");
-        text.setType("text");
-        text.setRenderType(Constants.RENDER_TYPE_DYNAMIC);
-        text.setEditable(true);
-        
-        ComponentEntity select = new ComponentEntity();
-        
-        select.setName("lx");
-        select.setType("select");
-        select.setRenderType(Constants.RENDER_TYPE_STATICFILE);
-        select.setEditable(true);
-        
-        components.add(text);
-        components.add(label);
-        components.add(select);
+        List<ComponentEntity> components = form.getComponents();
         
         request.setAttribute("components", components);
         request.setAttribute("formId", 100001);

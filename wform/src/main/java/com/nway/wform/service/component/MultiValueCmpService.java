@@ -1,21 +1,38 @@
 package com.nway.wform.service.component;
 
 import com.nway.wform.entity.ComponentEntity;
+import com.nway.wform.entity.SQL;
 
 public class MultiValueCmpService extends AbstractCmpService
 {
-    /**
-     * 返回本组件在这个表单中对应的sql查询语句,最终组合为
-     * select * from 表单主数据表 m left join (组件sql1) cmp1.getName() on m.cmp1.getName() = cmp1.getName().cmp1.getName() left join (组件sql2) cmp2.getName() on m.cmp2.getName() = cmp2.getName().cmp2.getName()
-     * 
-     */
-    public String buildQuerySql(ComponentEntity cmp)
+    @Override
+    public SQL buildQuerySql(ComponentEntity cmp)
     {
         String fieldName = cmp.getName();
-        String tableName = cmp.getTableName() == null ? cmp.getFormId() + "_" + cmp.getId()
-                : cmp.getTableName();
+        String tableName = getTableName(cmp);
         
-        return "select " + fieldName + "_key, " + fieldName + "_value from " + tableName + " where id = "
-                + fieldName;
+        SQL querySql = new SQL();
+        
+        String tableAlias = "ta_" + tableName;
+        
+        querySql.setColumnes(tableAlias + "." + fieldName + " " + tableName + "_value");
+        querySql.setWithTable(" left join " + tableName + " "+tableAlias + " on m." + cmp.getName()
+                + " = " + tableAlias + "." + cmp.getName());
+        
+        return querySql;
+    }
+    
+    @Override
+    public String buildResultMap(ComponentEntity cmp)
+    {
+        StringBuilder resultMap = new StringBuilder();
+        
+        resultMap.append("<collection property=\"")
+            .append(cmp.getName())
+            .append("\" javaType=\"java.util.ArrayList\" ofType=\"java.lang.Object\" columnPrefix=\"").append(getTableName(cmp))
+            .append("\"><result column=\"").append("_value\" />")
+            .append("</collection>");
+        
+        return resultMap.toString();
     }
 }
