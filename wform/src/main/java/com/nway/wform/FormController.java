@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,29 +24,28 @@ import org.springframework.web.servlet.ModelAndView;
 import com.nway.wform.entity.ComponentEntity;
 import com.nway.wform.entity.FormEntity;
 import com.nway.wform.service.FormService;
+import com.nway.wform.web.BaseServlet;
 
 @Controller
 @RequestMapping("form")
-public class FormController
+public class FormController extends BaseServlet
 {
     private final Logger log = LoggerFactory.getLogger(FormController.class);
     
     @Autowired
     private FormService formService;
     
-    @RequestMapping("create")
-    public ModelAndView create(HttpServletRequest request, HttpServletResponse response)
-    {
+	public void create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
         String formId = request.getParameter("formId");
         
         request.setAttribute("components", Collections.singletonList("text"));
         
-        return new ModelAndView("template/create");
+		forword("template/create", request, response);
     }
     
-    @RequestMapping("edit")
-    public ModelAndView edit(HttpServletRequest request, HttpServletResponse response)
-    {
+	public void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
         String formId = request.getParameter("formId");
         
         FormEntity form = formService.queryForm(1001, 1);
@@ -59,28 +57,25 @@ public class FormController
         request.setAttribute("formVersion", 1);
         request.setAttribute("formName", "testForm");
         
-        return new ModelAndView("template/edit");
+        forword("template/edit", request, response);
     }
     
-    @RequestMapping("detail")
-    public ModelAndView detail(HttpServletRequest request, HttpServletResponse response)
-    {
+	public void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
         String formId = request.getParameter("formId");
         
-        return new ModelAndView("template/detail");
+        forword("template/detail", request, response);
     }
     
-    @RequestMapping("list")
-    public ModelAndView list(HttpServletRequest request, HttpServletResponse response)
-    {
+	public void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
         String formId = request.getParameter("formId");
         
-        return new ModelAndView("template/list");
+        forword("template/list", request, response);
     }
     
-    @RequestMapping("component/staticPage")
-    public ModelAndView componentPage(HttpServletRequest request, HttpServletResponse response)
-    {
+	public void staticPage(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
         
         String formId = request.getParameter("formId");
         String componentName = request.getParameter("name");
@@ -94,8 +89,7 @@ public class FormController
         
         System.out.println(formId);
         
-        return new ModelAndView("component/" + componentType + "/" + componentType + "_" + displayMode,
-                param);
+        forword("component/" + componentType + "/" + componentType + "_" + displayMode, request, response);
     }
     
     @RequestMapping("getData")
