@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nway.wform.entity.FormMapper">
+
+	<select id="selectForm" resultMap="formMap">
+		SELECT f.id form_id,f.version
+		form_version,f.name form_name,f.title form_title,fc.id cmp_id,fc.name
+		cmp_name,fc.render_type cmp_render_type,fc.`type` cmp_type,fc.display
+		cmp_display,fc.table_name cmp_table_name,fce.is_editable
+		cmp_is_editable
+		FROM t_form f
+		LEFT JOIN t_form_cmp fc ON f.id =
+		fc.form_id
+		LEFT JOIN t_form_cmp_edit fce ON fce.cmp_id = fc.id
+		WHERE
+		f.id = #{formId} and version = #{version}
+	</select>
+
+	<resultMap id="formMap" type="com.nway.wform.entity.FormEntity">
+		<id property="id" column="form_id" />
+		<result property="name" column="form_name" />
+		<result property="title" column="form_title" />
+		<result property="tableName" column="form_table_Name" />
+		<collection property="components"
+			ofType="com.nway.wform.entity.ComponentEntity">
+			<id property="id" column="cmp_id" />
+			<result property="display" column="cmp_display" />
+			<result property="name" column="cmp_name" />
+			<result property="formId" column="form_id" />
+			<result property="tableName" column="cmp_table_Name" />
+			<result property="type" column="cmp_type" />
+			<result property="renderType" column="cmp_render_type" />
+			<result property="isEditable" column="cmp_is_editable" />
+		</collection>
+	</resultMap>
+
+</mapper>
