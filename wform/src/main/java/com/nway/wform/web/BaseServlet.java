@@ -105,7 +105,7 @@ public abstract class BaseServlet extends HttpServlet {
 	protected void forword(String path, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		request.getRequestDispatcher(path).forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/" + path + ".jsp").forward(request, response);
 	}
 
 	/**

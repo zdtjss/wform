@@ -17,13 +17,13 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import com.nway.wform.jdbc.transaction.SqlSessionManager;
 
-public class SqlSessionTemplate implements SqlSession
+public class MybatisExecutor implements SqlSession
 {
     private final SqlSessionFactory sqlSessionFactory;
     
     private final SqlSession sqlSessionProxy;
     
-    public SqlSessionTemplate(SqlSessionFactory sqlSessionFactory)
+    public MybatisExecutor(SqlSessionFactory sqlSessionFactory)
     {
         this.sqlSessionFactory = sqlSessionFactory;
         this.sqlSessionProxy = (SqlSession) Proxy.newProxyInstance(SqlSessionFactory.class.getClassLoader(),

@@ -3,13 +3,12 @@ package com.nway.wform.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nway.wform.entity.ComponentEntity;
 import com.nway.wform.entity.FormEntity;
+import com.nway.wform.jdbc.MybatisExecutor;
+import com.nway.wform.jdbc.MybatisUtils;
 import com.nway.wform.service.component.AbstractCmpService;
 import com.nway.wform.service.component.MultiValueCmpService;
 import com.nway.wform.service.component.SelectCmpService;
@@ -28,8 +27,7 @@ public class FormService
         
     }
     
-    @Autowired
-    private SqlSessionFactory sessionFactory;
+    private MybatisExecutor mybatisExecutor = MybatisUtils.getMybatisExecutor();
     
     public String buildSelectMapper(FormEntity form)
     {
@@ -61,9 +59,6 @@ public class FormService
         param.put("formId", formId);
         param.put("version", version);
         
-        SqlSession session = sessionFactory.openSession();
-        FormEntity form = (FormEntity) session.selectOne("selectForm", param);
-        session.close();
-        return form;
+        return (FormEntity) mybatisExecutor.selectOne("selectForm", param);
     }
 }

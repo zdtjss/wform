@@ -12,7 +12,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
 
-import com.nway.wform.jdbc.SqlSessionTemplate;
+import com.nway.wform.jdbc.MybatisExecutor;
 import com.nway.wform.jdbc.transaction.ManagedTransactionFactory;
 
 public class SqlExecutorTest
@@ -28,7 +28,7 @@ public class SqlExecutorTest
         
         configuration.setEnvironment(new Environment("test", new ManagedTransactionFactory(), configuration.getEnvironment().getDataSource()));
         
-        SqlSessionTemplate sqlSessionTemplate = new SqlSessionTemplate(sqlSessionFactory);
+        MybatisExecutor sqlSessionTemplate = new MybatisExecutor(sqlSessionFactory);
         
         Map<String,Object> param = new HashMap<>();
         

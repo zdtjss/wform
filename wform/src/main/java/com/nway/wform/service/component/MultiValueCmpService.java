@@ -16,8 +16,8 @@ public class MultiValueCmpService extends AbstractCmpService
         String tableAlias = "ta_" + tableName;
         
         querySql.setColumnes(tableAlias + "." + fieldName + " " + tableName + "_value");
-        querySql.setWithTable(" left join " + tableName + " "+tableAlias + " on m." + cmp.getName()
-                + " = " + tableAlias + "." + cmp.getName());
+        querySql.setWithTable(" inner join " + tableName + " " + tableAlias + " on " + tableAlias + "."
+                + cmp.getName() + " in m." + cmp.getName());
         
         return querySql;
     }
@@ -34,5 +34,23 @@ public class MultiValueCmpService extends AbstractCmpService
             .append("</collection>");
         
         return resultMap.toString();
+    }
+    
+    protected String buildInsertSql(ComponentEntity cmp)
+    {
+        StringBuilder insertSql = new StringBuilder();
+        
+        insertSql.append("insert into ").append(getTableName(cmp)).append(" ( id, value) values (#{id}, #{value})");
+        
+        return insertSql.toString();
+    }
+    
+    protected String buildUpdateSql(ComponentEntity cmp)
+    {
+        StringBuilder insertSql = new StringBuilder();
+        
+        insertSql.append("update ").append(getTableName(cmp)).append(" set value = #{value} where id = #{id}");
+        
+        return insertSql.toString();
     }
 }

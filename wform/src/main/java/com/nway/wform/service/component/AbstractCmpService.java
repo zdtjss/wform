@@ -34,6 +34,6 @@ public abstract class AbstractCmpService
     
     protected String getTableName(ComponentEntity cmp)
     {
-        return cmp.getTableName() == null ? "t_"+cmp.getFormId() + "_" + cmp.getId() : cmp.getTableName();
+        return "t_" + cmp.getFormId() + "_" + cmp.getId();
     }
 }

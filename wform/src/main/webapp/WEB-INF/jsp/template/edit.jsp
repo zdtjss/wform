@@ -1,13 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF8"
 	pageEncoding="UTF8"%>
-<%@ page import="com.nway.wform.Constants" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String contextPath = request.getContextPath();
 	application.setAttribute("contextPath", contextPath);
-	request.setAttribute("htmlRender", Constants.RENDER_TYPE_HTML);
-	request.setAttribute("fileRender", Constants.RENDER_TYPE_STATICFILE);
-	request.setAttribute("jsRender", Constants.RENDER_TYPE_DYNAMIC);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -20,15 +16,18 @@
 <script type="text/javascript" src="${contextPath }/js/easyui/jquery.easyui.min.js"></script>
 </head>
 <body bgcolor="antiquewhite">
+	<%-- 遍历组件，布局 --%>
 	<c:forEach var="component" items="${components }" varStatus="status">
+		<%-- 需要静态化的组件 --%>
 		<c:if test="${component.renderType == htmlRender}">
-			<jsp:include page="/form/component/staticPage">
+			<jsp:include page="/form/componentStaticPage.do">
 				<jsp:param name="formId" value="${formId }" />
 				<jsp:param name="name" value="${component.name }" />
 				<jsp:param name="type" value="${component.type }" />
 				<jsp:param name="displayMode" value="${component.editable ? 'edit' : 'detail'}" />
 			</jsp:include>
 		</c:if>
+		<%-- 动态数据组件或静态数据组件 --%>
 		<c:if test="${component.renderType != htmlRender}">
 			<div id="l_${component.name }"></div>
 		</c:if>
@@ -38,6 +37,7 @@
 	<script type="text/javascript">
 		$(function() {
 			(function initPage() {
+				<%-- 静态数据组件初始化 --%>
 				<c:forEach var="component" items="${components }">
 					<c:if test="${component.renderType == fileRender}">
 						<c:out value="init_${component.type}_file('${formId}','${component.name}');" escapeXml="false"></c:out>
@@ -49,6 +49,7 @@
 						dataType: "json",
 						url : "${contextPath}/form/getData?formId=${formId}&version=${formVersion}",
 						success : function(formData) {
+							<%-- 动态数据组件初始化 --%>
 							<c:forEach var="component" items="${components }">
 								<c:if test="${component.renderType == jsRender}">
 									<c:out value="init_${component.type}_js(formData, '${component.name}');" escapeXml="false"></c:out>
@@ -63,7 +64,9 @@
 				console.log("ajax af");
 			}());
 			
+			<%-- 后置 javascript 效果 --%>
 			loadJs("${contextPath }/js/custom/${formName}.js");
+			<%-- 后置 css 效果 --%>
 			loadCss("${contextPath }/css/custom/${formName}.css");
 			
 			function loadJs(url){

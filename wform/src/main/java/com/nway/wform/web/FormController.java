@@ -1,4 +1,4 @@
-package com.nway.wform;
+package com.nway.wform.web;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -6,37 +6,33 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
+import com.nway.wform.Constants;
 import com.nway.wform.entity.ComponentEntity;
 import com.nway.wform.entity.FormEntity;
 import com.nway.wform.service.FormService;
-import com.nway.wform.web.BaseServlet;
 
-@Controller
-@RequestMapping("form")
+@WebServlet(name = "form", urlPatterns = { "/form/*" })
 public class FormController extends BaseServlet
 {
     private final Logger log = LoggerFactory.getLogger(FormController.class);
     
-    @Autowired
-    private FormService formService;
+    private FormService formService = new FormService();
     
-	public void create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+    public void create(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        	
         String formId = request.getParameter("formId");
         
         request.setAttribute("components", Collections.singletonList("text"));
@@ -44,8 +40,10 @@ public class FormController extends BaseServlet
 		forword("template/create", request, response);
     }
     
-	public void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+    public void edit(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        	
         String formId = request.getParameter("formId");
         
         FormEntity form = formService.queryForm(1001, 1);
@@ -56,12 +54,17 @@ public class FormController extends BaseServlet
         request.setAttribute("formId", 100001);
         request.setAttribute("formVersion", 1);
         request.setAttribute("formName", "testForm");
+        request.setAttribute("htmlRender", Constants.RENDER_TYPE_HTML);
+        request.setAttribute("fileRender", Constants.RENDER_TYPE_STATICFILE);
+        request.setAttribute("jsRender", Constants.RENDER_TYPE_DYNAMIC);
         
         forword("template/edit", request, response);
     }
     
-	public void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+    public void detail(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        	
         String formId = request.getParameter("formId");
         
         forword("template/detail", request, response);
@@ -74,7 +77,7 @@ public class FormController extends BaseServlet
         forword("template/list", request, response);
     }
     
-	public void staticPage(HttpServletRequest request, HttpServletResponse response)
+	public void componentStaticPage(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
         
         String formId = request.getParameter("formId");
@@ -82,17 +85,11 @@ public class FormController extends BaseServlet
         String componentType = request.getParameter("type");
         String displayMode = request.getParameter("displayMode");
         
-        Map<String, Object> param = new HashMap<>();
-        
-        param.put("name", "abc");
-        param.put("value", "试试看");
-        
-        System.out.println(formId);
+        request.setAttribute("componentName", componentName);
         
         forword("component/" + componentType + "/" + componentType + "_" + displayMode, request, response);
     }
     
-    @RequestMapping("getData")
     public void getData(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
@@ -100,7 +97,25 @@ public class FormController extends BaseServlet
         response.getWriter().print("{\"bz\":\"备注\"}");
     }
     
-    @RequestMapping("release")
+    public void saveData(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException
+    {
+        FormEntity form = formService.queryForm(1001, 1);
+        
+        List<ComponentEntity> components = form.getComponents();
+        
+        Map<String, String[]> params = request.getParameterMap();
+        
+        StringBuilder mainDataSql = new StringBuilder();
+        
+        
+        
+        for(ComponentEntity comp : components) {
+            
+            String[] value = params.get(comp.getName());
+        }
+    }
+    
     public void release(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
