@@ -45,15 +45,14 @@ public class FormController extends BaseServlet
     {
         	
         String formId = request.getParameter("formId");
+        String requestVersion = request.getParameter("requestVersion");
         
-        FormEntity form = formService.queryForm(1001, 1);
+        FormEntity form = formService.queryForm(Integer.parseInt(formId), Integer.parseInt(requestVersion));
         
         List<ComponentEntity> components = form.getComponents();
         
         request.setAttribute("components", components);
-        request.setAttribute("formId", 100001);
-        request.setAttribute("formVersion", 1);
-        request.setAttribute("formName", "testForm");
+        request.setAttribute("formName", form.getName());
         request.setAttribute("htmlRender", Constants.RENDER_TYPE_HTML);
         request.setAttribute("fileRender", Constants.RENDER_TYPE_STATICFILE);
         request.setAttribute("jsRender", Constants.RENDER_TYPE_DYNAMIC);
@@ -86,21 +85,24 @@ public class FormController extends BaseServlet
         String displayMode = request.getParameter("displayMode");
         
         request.setAttribute("componentName", componentName);
+        request.setAttribute("value", "请填写内容");
         
         forword("component/" + componentType + "/" + componentType + "_" + displayMode, request, response);
     }
     
-    public void getData(HttpServletRequest request, HttpServletResponse response)
+    public Map<String,Object> getData(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        response.setContentType("text/json;charset=UTF-8");
-        response.getWriter().print("{\"bz\":\"备注\"}");
+        return formService.queryFormData(1);
     }
     
     public void saveData(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         FormEntity form = formService.queryForm(1001, 1);
+        
+        String formId = request.getParameter("formId");
+        String requestVersion = request.getParameter("requestVersion");
         
         List<ComponentEntity> components = form.getComponents();
         

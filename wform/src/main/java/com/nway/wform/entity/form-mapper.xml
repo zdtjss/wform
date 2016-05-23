@@ -4,14 +4,24 @@
 <mapper namespace="com.nway.wform.entity.FormMapper">
 
 	<select id="selectForm" resultMap="formMap">
-		SELECT f.id form_id,f.version
-		form_version,f.name form_name,f.title form_title,fc.id cmp_id,fc.name
-		cmp_name,fc.render_type cmp_render_type,fc.`type` cmp_type,fc.display
-		cmp_display,fc.table_name cmp_table_name,fce.is_editable cmp_is_editable
-		FROM t_form f
-		LEFT JOIN t_form_cmp fc ON f.id = fc.form_id
-		LEFT JOIN t_form_cmp_edit fce ON fce.cmp_id = fc.id
-		WHERE f.id = #{formId} and version = #{version}
+		SELECT
+		f.id form_id,
+		f.version form_version,
+		f. NAME form_name,
+		f.title form_title,
+		fc.id cmp_id,
+		fc. NAME cmp_name,
+		fc.render_type cmp_render_type,
+		fc.`type` cmp_type,
+		fc.display cmp_display,
+		fce.is_editable cmp_is_editable
+		FROM
+		t_form f
+		LEFT JOIN t_form_component fc ON f.id = fc.form_id
+		LEFT JOIN t_form_form fce ON fce.cmp_id = fc.id
+		WHERE
+		f.id = #{formId} and version = #{version}
+		order by fce.row ,fce.column
 	</select>
 
 	<resultMap id="formMap" type="com.nway.wform.entity.FormEntity">
@@ -32,4 +42,25 @@
 		</collection>
 	</resultMap>
 
+	<select id="select_firstForm" resultMap="resultMap_firstForm">
+		SELECT
+		ff.id,
+		ff.mc,
+		ff.lx,
+		ff1.VALUE lx_value
+		FROM
+		t_fixed_form ff
+		LEFT JOIN
+		t_fixed_form_10002 ff1 ON ff.lx = ff1.b_id
+		WHERE
+		ff.id = #{id}
+	</select>
+
+	<resultMap id="resultMap_firstForm" type="hashmap">
+		<id property="id" column="id" />
+		<result property="mc" column="mc" />
+		<collection property="lx" javaType="ArrayList" ofType="Object">
+			<result column="lx_value" />
+		</collection>
+	</resultMap>
 </mapper>

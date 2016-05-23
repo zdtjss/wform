@@ -12,6 +12,11 @@
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.css</url-pattern>
 	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.json</url-pattern>
+	</servlet-mapping>
 
 	<resource-ref>
 		<res-ref-name>jdbc/wform</res-ref-name>

@@ -15,9 +15,9 @@ public class MultiValueCmpService extends AbstractCmpService
         
         String tableAlias = "ta_" + tableName;
         
-        querySql.setColumnes(tableAlias + "." + fieldName + " " + tableName + "_value");
-        querySql.setWithTable(" inner join " + tableName + " " + tableAlias + " on " + tableAlias + "."
-                + cmp.getName() + " in m." + cmp.getName());
+        querySql.setColumnes(tableAlias + "." + fieldName + " " + fieldName + "_value");
+        querySql.setWithTable(" inner join " + tableName + " " + tableAlias + " on " + tableAlias + ".b_id"
+                + " in m." + cmp.getName());
         
         return querySql;
     }
@@ -29,27 +29,27 @@ public class MultiValueCmpService extends AbstractCmpService
         
         resultMap.append("<collection property=\"")
             .append(cmp.getName())
-            .append("\" javaType=\"java.util.ArrayList\" ofType=\"java.lang.Object\" columnPrefix=\"").append(getTableName(cmp))
+            .append("\" javaType=\"java.util.ArrayList\" ofType=\"java.lang.Object\" columnPrefix=\"").append(cmp.getName())
             .append("\"><result column=\"").append("_value\" />")
             .append("</collection>");
         
         return resultMap.toString();
     }
     
-    protected String buildInsertSql(ComponentEntity cmp)
+    public String buildInsertSql(ComponentEntity cmp)
     {
         StringBuilder insertSql = new StringBuilder();
         
-        insertSql.append("insert into ").append(getTableName(cmp)).append(" ( id, value) values (#{id}, #{value})");
+        insertSql.append("insert into ").append(getTableName(cmp)).append(" ( id, b_id, value) values (#{id}, #{bid}, #{value})");
         
         return insertSql.toString();
     }
     
-    protected String buildUpdateSql(ComponentEntity cmp)
+    public String buildDeleteSql(ComponentEntity cmp)
     {
         StringBuilder insertSql = new StringBuilder();
         
-        insertSql.append("update ").append(getTableName(cmp)).append(" set value = #{value} where id = #{id}");
+        insertSql.append("delete from ").append(getTableName(cmp)).append(" where b_id = #{bid}");
         
         return insertSql.toString();
     }

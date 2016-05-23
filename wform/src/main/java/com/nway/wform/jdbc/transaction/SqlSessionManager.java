@@ -59,6 +59,8 @@ public abstract class SqlSessionManager
         if (count != null && count == 0)
         {
             TX_SESSION.get().close();
+            TX_SESSION.remove();
+            TX_COUNT.remove();
         }
         else {
             
@@ -69,5 +71,6 @@ public abstract class SqlSessionManager
     public static void rollback() throws SQLException
     {
         TX_SESSION.get().rollback();
+        TX_COUNT.set(0);
     }
 }

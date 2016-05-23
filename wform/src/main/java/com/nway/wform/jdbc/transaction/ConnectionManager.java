@@ -59,6 +59,8 @@ public abstract class ConnectionManager
         if (count != null && count == 0)
         {
             TX_CONN.get().close();
+            TX_CONN.remove();
+            TX_COUNT.remove();
         }
         else {
             
@@ -69,5 +71,6 @@ public abstract class ConnectionManager
     public static void rollback() throws SQLException
     {
         TX_CONN.get().rollback();
+        TX_COUNT.set(0);
     }
 }

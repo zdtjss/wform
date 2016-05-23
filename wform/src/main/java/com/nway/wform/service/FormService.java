@@ -59,6 +59,11 @@ public class FormService
         param.put("formId", formId);
         param.put("version", version);
         
-        return (FormEntity) mybatisExecutor.selectOne("selectForm", param);
+        return mybatisExecutor.selectOne("selectForm", param);
+    }
+    
+    public Map<String,Object> queryFormData(int id)
+    {
+        return mybatisExecutor.selectOne("select_firstForm", id);
     }
 }
