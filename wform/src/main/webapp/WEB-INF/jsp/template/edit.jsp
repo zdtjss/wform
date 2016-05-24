@@ -4,6 +4,9 @@
 <%
 	String contextPath = request.getContextPath();
 	application.setAttribute("contextPath", contextPath);
+	StringBuffer requestURL = request.getRequestURL();
+	String host = requestURL.substring(0, requestURL.indexOf(request.getRequestURI()));
+	pageContext.setAttribute("host", host + contextPath);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -28,8 +31,8 @@
 					<jsp:param name="name" value="${component.name }" />
 					<jsp:param name="type" value="${component.type }" />
 					<jsp:param name="displayMode" value="${component.editable ? 'edit' : 'detail'}" />
-				</jsp:include>  --%>
-				<c:import url="http://localhost:8180/wform/form/componentStaticPage">
+				</jsp:include> --%>
+				<c:import url="${host }/form/componentStaticPage">
 					<c:param name="formId" value="${param.formId }" />
 					<c:param name="name" value="${component.name }" />
 					<c:param name="type" value="${component.type }" />

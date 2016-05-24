@@ -99,23 +99,7 @@ public class FormController extends BaseServlet
     public void saveData(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        FormEntity form = formService.queryForm(1001, 1);
-        
-        String formId = request.getParameter("formId");
-        String requestVersion = request.getParameter("requestVersion");
-        
-        List<ComponentEntity> components = form.getComponents();
-        
-        Map<String, String[]> params = request.getParameterMap();
-        
-        StringBuilder mainDataSql = new StringBuilder();
-        
-        
-        
-        for(ComponentEntity comp : components) {
-            
-            String[] value = params.get(comp.getName());
-        }
+        formService.saveData(request.getParameterMap());
     }
     
     public void release(HttpServletRequest request, HttpServletResponse response)

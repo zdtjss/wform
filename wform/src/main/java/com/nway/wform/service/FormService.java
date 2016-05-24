@@ -1,6 +1,7 @@
 package com.nway.wform.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -65,5 +66,37 @@ public class FormService
     public Map<String,Object> queryFormData(int id)
     {
         return mybatisExecutor.selectOne("select_firstForm", id);
+    }
+    
+    public void saveData(Map<String, String[]> params) {
+        
+        String formId = params.get("formId")[0];
+        String requestVersion =  params.get("requestVersion")[0];
+        
+        FormEntity form = queryForm(Integer.parseInt(formId), Integer.parseInt(requestVersion));
+        
+        List<ComponentEntity> components = form.getComponents();
+        
+        Map<String,Object> mainData = new HashMap<>();
+        
+        int bid = (int) (Math.random() * 1000000);
+        
+        for(ComponentEntity comp : components) {
+            
+            AbstractCmpService cmpService = componentService.get(comp.getType());
+            
+            if(cmpService instanceof MultiValueCmpService) {
+                
+                ((MultiValueCmpService)cmpService).insert(form, comp, params, bid);
+                
+                mainData.put(comp.getName(), bid);
+            }
+            else {
+                
+                mainData.put(comp.getName(), params.get(comp.getName())[0]);
+            }
+        }
+        
+        mybatisExecutor.insert("inseret_" + form.getName(), mainData);
     }
 }

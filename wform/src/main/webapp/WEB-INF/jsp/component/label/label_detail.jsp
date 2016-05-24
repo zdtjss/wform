@@ -4,5 +4,6 @@
 <html>
 <body>
 	${value }
+	<input type="hidden" name="${componentName }" value="${value }">
 </body>
 </html>

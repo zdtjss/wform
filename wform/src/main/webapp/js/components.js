@@ -19,7 +19,7 @@ function setValue_text(data, componentName) {
 
 function init_select_file(staticData, componentName) {
 	console.log("静态数据文件");
-	var html = "<select id=\""+componentName+"\">"
+	var html = "<select id=\""+componentName+"\" name=\""+componentName+"\">"
 	
 	for(var i = 0;i < staticData.length ; i++) {
 		

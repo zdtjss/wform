@@ -59,8 +59,20 @@
 	<resultMap id="resultMap_firstForm" type="hashmap">
 		<id property="id" column="id" />
 		<result property="mc" column="mc" />
+		<result property="my" column="my" />
 		<collection property="lx" javaType="ArrayList" ofType="Object">
 			<result column="lx_value" />
 		</collection>
 	</resultMap>
+	
+	<insert id="insert_firstForm">
+		insert into t_fixed_form (id,mc,lx) values (#{id},#{mc},#{lx})
+	</insert>
+	
+	<insert id="insert_firstForm_lx">
+		insert into t_fixed_form_10002 (id,b_id,value) values 
+		<foreach collection="list" item="item" index="index" separator="," >  
+	        (#{item.id},#{item.bid},#{item.value})  
+	    </foreach>  
+	</insert>
 </mapper>

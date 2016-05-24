@@ -1,10 +1,21 @@
 package com.nway.wform.service.component;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import com.nway.wform.entity.ComponentEntity;
+import com.nway.wform.entity.FormEntity;
 import com.nway.wform.entity.SQL;
+import com.nway.wform.jdbc.MybatisExecutor;
+import com.nway.wform.jdbc.MybatisUtils;
 
 public class MultiValueCmpService extends AbstractCmpService
 {
+    private MybatisExecutor mybatisExecutor = MybatisUtils.getMybatisExecutor();
+    
     @Override
     public SQL buildQuerySql(ComponentEntity cmp)
     {
@@ -52,5 +63,25 @@ public class MultiValueCmpService extends AbstractCmpService
         insertSql.append("delete from ").append(getTableName(cmp)).append(" where b_id = #{bid}");
         
         return insertSql.toString();
+    }
+    
+    public void insert(FormEntity form, ComponentEntity cmp, Map<String, String[]> params, int bid) {
+        
+        String statement = "insert_" + form.getName() + "_" + cmp.getName();
+        
+        List<Map<String,Object>> parameter = new ArrayList<>();
+        
+        for (String value : params.get(cmp.getName()))
+        {
+            Map<String,Object> param = new HashMap<>();
+            
+            param.put("bid", bid);
+            param.put("id", (int) (Math.random() * 1000000));
+            param.put("value", value);
+            
+            parameter.add(param);
+        }
+        
+        mybatisExecutor.insert(statement, parameter);
     }
 }

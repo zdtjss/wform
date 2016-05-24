@@ -12,11 +12,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nway.wform.jdbc.transaction.SqlSessionManager;
 
 
 /**
@@ -144,6 +146,10 @@ public abstract class BaseServlet extends HttpServlet {
 
 		try {
 
+		    SqlSessionFactory sqlSessionFactory = (SqlSessionFactory) request.getServletContext().getAttribute("sqlSessionFactory");
+		    
+		    SqlSessionManager.bindSqlSession(sqlSessionFactory);
+		    
 			Object rs = method.invoke(this, request, response);
 			
 			if (rs != null) {

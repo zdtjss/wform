@@ -17,11 +17,6 @@ public class ComponentEntity
     private String formId;
     
     /**
-     * 组件子数据表名字
-     */
-    private String tableName;
-    
-    /**
      * 组件类别
      */
     private String type;
@@ -38,6 +33,15 @@ public class ComponentEntity
      * 是否可编辑
      */
     private boolean isEditable;
+    
+    /** 行号  **/
+    private int rowNum;
+    
+    /** 列  **/
+    private int columnNum;
+    
+    /** 跨列  **/
+    private int columnSpan;
     
     public int getId()
     {
@@ -79,16 +83,6 @@ public class ComponentEntity
         this.formId = formId;
     }
     
-    public String getTableName()
-    {
-        return tableName;
-    }
-    
-    public void setTableName(String tableName)
-    {
-        this.tableName = tableName;
-    }
-    
     public String getType()
     {
         return type;
@@ -117,6 +111,36 @@ public class ComponentEntity
     public void setEditable(boolean isEditable)
     {
         this.isEditable = isEditable;
+    }
+    
+    public int getRowNum()
+    {
+        return rowNum;
+    }
+    
+    public void setRowNum(int rowNum)
+    {
+        this.rowNum = rowNum;
+    }
+    
+    public int getColumnNum()
+    {
+        return columnNum;
+    }
+    
+    public void setColumnNum(int columnNum)
+    {
+        this.columnNum = columnNum;
+    }
+    
+    public int getColumnSpan()
+    {
+        return columnSpan;
+    }
+    
+    public void setColumnSpan(int columnSpan)
+    {
+        this.columnSpan = columnSpan;
     }
     
 }
