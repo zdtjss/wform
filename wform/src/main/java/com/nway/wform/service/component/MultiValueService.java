@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import com.nway.wform.entity.ComponentEntity;
 import com.nway.wform.entity.FormEntity;
@@ -12,7 +11,7 @@ import com.nway.wform.entity.SQL;
 import com.nway.wform.jdbc.MybatisExecutor;
 import com.nway.wform.jdbc.MybatisUtils;
 
-public class MultiValueCmpService extends AbstractCmpService
+public class MultiValueService extends ComponentService
 {
     private MybatisExecutor mybatisExecutor = MybatisUtils.getMybatisExecutor();
     

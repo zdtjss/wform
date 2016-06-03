@@ -47,7 +47,7 @@ public abstract class SqlSessionManager
         }
     }
     
-    public static void releaseConnection() throws SQLException
+    public static void releaseSqlSession() throws SQLException
     {
         
         Integer count = TX_COUNT.get();

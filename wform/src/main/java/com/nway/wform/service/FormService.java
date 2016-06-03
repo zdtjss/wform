@@ -10,21 +10,21 @@ import com.nway.wform.entity.ComponentEntity;
 import com.nway.wform.entity.FormEntity;
 import com.nway.wform.jdbc.MybatisExecutor;
 import com.nway.wform.jdbc.MybatisUtils;
-import com.nway.wform.service.component.AbstractCmpService;
-import com.nway.wform.service.component.MultiValueCmpService;
-import com.nway.wform.service.component.SelectCmpService;
-import com.nway.wform.service.component.TextCmpService;
+import com.nway.wform.service.component.ComponentService;
+import com.nway.wform.service.component.MultiValueService;
+import com.nway.wform.service.component.SelectService;
+import com.nway.wform.service.component.TextService;
 
 @Service
 public class FormService
 {
-    private static final Map<String, AbstractCmpService> componentService = new HashMap<>();
+    private static final Map<String, ComponentService> componentService = new HashMap<>();
     
     static
     {
-        componentService.put("text", new TextCmpService());
-        componentService.put("select", new SelectCmpService());
-        componentService.put("multiValue", new MultiValueCmpService());
+        componentService.put("text", new TextService());
+        componentService.put("select", new SelectService());
+        componentService.put("multiValue", new MultiValueService());
         
     }
     
@@ -83,11 +83,11 @@ public class FormService
         
         for(ComponentEntity comp : components) {
             
-            AbstractCmpService cmpService = componentService.get(comp.getType());
+            ComponentService cmpService = componentService.get(comp.getType());
             
-            if(cmpService instanceof MultiValueCmpService) {
+            if(cmpService instanceof MultiValueService) {
                 
-                ((MultiValueCmpService)cmpService).insert(form, comp, params, bid);
+                ((MultiValueService)cmpService).insert(form, comp, params, bid);
                 
                 mainData.put(comp.getName(), bid);
             }

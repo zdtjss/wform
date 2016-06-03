@@ -235,7 +235,7 @@ public class MybatisExecutor implements SqlSession
             }
             finally
             {
-                SqlSessionManager.releaseConnection();
+                SqlSessionManager.releaseSqlSession();
             }
         }
     }

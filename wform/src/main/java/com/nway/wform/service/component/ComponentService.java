@@ -3,7 +3,7 @@ package com.nway.wform.service.component;
 import com.nway.wform.entity.ComponentEntity;
 import com.nway.wform.entity.SQL;
 
-public abstract class AbstractCmpService
+public abstract class ComponentService
 {
     public SQL buildQuerySql(ComponentEntity cmp)
     {
