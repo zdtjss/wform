@@ -5,15 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.nway.wform.entity.ComponentEntity;
 import com.nway.wform.entity.FormEntity;
 import com.nway.wform.entity.SQL;
-import com.nway.wform.jdbc.MybatisExecutor;
-import com.nway.wform.jdbc.MybatisUtils;
 
+@Service
 public class MultiValueService extends ComponentService
 {
-    private MybatisExecutor mybatisExecutor = MybatisUtils.getMybatisExecutor();
+    @Autowired
+    private SqlSession sqlSession;
     
     @Override
     public SQL buildQuerySql(ComponentEntity cmp)
@@ -75,12 +79,12 @@ public class MultiValueService extends ComponentService
             Map<String,Object> param = new HashMap<>();
             
             param.put("bid", bid);
-            param.put("id", (int) (Math.random() * 1000000));
+            param.put("id", Math.round((Math.random() * 1000000)));
             param.put("value", value);
             
             parameter.add(param);
         }
         
-        mybatisExecutor.insert(statement, parameter);
+        sqlSession.insert(statement, parameter);
     }
 }

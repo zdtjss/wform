@@ -5,3 +5,7 @@ function init_select_file(formId, componentName) {
 function init_select_js(formData, componentName) {
 	console.log(componentName);
 }
+
+function setValue_label(data, componentName) {
+	
+}

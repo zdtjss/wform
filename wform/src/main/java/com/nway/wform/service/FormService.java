@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nway.wform.SpringContextUtil;
 import com.nway.wform.entity.ComponentEntity;
 import com.nway.wform.entity.FormEntity;
-import com.nway.wform.jdbc.MybatisExecutor;
-import com.nway.wform.jdbc.MybatisUtils;
 import com.nway.wform.service.component.ComponentService;
 import com.nway.wform.service.component.MultiValueService;
 import com.nway.wform.service.component.SelectService;
@@ -25,10 +26,10 @@ public class FormService
         componentService.put("text", new TextService());
         componentService.put("select", new SelectService());
         componentService.put("multiValue", new MultiValueService());
-        
     }
     
-    private MybatisExecutor mybatisExecutor = MybatisUtils.getMybatisExecutor();
+    @Autowired
+    private SqlSession sqlSession;
     
     public String buildSelectMapper(FormEntity form)
     {
@@ -53,19 +54,19 @@ public class FormService
         return selectedColumnes.append(" from t_main ").append(selectedTables).toString()+"\n" +resultMap;
     }
     
-    public FormEntity queryForm(int formId,int version)
+    public FormEntity queryForm(int formId, int version)
     {
         Map<String,Object> param = new HashMap<>();
         
         param.put("formId", formId);
         param.put("version", version);
         
-        return mybatisExecutor.selectOne("selectForm", param);
+        return sqlSession.selectOne("selectForm", param);
     }
     
-    public Map<String,Object> queryFormData(int id)
+    public Map<String,Object> queryFormData(String formName, int id)
     {
-        return mybatisExecutor.selectOne("select_firstForm", id);
+        return sqlSession.selectOne("select_" + formName, id);
     }
     
     public void saveData(Map<String, String[]> params) {
@@ -83,7 +84,7 @@ public class FormService
         
         for(ComponentEntity comp : components) {
             
-            ComponentService cmpService = componentService.get(comp.getType());
+            ComponentService cmpService = SpringContextUtil.getBean(comp.getType()+"Service", ComponentService.class);
             
             if(cmpService instanceof MultiValueService) {
                 
@@ -97,6 +98,6 @@ public class FormService
             }
         }
         
-        mybatisExecutor.insert("inseret_" + form.getName(), mainData);
+        sqlSession.insert("insert_" + form.getName(), mainData);
     }
 }

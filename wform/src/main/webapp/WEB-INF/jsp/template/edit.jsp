@@ -26,18 +26,12 @@
 		<c:forEach var="component" items="${components }" varStatus="status">
 			<%-- 需要静态化的组件 --%>
 			<c:if test="${component.renderType == htmlRender}">
-				<%-- <jsp:include page="/form/componentStaticPage" flush="true">
+				<jsp:include page="/form/component/staticPage" flush="true">
 					<jsp:param name="formId" value="${param.formId }" />
 					<jsp:param name="name" value="${component.name }" />
 					<jsp:param name="type" value="${component.type }" />
 					<jsp:param name="displayMode" value="${component.editable ? 'edit' : 'detail'}" />
-				</jsp:include> --%>
-				<c:import url="${host }/form/componentStaticPage">
-					<c:param name="formId" value="${param.formId }" />
-					<c:param name="name" value="${component.name }" />
-					<c:param name="type" value="${component.type }" />
-					<c:param name="displayMode" value="${component.editable ? 'edit' : 'detail'}" />
-				</c:import>
+				</jsp:include>
 			</c:if>
 			<%-- 动态数据组件或静态数据组件 --%>
 			<c:if test="${component.renderType != htmlRender}">
@@ -70,7 +64,7 @@
 				jQuery.ajax({
 						async : false,
 						dataType: "json",
-						url : "${contextPath}/form/getData?id=1",
+						url : "${contextPath}/form/getData?id=750015",
 						success : function(formData) {
 							<%-- 动态数据组件初始化 --%>
 							<c:forEach var="component" items="${components }">

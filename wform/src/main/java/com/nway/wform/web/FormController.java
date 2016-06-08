@@ -10,26 +10,32 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.nway.wform.Constants;
 import com.nway.wform.entity.ComponentEntity;
 import com.nway.wform.entity.FormEntity;
 import com.nway.wform.service.FormService;
 
-@WebServlet(name = "form", urlPatterns = { "/form/*" })
-public class FormController extends BaseServlet
+@Controller
+@RequestMapping("/form")
+public class FormController
 {
     private final Logger log = LoggerFactory.getLogger(FormController.class);
     
-    private FormService formService = new FormService();
+    @Autowired
+    private FormService formService;
     
-    public void create(HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping("create")
+    public String create(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         	
@@ -37,10 +43,11 @@ public class FormController extends BaseServlet
         
         request.setAttribute("components", Collections.singletonList("text"));
         
-		forword("template/create", request, response);
+		return "template/create";
     }
     
-    public void edit(HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping("edit")
+    public String edit(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         	
@@ -57,26 +64,29 @@ public class FormController extends BaseServlet
         request.setAttribute("fileRender", Constants.RENDER_TYPE_STATICFILE);
         request.setAttribute("jsRender", Constants.RENDER_TYPE_DYNAMIC);
         
-        forword("template/edit", request, response);
+        return "template/edit";
     }
     
-    public void detail(HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping("detail")
+    public String detail(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         	
         String formId = request.getParameter("formId");
         
-        forword("template/detail", request, response);
+       return "template/detail";
     }
     
-	public void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @RequestMapping("list")
+	public String list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
         String formId = request.getParameter("formId");
         
-        forword("template/list", request, response);
+        return "template/list";
     }
     
-	public void componentStaticPage(HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping("component/staticPage")
+	public String componentStaticPage(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
         
         String formId = request.getParameter("formId");
@@ -87,28 +97,32 @@ public class FormController extends BaseServlet
         request.setAttribute("componentName", componentName);
         request.setAttribute("value", "请填写内容");
         
-        forword("component/" + componentType + "/" + componentType + "_" + displayMode, request, response);
+        return "component/" + componentType + "/" + componentType + "_" + displayMode;
     }
     
+    @ResponseBody
+    @RequestMapping("getData")
     public Map<String,Object> getData(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        return formService.queryFormData(1);
+        return formService.queryFormData("firstForm", Integer.parseInt(request.getParameter("id")));
     }
     
+    @RequestMapping("saveData")
     public void saveData(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         formService.saveData(request.getParameterMap());
     }
     
+    @RequestMapping("release")
     public void release(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
         StringBuffer requestUrl = request.getRequestURL();
         String templateName = request.getParameter("templateName");
         
-        String releasePage = requestUrl.delete(requestUrl.length() - 7, requestUrl.length()) + templateName;
+        String releasePage = requestUrl.delete(requestUrl.length() - 7, requestUrl.length()) + templateName +"?formId=1001&requestVersion=1";
         
         log.info(releasePage);
         
