@@ -4,8 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.builder.xml.XMLMapperBuilder;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.NestedIOException;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.nway.wform.SpringContextUtil;
@@ -13,21 +17,10 @@ import com.nway.wform.entity.ComponentEntity;
 import com.nway.wform.entity.FormEntity;
 import com.nway.wform.service.component.ComponentService;
 import com.nway.wform.service.component.MultiValueService;
-import com.nway.wform.service.component.SelectService;
-import com.nway.wform.service.component.TextService;
 
 @Service
 public class FormService
 {
-    private static final Map<String, ComponentService> componentService = new HashMap<>();
-    
-    static
-    {
-        componentService.put("text", new TextService());
-        componentService.put("select", new SelectService());
-        componentService.put("multiValue", new MultiValueService());
-    }
-    
     @Autowired
     private SqlSession sqlSession;
     
@@ -40,12 +33,12 @@ public class FormService
         for (ComponentEntity component : form.getComponents())
         {
             selectedColumnes
-                    .append(componentService.get(component.getType()).buildQuerySql(component).getColumnes())
+                    .append(getComponentService(component.getType() + "Service").buildQuerySql(component).getColumnes())
                     .append(',');
             selectedTables
-                    .append(componentService.get(component.getType()).buildQuerySql(component).getWithTable())
+                    .append(getComponentService(component.getType() + "Service").buildQuerySql(component).getWithTable())
                     .append(' ');
-            resultMap.append(componentService.get(component.getType()).buildResultMap(component));
+            resultMap.append(getComponentService(component.getType() + "Service").buildResultMap(component));
         }
         
         selectedColumnes = selectedColumnes.length() > 7
@@ -84,7 +77,7 @@ public class FormService
         
         for(ComponentEntity comp : components) {
             
-            ComponentService cmpService = SpringContextUtil.getBean(comp.getType()+"Service", ComponentService.class);
+            ComponentService cmpService = getComponentService(comp.getType() + "Service");
             
             if(cmpService instanceof MultiValueService) {
                 
@@ -99,5 +92,27 @@ public class FormService
         }
         
         sqlSession.insert("insert_" + form.getName(), mainData);
+    }
+    
+    private ComponentService getComponentService(String componentServiceName) {
+        
+        return SpringContextUtil.getBean(componentServiceName, ComponentService.class);
+    }
+    
+    private void addMapper(String mapperLocation) throws NestedIOException {
+        
+        Configuration configuration = sqlSession.getConfiguration();
+        ClassPathResource resource = new ClassPathResource(mapperLocation);
+        
+        try
+        {
+            XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(resource.getInputStream(), configuration,
+                    resource.toString(), configuration.getSqlFragments());
+            xmlMapperBuilder.parse();
+        }
+        catch (Exception e)
+        {
+            throw new NestedIOException("Failed to parse mapping resource: '" + mapperLocation + "'", e);
+        }
     }
 }

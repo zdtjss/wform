@@ -1,5 +1,6 @@
 package com.nway.wform.web;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -121,6 +122,7 @@ public class FormController
     {
         StringBuffer requestUrl = request.getRequestURL();
         String templateName = request.getParameter("templateName");
+        String basePath = request.getSession().getServletContext().getRealPath("customform");
         
         String releasePage = requestUrl.delete(requestUrl.length() - 7, requestUrl.length()) + templateName +"?formId=1001&requestVersion=1";
         
@@ -132,7 +134,14 @@ public class FormController
         
         InputStream is = urlConnection.getInputStream();
         
-        FileOutputStream fos = new FileOutputStream("C:\\page.html");
+        File releaseFile = new File(basePath+File.separator+"firstForm"+File.separator+"v_"+1);
+        
+        if(!releaseFile.exists()) {
+            
+            releaseFile.mkdirs();
+        }
+        
+        FileOutputStream fos = new FileOutputStream(releaseFile + File.separator + "firstForm.html");
         
         int length = -1;
         byte[] b = new byte[4096];
