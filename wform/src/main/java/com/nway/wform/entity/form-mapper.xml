@@ -14,7 +14,9 @@
 		fc.render_type cmp_render_type,
 		fc.`type` cmp_type,
 		fc.display cmp_display,
-		fce.is_editable cmp_is_editable
+		fce.is_editable cmp_is_editable,
+		fce.`row` cmp_row,
+		fce.column_span cmp_column_span
 		FROM
 		t_form f
 		LEFT JOIN t_form_component fc ON f.id = fc.form_id
@@ -39,6 +41,8 @@
 			<result property="type" column="cmp_type" />
 			<result property="renderType" column="cmp_render_type" />
 			<result property="isEditable" column="cmp_is_editable" />
+			<result property="rowNum" column="cmp_row" />
+			<result property="colSpan" column="cmp_column_span" />
 		</collection>
 	</resultMap>
 

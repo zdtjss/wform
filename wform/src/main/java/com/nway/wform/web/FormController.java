@@ -53,12 +53,16 @@ public class FormController
     {
         	
         String formId = request.getParameter("formId");
-        String requestVersion = request.getParameter("requestVersion");
+        String formVersion = request.getParameter("formVersion");
+        String bid = request.getParameter("bid");
         
-        FormEntity form = formService.queryForm(Integer.parseInt(formId), Integer.parseInt(requestVersion));
+        FormEntity form = formService.queryForm(Integer.parseInt(formId), Integer.parseInt(formVersion));
         
         List<ComponentEntity> components = form.getComponents();
         
+        request.setAttribute("formId", formId);
+        request.setAttribute("formVersion", formVersion);
+        request.setAttribute("bid", bid);
         request.setAttribute("components", components);
         request.setAttribute("formName", form.getName());
         request.setAttribute("htmlRender", Constants.RENDER_TYPE_HTML);
@@ -106,7 +110,7 @@ public class FormController
     public Map<String,Object> getData(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        return formService.queryFormData("firstForm", Integer.parseInt(request.getParameter("id")));
+        return formService.queryFormData("firstForm", Integer.parseInt(request.getParameter("bid")));
     }
     
     @RequestMapping("saveData")

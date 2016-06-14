@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF8"
 	pageEncoding="UTF8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
 	String contextPath = request.getContextPath();
 	application.setAttribute("contextPath", contextPath);
@@ -20,29 +21,44 @@
 </head>
 <body bgcolor="antiquewhite">
 	<form action="${contextPath}/form/saveData">
-		<input type="hidden" name="formId" value="${param.formId }">
-		<input type="hidden" name="requestVersion" value="${param.requestVersion }">
-		<%-- 遍历组件，布局 --%>
-		<c:forEach var="component" items="${components }" varStatus="status">
-			<%-- 需要静态化的组件 --%>
-			<c:if test="${component.renderType == htmlRender}">
-				<jsp:include page="/form/component/staticPage" flush="true">
-					<jsp:param name="formId" value="${param.formId }" />
-					<jsp:param name="name" value="${component.name }" />
-					<jsp:param name="type" value="${component.type }" />
-					<jsp:param name="displayMode" value="${component.editable ? 'edit' : 'detail'}" />
-				</jsp:include>
-			</c:if>
-			<%-- 动态数据组件或静态数据组件 --%>
-			<c:if test="${component.renderType != htmlRender}">
-				<div id="l_${component.name }"></div>
-			</c:if>
-		</c:forEach>
-		<input type="submit">
+		<input type="hidden" name="formId" value="${formId }">
+		<input type="hidden" name="formVersion" value="${formVersion }">
+		<input type="hidden" id="bid" name="bid" value="${bid }">
+		<table>
+			<%-- 遍历组件，布局 --%>
+			<c:forEach var="cmpIndex" begin="0" end="${fn:length(components) - 1 }">
+				<c:if test="${cmpIndex == 0 ||  components[cmpIndex -1].rowNum != components[cmpIndex].rowNum}">
+					<tr>
+				</c:if> 
+						<td>${components[cmpIndex].display }</td>
+						<td id="l_${components[cmpIndex].name }" colspan="${components[cmpIndex].colSpan }">
+							<%-- 需要静态化的组件 --%>
+							<c:if test="${components[cmpIndex].renderType == htmlRender}">
+								<jsp:include page="/form/component/staticPage" flush="true">
+									<jsp:param name="formId" value="${param.formId }" />
+									<jsp:param name="name" value="${components[cmpIndex].name }" />
+									<jsp:param name="type" value="${components[cmpIndex].type }" />
+									<jsp:param name="displayMode" value="${components[cmpIndex].editable ? 'edit' : 'detail'}" />
+								</jsp:include>
+							</c:if>
+						</td>
+				<c:if test="${components[cmpIndex].rowNum != components[cmpIndex + 1].rowNum}">
+					</tr>
+				</c:if>
+			</c:forEach>
+			<tr><td>
+			<input type="submit">
+			</tr></td>
+		</table>
 	</form>
 	<script type="text/javascript" src="${contextPath }/js/components.js"></script>
 	<script type="text/javascript">
 		$(function() {
+			var paramReg = new RegExp("(^|&)bid=([^&]*)(&|$)"); 
+			var value = location.search.substr(1).match(paramReg); 
+			if (value != null) {
+				$('#bid').val(unescape(value[2])); 
+			}
 			(function initPage() {
 				jQuery.ajax({
 					async : false,
@@ -64,7 +80,7 @@
 				jQuery.ajax({
 						async : false,
 						dataType: "json",
-						url : "${contextPath}/form/getData?id=750015",
+						url : "${contextPath}/form/getData?bid="+$('#bid').val(),
 						success : function(formData) {
 							<%-- 动态数据组件初始化 --%>
 							<c:forEach var="component" items="${components }">
@@ -73,13 +89,11 @@
 								</c:if>
 								<c:out value="setValue_${component.type}(formData, '${component.name}');" escapeXml="false"></c:out>
 							</c:forEach>
-							console.log("ajax success");
 						},
 						error : function(xhr,errMsg) {
 							jQuery.messager.alert('错误','动态数据加载失败');
 						}
 					});
-				console.log("ajax af");
 			}());
 			
 			<%-- 后置 javascript 效果 --%>
@@ -87,7 +101,7 @@
 			<%-- 后置 css 效果 --%>
 			loadCss("${contextPath }/css/custom/${formName}.css");
 			
-			function loadJs(url){
+			function loadJs(url) {
 				var script = document.createElement('script');
 				script.type = 'text/javascript';
 				script.language = 'javascript';
@@ -95,7 +109,7 @@
 				document.getElementsByTagName("head")[0].appendChild(script);
 			}
 			
-			function loadCss(url){
+			function loadCss(url) {
 				var link = document.createElement('link');
 				link.rel = 'stylesheet';
 				link.type = 'text/css';

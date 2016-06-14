@@ -38,10 +38,10 @@ public class ComponentEntity
     private int rowNum;
     
     /** 列  **/
-    private int columnNum;
+    private int colNum;
     
     /** 跨列  **/
-    private int columnSpan;
+    private int colSpan;
     
     public int getId()
     {
@@ -122,25 +122,25 @@ public class ComponentEntity
     {
         this.rowNum = rowNum;
     }
-    
-    public int getColumnNum()
+
+    public int getColNum()
     {
-        return columnNum;
+        return colNum;
     }
-    
-    public void setColumnNum(int columnNum)
+
+    public void setColNum(int colNum)
     {
-        this.columnNum = columnNum;
+        this.colNum = colNum;
     }
-    
-    public int getColumnSpan()
+
+    public int getColSpan()
     {
-        return columnSpan;
+        return colSpan;
     }
-    
-    public void setColumnSpan(int columnSpan)
+
+    public void setColSpan(int colSpan)
     {
-        this.columnSpan = columnSpan;
+        this.colSpan = colSpan;
     }
     
 }

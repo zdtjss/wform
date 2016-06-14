@@ -7,17 +7,15 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.nway.wform.entity.ComponentEntity;
 import com.nway.wform.entity.FormEntity;
 import com.nway.wform.entity.SQL;
 
-@Service
-public class MultiValueService extends ComponentService
+public abstract class MultiValueService extends ComponentService
 {
     @Autowired
-    private SqlSession sqlSession;
+    protected SqlSession sqlSession;
     
     @Override
     public SQL buildQuerySql(ComponentEntity cmp)

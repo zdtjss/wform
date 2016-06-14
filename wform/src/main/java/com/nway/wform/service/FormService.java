@@ -57,9 +57,9 @@ public class FormService
         return sqlSession.selectOne("selectForm", param);
     }
     
-    public Map<String,Object> queryFormData(String formName, int id)
+    public Map<String,Object> queryFormData(String formName, int bid)
     {
-        return sqlSession.selectOne("select_" + formName, id);
+        return sqlSession.selectOne("select_" + formName, bid);
     }
     
     public void saveData(Map<String, String[]> params) {
