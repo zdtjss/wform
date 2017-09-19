@@ -29,7 +29,7 @@ public class FormServiceTest
     private List<ComponentEntity> getComponents()
     {
         
-        List<ComponentEntity> components = new ArrayList<>();
+        List<ComponentEntity> components = new ArrayList<ComponentEntity>();
         
         ComponentEntity text = new ComponentEntity();
         
