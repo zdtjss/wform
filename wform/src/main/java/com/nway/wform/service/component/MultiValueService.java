@@ -70,11 +70,11 @@ public abstract class MultiValueService extends ComponentService
         
         String statement = "insert_" + form.getName() + "_" + cmp.getName();
         
-        List<Map<String,Object>> parameter = new ArrayList<>();
+        List<Map<String,Object>> parameter = new ArrayList<Map<String,Object>>();
         
         for (String value : params.get(cmp.getName()))
         {
-            Map<String,Object> param = new HashMap<>();
+            Map<String,Object> param = new HashMap<String,Object>();
             
             param.put("bid", bid);
             param.put("id", Math.round((Math.random() * 1000000)));

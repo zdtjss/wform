@@ -27,7 +27,7 @@
 	<mvc:annotation-driven>
 		<mvc:message-converters>
 			<bean
-				class="org.springframework.http.converter.json.GsonHttpMessageConverter" />
+				class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter" />
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 </beans>

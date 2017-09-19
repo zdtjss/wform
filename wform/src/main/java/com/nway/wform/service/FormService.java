@@ -49,7 +49,7 @@ public class FormService
     
     public FormEntity queryForm(int formId, int version)
     {
-        Map<String,Object> param = new HashMap<>();
+        Map<String,Object> param = new HashMap<String,Object>();
         
         param.put("formId", formId);
         param.put("version", version);
@@ -71,7 +71,7 @@ public class FormService
         
         List<ComponentEntity> components = form.getComponents();
         
-        Map<String,Object> mainData = new HashMap<>();
+        Map<String,Object> mainData = new HashMap<String,Object>();
         
         int bid = (int) (Math.random() * 1000000);
         
