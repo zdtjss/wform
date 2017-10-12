@@ -1,14 +1,14 @@
-package com.nway.wform;
+package com.nway.wform.commons;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * 获取spring容器，以访问容器中定义的其他bean
  */
-@Service
+@Component
 public class SpringContextUtil implements ApplicationContextAware
 {
     
@@ -35,13 +35,13 @@ public class SpringContextUtil implements ApplicationContextAware
      * @return  Object 一个以所给名字注册的bean的实例
      * @throws BeansException
      */
-    public static Object getBean(String beanId) throws BeansException
+    public static Object getBean(String name) throws BeansException
     {
-        return applicationContext.getBean(beanId);
+        return applicationContext.getBean(name);
     }
     
-    public static <T> T getBean(String beanId, Class<T> requiredType) throws BeansException
+    public static <T> T getBean(String name, Class<T> requiredType) throws BeansException
     {
-        return applicationContext.getBean(beanId, requiredType);
+        return applicationContext.getBean(name, requiredType);
     }
 }

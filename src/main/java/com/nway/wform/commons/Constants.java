@@ -1,4 +1,4 @@
-package com.nway.wform;
+package com.nway.wform.commons;
 
 public class Constants
 {

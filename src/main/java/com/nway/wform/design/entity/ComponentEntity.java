@@ -1,4 +1,4 @@
-package com.nway.wform.entity;
+package com.nway.wform.design.entity;
 
 public class ComponentEntity
 {
