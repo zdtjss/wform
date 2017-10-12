@@ -4,7 +4,7 @@ import java.util.List;
 
 public class FormEntity
 {
-    private int id;
+    private String id;
     
     private String name;
     
@@ -12,14 +12,16 @@ public class FormEntity
     
     private String tableName;
     
-    private List<ComponentEntity> components;
+    private int maxColumnNum;
     
-    public int getId()
+    private List<ComponentGroupEntity> componentGroups;
+    
+    public String getId()
     {
         return id;
     }
     
-    public void setId(int id)
+    public void setId(String id)
     {
         this.id = id;
     }
@@ -54,14 +56,14 @@ public class FormEntity
         this.tableName = tableName;
     }
     
-    public List<ComponentEntity> getComponents()
+    public List<ComponentGroupEntity> getComponents()
     {
-        return components;
+        return componentGroups;
     }
     
-    public void setComponents(List<ComponentEntity> components)
+    public void setComponents(List<ComponentGroupEntity> components)
     {
-        this.components = components;
+        this.componentGroups = components;
     }
     
 }

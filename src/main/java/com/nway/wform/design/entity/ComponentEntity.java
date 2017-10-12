@@ -2,7 +2,7 @@ package com.nway.wform.design.entity;
 
 public class ComponentEntity
 {
-    private int id;
+    private String id;
     
     /**
      * 中文解释
@@ -21,34 +21,21 @@ public class ComponentEntity
      */
     private String type;
     
-    /**
-     * 组件渲染类型<br>
-     * 1：html页面javascript渲染，数据来自动态后台获取<br>
-     * 2：html页面javascript渲染，数据来自静态文件<br>
-     * 3：模板生成html时初始化展示数据
-     */
-    private int renderType;
-    
-    /**
-     * 是否可编辑
-     */
-    private boolean isEditable;
-    
     /** 行号  **/
     private int rowNum;
     
     /** 列  **/
     private int colNum;
     
-    /** 跨列  **/
+    /** 跨列数  **/
     private int colSpan;
     
-    public int getId()
+    public String getId()
     {
         return id;
     }
     
-    public void setId(int id)
+    public void setId(String id)
     {
         this.id = id;
     }
@@ -91,26 +78,6 @@ public class ComponentEntity
     public void setType(String type)
     {
         this.type = type;
-    }
-    
-    public int getRenderType()
-    {
-        return renderType;
-    }
-    
-    public void setRenderType(int renderType)
-    {
-        this.renderType = renderType;
-    }
-    
-    public boolean isEditable()
-    {
-        return isEditable;
-    }
-    
-    public void setEditable(boolean isEditable)
-    {
-        this.isEditable = isEditable;
     }
     
     public int getRowNum()
