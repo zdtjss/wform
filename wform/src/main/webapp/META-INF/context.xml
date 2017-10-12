@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context>
-	<Resource name="jdbc/wform" auth="Container" type="javax.sql.DataSource"
-		maxTotal="10" maxIdle="3" maxWaitMillis="10000" username="root"
-		password="wform" driverClassName="org.mariadb.jdbc.Driver" url="jdbc:mariadb://localhost:3306/wform" />
-</Context>
