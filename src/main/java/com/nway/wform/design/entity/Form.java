@@ -1,8 +1,6 @@
 package com.nway.wform.design.entity;
 
-import java.util.List;
-
-public class FormEntity
+public class Form
 {
     private String id;
     
@@ -12,9 +10,7 @@ public class FormEntity
     
     private String tableName;
     
-    private int maxColumnNum;
-    
-    private List<ComponentGroupEntity> componentGroups;
+    private String summary;
     
     public String getId()
     {
@@ -54,16 +50,6 @@ public class FormEntity
     public void setTableName(String tableName)
     {
         this.tableName = tableName;
-    }
-    
-    public List<ComponentGroupEntity> getComponents()
-    {
-        return componentGroups;
-    }
-    
-    public void setComponents(List<ComponentGroupEntity> components)
-    {
-        this.componentGroups = components;
     }
     
 }

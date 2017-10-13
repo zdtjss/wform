@@ -1,18 +1,18 @@
 package com.nway.wform.design.entity;
 
-public class ComponentEntity
+public class Component
 {
     private String id;
-    
-    /**
-     * 中文解释
-     */
-    private String display;
     
     /**
      * 用做页面元素 id 或 name
      */
     private String name;
+    
+    /**
+     * 中文解释
+     */
+    private String display;
     
     private String formId;
     
