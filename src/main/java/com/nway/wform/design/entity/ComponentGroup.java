@@ -10,10 +10,12 @@ public class ComponentGroup {
 	private String id;
 
 	private String name;
-
+	
 	private boolean isManual;
 
 	private int displayType;
+	
+	private boolean isModify;
 
 	private int maxRowNum;
 
@@ -22,6 +24,8 @@ public class ComponentGroup {
 	private List<Component> components;
 
 	// VO
+	private String fullName;
+	
 	private List<String> updateComponentNames;
 
 	private List<String> viewComponentNames;
@@ -58,6 +62,14 @@ public class ComponentGroup {
 		this.displayType = displayType;
 	}
 
+	public boolean isModify() {
+		return isModify;
+	}
+
+	public void setModify(boolean isModify) {
+		this.isModify = isModify;
+	}
+
 	public int getMaxRowNum() {
 		return maxRowNum;
 	}
@@ -80,6 +92,14 @@ public class ComponentGroup {
 
 	public void setComponents(List<Component> components) {
 		this.components = components;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public List<String> getUpdateComponentNames() {

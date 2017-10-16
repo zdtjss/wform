@@ -4,13 +4,13 @@ import java.util.EventListener;
 
 public abstract class FormDataEventListener implements EventListener {
 
-	public void handleEvent(FormDataEvent formDataEvent) {
+	public void handleEvent(FormEvent formDataEvent) {
 		
-		if(FormDataEvent.EVENT_HANDLE_TYPE_BEFORE == formDataEvent.getHandleType()) {
+		if(FormEvent.EVENT_HANDLE_TYPE_BEFORE == formDataEvent.getHandleType()) {
 			
 			preEvent(formDataEvent);
 		}
-		else if(FormDataEvent.EVENT_HANDLE_TYPE_AFTER == formDataEvent.getHandleType()) {
+		else if(FormEvent.EVENT_HANDLE_TYPE_AFTER == formDataEvent.getHandleType()) {
 			
 			afterEvent(formDataEvent);
 		}
@@ -19,8 +19,8 @@ public abstract class FormDataEventListener implements EventListener {
 	// formPageName_groupName_{EventObject.EVENT_TYPE_*}
 	protected abstract String getName();
 	
-	public abstract void preEvent(FormDataEvent formDataEvent);
+	public abstract void preEvent(FormEvent formDataEvent);
 	
-	public abstract void afterEvent(FormDataEvent formDataEvent);
+	public abstract void afterEvent(FormEvent formDataEvent);
 	
 }

@@ -27,4 +27,5 @@ public class MybatisMapper {
 			throw new NestedIOException("Failed to parse mapping resource: '" + mapperLocation + "'", e);
 		}
 	}
+	
 }

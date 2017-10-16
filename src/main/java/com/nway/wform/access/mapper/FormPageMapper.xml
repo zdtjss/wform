@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nway.wform.access.mapper.FormPageMapper">
+	
+	<select id="getFormPage" parameterType="string" resultMap="getFormPageMap">
+		SELECT 
+		    a.id form_page_id,
+		    a.name form_page_name,
+		    a.page_type form_page_type,
+		    a.create_time form_page_create_time,
+		    b.id group_id,
+		    b.name group_name,
+		    CONCAT(a.name, b.name) group_full_name,
+		    b.is_manual group_is_manual,
+		    b.display_type group_display_type,
+		    b.is_modify group_is_modify,
+		    b.max_row_num group_max_row_num,
+		    b.max_column_num group_max_column_num,
+		    b.form_page_id group_form_page_id,
+		    b.component_id group_component_id,
+		    d.id component_id,
+		    d.name component_name,
+		    d.form_id component_form_id,
+		    d.type component_type,
+		    d.row_num component_row_num,
+		    d.column_num component_column_num,
+		    d.column_span component_column_span
+		FROM
+		    t_form_page a
+		        LEFT JOIN
+		    t_component_group b ON a.id = b.form_page_id
+		        LEFT JOIN
+		    t_r_component_group c ON b.id = c.group_id
+		        LEFT JOIN
+		    t_component d ON c.component_id = d.id;
+	</select>
+	
+	<select id="listFormPage" parameterType="string" resultMap="listFormPageMap">
+		
+	</select>
+</mapper>

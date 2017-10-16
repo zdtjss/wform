@@ -12,7 +12,7 @@ public class EventPublisher {
 		FORM_DATA_EVENT_LISTENER.put(listener.getName(), listener);
 	}
 	
-	public static void publishFormDataEvent(FormDataEvent formDataEvent) {
+	public static void publishFormDataEvent(FormEvent formDataEvent) {
 		
 		FORM_DATA_EVENT_LISTENER.get(formDataEvent.getSource()).handleEvent(formDataEvent);
 	}
