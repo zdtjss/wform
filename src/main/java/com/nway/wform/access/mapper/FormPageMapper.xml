@@ -8,23 +8,24 @@
 		    a.id form_page_id,
 		    a.name form_page_name,
 		    a.page_type form_page_type,
+		    a.summary form_page_summary,
 		    a.create_time form_page_create_time,
+		    a.status form_page_status,
 		    b.id group_id,
 		    b.name group_name,
-		    CONCAT(a.name, b.name) group_full_name,
+		    CONCAT_WS('_', a.name, b.name) group_full_name,
 		    b.is_manual group_is_manual,
 		    b.display_type group_display_type,
 		    b.is_modify group_is_modify,
 		    b.max_row_num group_max_row_num,
 		    b.max_column_num group_max_column_num,
 		    b.form_page_id group_form_page_id,
-		    b.component_id group_component_id,
 		    d.id component_id,
 		    d.name component_name,
 		    d.form_id component_form_id,
 		    d.type component_type,
-		    d.row_num component_row_num,
-		    d.column_num component_column_num,
+		    d.row component_num,
+		    d.column component_column,
 		    d.column_span component_column_span
 		FROM
 		    t_form_page a
@@ -33,10 +34,57 @@
 		        LEFT JOIN
 		    t_r_component_group c ON b.id = c.group_id
 		        LEFT JOIN
-		    t_component d ON c.component_id = d.id;
+		    t_component d ON c.component_id = d.id
+		where
+			a.id = #{formId}
 	</select>
 	
-	<select id="listFormPage" parameterType="string" resultMap="listFormPageMap">
-		
+	<resultMap type="com.nway.wform.design.entity.FormPage" id="getFormPageMap">
+		<result column="form_page_id" property="id"/>
+		<result column="form_page_name" property="name"/>
+		<result column="form_page_type" property="type"/>
+		<result column="status" property="status"/>
+		<result column="form_page_create_time" property="createTime"/>
+		<collection property="componentGroups" ofType="com.nway.wform.design.entity.ComponentGroup">
+			<result column="group_id" property="id"/>
+			<result column="group_name" property="name"/>
+			<result column="group_full_name" property="fullName"/>
+			<result column="group_is_manual" property="isManual"/>
+			<result column="group_display_type" property="displayType"/>
+			<result column="group_is_modify" property="isModify"/>
+			<result column="group_max_row_num" property="maxRowNum"/>
+			<result column="group_max_column_num" property="maxColumnNum"/>
+			<result column="group_form_page_id" property="formPageId"/>
+			<collection property="components" ofType="com.nway.wform.design.entity.Component">
+				<result column="component_id" property="id"/>
+				<result column="component_name" property="name"/>
+				<result column="component_form_id" property="formId"/>
+				<result column="component_type" property="type"/>
+				<result column="component_row" property="row"/>
+				<result column="component_column" property="column"/>
+				<result column="component_column_span" property="columnSpan"/>
+			</collection>
+		</collection>
+	</resultMap>
+	
+	<select id="listFormPage" parameterType="string" resultType="com.nway.wform.design.entity.FormPage">
+		select 
+			id,
+		    name,
+		    page_type,
+		    summary,
+		    create_time,
+		    status
+		from t_form_page
 	</select>
+	
+	<resultMap type="map" id="com.nway.wform.design.entity.FormPage">
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="page_type" property="pageType"/>
+		<result column="summary" property="summary"/>
+		<result column="create_time" property="createTime"/>
+		<result column="status" property="status"/>
+	</resultMap>
+	
 </mapper>

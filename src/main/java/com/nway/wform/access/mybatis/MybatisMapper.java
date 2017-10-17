@@ -8,11 +8,43 @@ import org.springframework.core.NestedIOException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import com.nway.wform.design.entity.ComponentGroup;
+import com.nway.wform.design.entity.FormPage;
+
 @Component
 public class MybatisMapper {
 	
 	@Autowired
     private SqlSessionTemplate sqlSession;
+	
+	public void createMapper(FormPage formPage) {
+		
+		StringBuilder xml = new StringBuilder();
+		
+		for(ComponentGroup group : formPage.getComponentGroups()) {
+			
+			if(formPage.getPageType() == FormPage.PAGE_TYPE_CREATE && group.isModify()) {
+				
+				
+				xml.append(group.getUpdateComponentNames());
+			}
+			else if(formPage.getPageType() == FormPage.PAGE_TYPE_EDIT && group.isModify()) {
+				
+				
+				xml.append(group.getUpdateComponentNames());
+			}
+			else if(formPage.getPageType() == FormPage.PAGE_TYPE_DETAILS) {
+				
+				
+				xml.append(group.getUpdateComponentNames());
+			}
+			else if(formPage.getPageType() == FormPage.PAGE_TYPE_LIST) {
+				
+				
+				xml.append(group.getUpdateComponentNames());
+			}
+		}
+	}
 
 	public void addMapper(String mapperLocation) throws NestedIOException {
 

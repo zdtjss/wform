@@ -22,13 +22,15 @@ public class ComponentGroup {
 	private int maxColumnNum;
 
 	private List<Component> components;
+	
+	private String formPageId;
 
 	// VO
 	private String fullName;
 	
-	private List<String> updateComponentNames;
+	private String updateComponentNames;
 
-	private List<String> viewComponentNames;
+	private String viewComponentNames;
 
 	public String getId() {
 		return id;
@@ -102,20 +104,28 @@ public class ComponentGroup {
 		this.fullName = fullName;
 	}
 
-	public List<String> getUpdateComponentNames() {
+	public String getUpdateComponentNames() {
 		return updateComponentNames;
 	}
 
-	public void setUpdateComponentNames(List<String> updateComponentNames) {
+	public void setUpdateComponentNames(String updateComponentNames) {
 		this.updateComponentNames = updateComponentNames;
 	}
 
-	public List<String> getViewComponentNames() {
+	public String getViewComponentNames() {
 		return viewComponentNames;
 	}
 
-	public void setViewComponentNames(List<String> viewComponentNames) {
+	public void setViewComponentNames(String viewComponentNames) {
 		this.viewComponentNames = viewComponentNames;
+	}
+
+	public String getFormPageId() {
+		return formPageId;
+	}
+
+	public void setFormPageId(String formPageId) {
+		this.formPageId = formPageId;
 	}
 
 }

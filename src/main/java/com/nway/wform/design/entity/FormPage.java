@@ -19,6 +19,10 @@ public class FormPage {
 
 	// 增、改、查、列
 	private int pageType;
+	
+	private int status;
+	
+	private String summary;
 
 	private List<ComponentGroup> componentGroups;
 
@@ -46,6 +50,22 @@ public class FormPage {
 
 	public void setPageType(int pageType) {
 		this.pageType = pageType;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
 	}
 
 	public List<ComponentGroup> getComponentGroups() {
