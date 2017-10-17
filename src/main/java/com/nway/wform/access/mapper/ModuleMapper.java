@@ -1,5 +1,5 @@
 package com.nway.wform.access.mapper;
 
-public interface FormMapper {
+public interface ModuleMapper {
 	
 }

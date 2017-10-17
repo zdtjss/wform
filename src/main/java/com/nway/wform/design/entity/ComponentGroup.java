@@ -28,9 +28,9 @@ public class ComponentGroup {
 	// VO
 	private String fullName;
 	
-	private String updateComponentNames;
+	private String updateFieldNames;
 
-	private String viewComponentNames;
+	private String viewFieldNames;
 
 	public String getId() {
 		return id;
@@ -104,20 +104,20 @@ public class ComponentGroup {
 		this.fullName = fullName;
 	}
 
-	public String getUpdateComponentNames() {
-		return updateComponentNames;
+	public String getUpdateFieldNames() {
+		return updateFieldNames;
 	}
 
-	public void setUpdateComponentNames(String updateComponentNames) {
-		this.updateComponentNames = updateComponentNames;
+	public void setUpdateFieldNames(String updateFieldNames) {
+		this.updateFieldNames = updateFieldNames;
 	}
 
-	public String getViewComponentNames() {
-		return viewComponentNames;
+	public String getViewFieldNames() {
+		return viewFieldNames;
 	}
 
-	public void setViewComponentNames(String viewComponentNames) {
-		this.viewComponentNames = viewComponentNames;
+	public void setViewFieldNames(String viewFieldNames) {
+		this.viewFieldNames = viewFieldNames;
 	}
 
 	public String getFormPageId() {

@@ -26,22 +26,22 @@ public class MybatisMapper {
 			if(formPage.getPageType() == FormPage.PAGE_TYPE_CREATE && group.isModify()) {
 				
 				
-				xml.append(group.getUpdateComponentNames());
+				xml.append(group.getUpdateFieldNames());
 			}
 			else if(formPage.getPageType() == FormPage.PAGE_TYPE_EDIT && group.isModify()) {
 				
 				
-				xml.append(group.getUpdateComponentNames());
+				xml.append(group.getUpdateFieldNames());
 			}
 			else if(formPage.getPageType() == FormPage.PAGE_TYPE_DETAILS) {
 				
 				
-				xml.append(group.getUpdateComponentNames());
+				xml.append(group.getUpdateFieldNames());
 			}
 			else if(formPage.getPageType() == FormPage.PAGE_TYPE_LIST) {
 				
 				
-				xml.append(group.getUpdateComponentNames());
+				xml.append(group.getUpdateFieldNames());
 			}
 		}
 	}

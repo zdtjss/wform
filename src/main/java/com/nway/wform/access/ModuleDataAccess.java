@@ -16,7 +16,7 @@ import com.nway.wform.design.entity.ComponentGroup;
 import com.nway.wform.design.entity.FormPage;
 
 @Component
-public class FormDataAccess {
+public class ModuleDataAccess {
 
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;

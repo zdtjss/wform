@@ -1,6 +1,6 @@
 package com.nway.wform.design.entity;
 
-public class Form
+public class Module
 {
     private String id;
     

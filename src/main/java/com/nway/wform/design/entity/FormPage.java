@@ -19,10 +19,12 @@ public class FormPage {
 
 	// 增、改、查、列
 	private int pageType;
-	
+
 	private int status;
-	
+
 	private String summary;
+
+	private String moduleId;
 
 	private List<ComponentGroup> componentGroups;
 
@@ -66,6 +68,14 @@ public class FormPage {
 
 	public void setSummary(String summary) {
 		this.summary = summary;
+	}
+
+	public String getModuleId() {
+		return moduleId;
+	}
+
+	public void setModuleId(String moduleId) {
+		this.moduleId = moduleId;
 	}
 
 	public List<ComponentGroup> getComponentGroups() {
