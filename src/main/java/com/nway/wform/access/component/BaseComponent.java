@@ -1,11 +1,12 @@
 package com.nway.wform.access.component;
 
-public abstract class BaseComponent {
+public abstract class BaseComponent<T> {
 
 	/**
-	 * 获取实际数据类型数据
+	 * 根据组件所需的实际类型，转换页面参数值
 	 * 
 	 * @return
 	 */
-	protected abstract Object getValue();
+	protected abstract T getValue(String pageData);
+	
 }

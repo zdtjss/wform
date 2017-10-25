@@ -8,7 +8,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nway.wform.access.component.MultiComponent;
+import com.nway.wform.access.component.MultiValueComponent;
 import com.nway.wform.access.event.EventPublisher;
 import com.nway.wform.access.event.FieldGroupEvent;
 import com.nway.wform.access.event.FormEvent;
@@ -44,7 +44,7 @@ public class ModuleDataAccess {
 			// 子表操作
 			for(Field field : group.getFields()) {
 				
-				if(MultiComponent.class.isInstance(field)) {
+				if(MultiValueComponent.class.isInstance(field)) {
 					if(formPage.getPageType() == FormPage.PAGE_TYPE_CREATE && field.isEditable()) {
 						
 					}
@@ -78,7 +78,7 @@ public class ModuleDataAccess {
 				// 子表操作
 				for(Field field : group.getFields()) {
 					
-					if(MultiComponent.class.isInstance(field)) {
+					if(MultiValueComponent.class.isInstance(field)) {
 						
 					}
 				}
@@ -92,7 +92,7 @@ public class ModuleDataAccess {
 				// 子表操作
 				for(Field field : group.getFields()) {
 					
-					if(MultiComponent.class.isInstance(field)) {
+					if(MultiValueComponent.class.isInstance(field)) {
 						
 						
 					}
