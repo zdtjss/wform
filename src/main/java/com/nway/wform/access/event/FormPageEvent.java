@@ -8,9 +8,9 @@ public class FormPageEvent extends FormEvent {
 	
 	private FormPage formPage;
 	
-	private Map<String, String> requestParam;
+	private Map<String, Map<String, Object>> requestParam;
 
-	public FormPageEvent(FormPage formPage, Map<String, String> requestParam, int executeType) {
+	public FormPageEvent(FormPage formPage, Map<String, Map<String, Object>> requestParam, int executeType) {
 
 		super(formPage.getName());
 
@@ -25,11 +25,11 @@ public class FormPageEvent extends FormEvent {
 		this.formPage = formPage;
 	}
 
-	public Map<String, String> getRequestParam() {
+	public Map<String, Map<String, Object>> getRequestParam() {
 		return requestParam;
 	}
 
-	public void setRequestParam(Map<String, String> requestParam) {
+	public void setRequestParam(Map<String, Map<String, Object>> requestParam) {
 		this.requestParam = requestParam;
 	}
 

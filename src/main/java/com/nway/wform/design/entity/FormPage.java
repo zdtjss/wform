@@ -26,7 +26,7 @@ public class FormPage {
 
 	private String moduleId;
 
-	private List<ComponentGroup> componentGroups;
+	private List<FieldGroup> componentGroups;
 
 	private Map<String, Map<String, String>> componentAttributes;
 
@@ -78,11 +78,11 @@ public class FormPage {
 		this.moduleId = moduleId;
 	}
 
-	public List<ComponentGroup> getComponentGroups() {
+	public List<FieldGroup> getComponentGroups() {
 		return componentGroups;
 	}
 
-	public void setComponentGroups(List<ComponentGroup> componentGroups) {
+	public void setComponentGroups(List<FieldGroup> componentGroups) {
 		this.componentGroups = componentGroups;
 	}
 

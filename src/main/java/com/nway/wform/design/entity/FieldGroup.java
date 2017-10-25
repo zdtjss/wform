@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * 组件组
  */
-public class ComponentGroup {
+public class FieldGroup {
 
 	private String id;
 
@@ -15,13 +15,13 @@ public class ComponentGroup {
 
 	private int displayType;
 	
-	private boolean isModify;
+	private boolean editable;
 
 	private int maxRowNum;
 
 	private int maxColumnNum;
 
-	private List<Component> components;
+	private List<Field> fields;
 	
 	private String formPageId;
 
@@ -64,12 +64,12 @@ public class ComponentGroup {
 		this.displayType = displayType;
 	}
 
-	public boolean isModify() {
-		return isModify;
+	public boolean isEditable() {
+		return editable;
 	}
 
-	public void setModify(boolean isModify) {
-		this.isModify = isModify;
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 
 	public int getMaxRowNum() {
@@ -88,12 +88,12 @@ public class ComponentGroup {
 		this.maxColumnNum = maxColumnNum;
 	}
 
-	public List<Component> getComponents() {
-		return components;
+	public List<Field> getFields() {
+		return fields;
 	}
 
-	public void setComponents(List<Component> components) {
-		this.components = components;
+	public void setFields(List<Field> fields) {
+		this.fields = fields;
 	}
 
 	public String getFullName() {

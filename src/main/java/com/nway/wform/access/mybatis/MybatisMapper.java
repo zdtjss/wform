@@ -8,7 +8,7 @@ import org.springframework.core.NestedIOException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-import com.nway.wform.design.entity.ComponentGroup;
+import com.nway.wform.design.entity.FieldGroup;
 import com.nway.wform.design.entity.FormPage;
 
 @Component
@@ -21,14 +21,14 @@ public class MybatisMapper {
 		
 		StringBuilder xml = new StringBuilder();
 		
-		for(ComponentGroup group : formPage.getComponentGroups()) {
+		for(FieldGroup group : formPage.getComponentGroups()) {
 			
-			if(formPage.getPageType() == FormPage.PAGE_TYPE_CREATE && group.isModify()) {
+			if(formPage.getPageType() == FormPage.PAGE_TYPE_CREATE && group.isEditable()) {
 				
 				
 				xml.append(group.getUpdateFieldNames());
 			}
-			else if(formPage.getPageType() == FormPage.PAGE_TYPE_EDIT && group.isModify()) {
+			else if(formPage.getPageType() == FormPage.PAGE_TYPE_EDIT && group.isEditable()) {
 				
 				
 				xml.append(group.getUpdateFieldNames());

@@ -1,6 +1,6 @@
 package com.nway.wform.design.entity;
 
-public class Component {
+public class Field {
 	private String id;
 
 	/**
@@ -28,6 +28,9 @@ public class Component {
 
 	/** 跨列数 **/
 	private int colSpan;
+	
+	// VO
+	private boolean editable;
 
 	public String getId() {
 		return id;
@@ -93,4 +96,12 @@ public class Component {
 		this.colSpan = colSpan;
 	}
 
+	public boolean isEditable() {
+		return editable;
+	}
+
+	public void setEditable(boolean editable) {
+		this.editable = editable;
+	}
+	
 }
