@@ -70,7 +70,6 @@ public class ModuleDataAccess {
 			
 			EventPublisher.publishFormDataEvent(new FieldGroupEvent(group, param.get(group.getName()), FormEvent.EVENT_HANDLE_TYPE_BEFORE));
 			
-			
 			if(formPage.getPageType() == FormPage.PAGE_TYPE_DETAILS) {
 			
 				Map<String, Object> groupData = sqlSessionTemplate.selectOne(TemporaryStatementRegistry.getLastestName(group.getFullName()), param);
