@@ -1,6 +1,7 @@
 package com.nway.wform.access;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,16 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nway.wform.access.component.MultiValueComponent;
-import com.nway.wform.access.handler.FieldGroupDataCreateHandler;
-import com.nway.wform.access.handler.FieldGroupDataListHandler;
-import com.nway.wform.access.handler.FieldGroupDataModifyHandler;
-import com.nway.wform.access.handler.FieldGroupDataQueryHandler;
-import com.nway.wform.access.handler.FieldGroupDataRemoveHandler;
-import com.nway.wform.access.handler.FormPageDataCreateHandler;
-import com.nway.wform.access.handler.FormPageDataListHandler;
-import com.nway.wform.access.handler.FormPageDataModifyHandler;
-import com.nway.wform.access.handler.FormPageDataQueryHandler;
-import com.nway.wform.access.handler.FormPageDataRemoveHandler;
+import com.nway.wform.access.handler.FieldGroupDataHandler;
+import com.nway.wform.access.handler.FormPageDataHandler;
+import com.nway.wform.access.handler.HandlerType;
 import com.nway.wform.access.mybatis.TemporaryStatementRegistry;
 import com.nway.wform.commons.SpringContextUtil;
 import com.nway.wform.design.entity.Field;
@@ -40,17 +34,15 @@ public class FormDataAccess {
 	 */
 	public void create(FormPage formPage, Map<String, Map<String, Object>> formData) {
 		
-		FormPageDataCreateHandler formPageDataCreateHandler = SpringContextUtil.getBean(
-				formPage.getName() + "DataCreateHandler", FormPageDataCreateHandler.class, defaultFormPageDataCreateHandler);
+		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(formPage.getName());
 		
-		formPageDataCreateHandler.onBefore(formPage, formData);
+		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_CREATE, formPage, (Map) formData);
 		
 		for(FieldGroup group : formPage.getComponentGroups()) {
 			
-			FieldGroupDataCreateHandler fieldGroupDataModifyHandler = SpringContextUtil.getBean(
-					group.getName() + "DataModifyHandler", FieldGroupDataCreateHandler.class, defaultFieldGroupDataCreateHandler);
+			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(group.getName());
 						
-			fieldGroupDataModifyHandler.onBefore(group, formData.get(group.getName()));
+			fieldGroupDataHandler.onBefore(HandlerType.FIELD_GROUP_DATA_CREATE, group, formData.get(group.getName()));
 			
 			sqlSessionTemplate.insert(TemporaryStatementRegistry.getLastestName(group.getFullName()), formData);
 			
@@ -62,10 +54,10 @@ public class FormDataAccess {
 				}
 			}
 			
-			fieldGroupDataModifyHandler.onAfter(group, formData.get(group.getName()));
+			fieldGroupDataHandler.onAfter(HandlerType.FIELD_GROUP_DATA_CREATE, group, formData.get(group.getName()));
 		}
 		
-		formPageDataCreateHandler.onAfter(formPage, formData);
+		formPageDataHandler.onAfter(HandlerType.FORM_PAGE_DATA_CREATE, formPage, (Map) formData);
 	}
 	
 	
@@ -77,17 +69,15 @@ public class FormDataAccess {
 	 */
 	public void update(FormPage formPage, Map<String, Map<String, Object>> formData) {
 		
-		FormPageDataModifyHandler formPageDataModifyHandler = SpringContextUtil.getBean(
-				formPage.getName() + "DataModifyHandler", FormPageDataModifyHandler.class, defaultFormPageDataModifyHandler);
-		
-		formPageDataModifyHandler.onBefore(formPage, formData);
+		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(formPage.getName());
+
+		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_MODIFY, formPage, (Map) formData);
 		
 		for(FieldGroup group : formPage.getComponentGroups()) {
 			
-			FieldGroupDataModifyHandler fieldGroupDataModifyHandler = SpringContextUtil.getBean(
-					formPage.getName() + "DataModifyHandler", FieldGroupDataModifyHandler.class, defaultFieldGroupDataModifyHandler);
+			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(group.getName());
 						
-			fieldGroupDataModifyHandler.onBefore(group, formData.get(group.getName()));
+			fieldGroupDataHandler.onBefore(HandlerType.FIELD_GROUP_DATA_MODIFY, group, formData.get(group.getName()));
 			
 			sqlSessionTemplate.update(TemporaryStatementRegistry.getLastestName(group.getFullName()), formData);
 			
@@ -99,10 +89,10 @@ public class FormDataAccess {
 				}
 			}
 			
-			fieldGroupDataModifyHandler.onAfter(group, formData.get(group.getName()));
+			fieldGroupDataHandler.onBefore(HandlerType.FIELD_GROUP_DATA_MODIFY, group, formData.get(group.getName()));
 		}
 		
-		formPageDataModifyHandler.onAfter(formPage, formData);
+		formPageDataHandler.onAfter(HandlerType.FORM_PAGE_DATA_MODIFY, formPage, (Map) formData);
 	}
 	
 	/**
@@ -116,17 +106,17 @@ public class FormDataAccess {
 		
 		Map<String, Map<String, Object>> pageData = new HashMap<String, Map<String, Object>>();
 		
-		FormPageDataQueryHandler formPageDataQueryHandler = SpringContextUtil.getBean(
-				formPage.getName() + "DataQueryHandler", FormPageDataQueryHandler.class, defaultFormPageDataQueryHandler);
+		Map<String, Object> param = Collections.<String, Object>singletonMap("id", dataId);
 		
-		formPageDataQueryHandler.onBefore(formPage, dataId);
+		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(formPage.getName());
+
+		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_QUERY, formPage, param);
 		
 		for(FieldGroup group : formPage.getComponentGroups()) {
 			
-			FieldGroupDataQueryHandler fieldGroupDataQueryHandler = SpringContextUtil.getBean(
-					group.getFullName() + "DataQueryHandler", FieldGroupDataQueryHandler.class, defaultFieldGroupDataQueryHandler);
+			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(group.getName());
 			
-			fieldGroupDataQueryHandler.onBefore(group, dataId);
+			fieldGroupDataHandler.onBefore(HandlerType.FIELD_GROUP_DATA_QUERY, group, param);
 			
 			Map<String, Object> groupData = sqlSessionTemplate.selectOne(TemporaryStatementRegistry.getLastestName(group.getFullName()), dataId);
 
@@ -140,10 +130,10 @@ public class FormDataAccess {
 
 			pageData.put(group.getName(), groupData);
 
-			fieldGroupDataQueryHandler.onAfter(group, groupData);
+			fieldGroupDataHandler.onAfter(HandlerType.FIELD_GROUP_DATA_QUERY, group, param);
 		}
 		
-		formPageDataQueryHandler.onAfter(formPage, dataId);
+		formPageDataHandler.onAfter(HandlerType.FORM_PAGE_DATA_QUERY, formPage, param);
 		
 		return pageData;
 	}
@@ -157,21 +147,19 @@ public class FormDataAccess {
 	 * @param param
 	 * @return
 	 */
-	public List<Map<String, Object>> list(FormPage formPage, Map<String, Map<String, Object>> param) {
+	public List<Map<String, Object>> list(FormPage formPage, Map<String, Object> param) {
 		
 		List<Map<String, Object>> pageData = new ArrayList<Map<String, Object>>();
 		
-		FormPageDataListHandler formPageDataListHandler = SpringContextUtil.getBean(
-				formPage.getName() + "DataListHandler", FormPageDataListHandler.class, defaultFormPageDataListHandler);
+		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(formPage.getName());
 		
-		formPageDataListHandler.onBefore(formPage, param);
+		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_LIST, formPage, param);
 		
 		for(FieldGroup group : formPage.getComponentGroups()) {
 			
-			FieldGroupDataListHandler fieldGroupDataListHandler = SpringContextUtil.getBean(
-					group.getFullName() + "DataListHandler", FieldGroupDataListHandler.class, defaultFieldGroupDataListHandler);
+			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(group.getName());
 			
-			fieldGroupDataListHandler.onBefore(group, param.get(group.getName()));
+			fieldGroupDataHandler.onBefore(HandlerType.FIELD_GROUP_DATA_LIST, group, param);
 			
 			pageData = sqlSessionTemplate.selectList(TemporaryStatementRegistry.getLastestName(group.getFullName()), param);
 				
@@ -184,28 +172,28 @@ public class FormDataAccess {
 				}
 			}
 			
-			fieldGroupDataListHandler.onAfter(group, param.get(group.getName()));	
+			fieldGroupDataHandler.onAfter(HandlerType.FIELD_GROUP_DATA_LIST, group, param);
 		}
 	
-		formPageDataListHandler.onAfter(formPage, param);
+		formPageDataHandler.onAfter(HandlerType.FORM_PAGE_DATA_LIST, formPage, param);
 		
 		return pageData;
 	}
 	
 	public void remove(FormPage formPage, String dataId) {
 		
-		FormPageDataRemoveHandler formPageDataRemoveHandler = SpringContextUtil.getBean(
-				formPage.getName() + "DataRemoveHandler", FormPageDataRemoveHandler.class, defaultFormPageDataRemoveHandler);
+		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(formPage.getName());
 		
-		formPageDataRemoveHandler.onBefore(formPage, dataId);
+		Map<String, Object> param = Collections.<String, Object>singletonMap("id", dataId);
+
+		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_REMOVE, formPage, param);
 		
 		for(FieldGroup group : formPage.getComponentGroups()) {
 
-			FieldGroupDataRemoveHandler fieldGroupDataRemoveHandler = SpringContextUtil.getBean(
-					group.getFullName() + "DataRemoveHandler", FieldGroupDataRemoveHandler.class, defaultFieldGroupDataRemoveHandler);
-			
-			fieldGroupDataRemoveHandler.onBefore(group, dataId);
-			
+			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(formPage.getName());
+
+			fieldGroupDataHandler.onBefore(HandlerType.FIELD_GROUP_DATA_REMOVE, group, param);
+
 			int effectCount = sqlSessionTemplate.delete(TemporaryStatementRegistry.getLastestName(group.getFullName()), dataId);
 			
 			if (effectCount > 0) {
@@ -219,169 +207,50 @@ public class FormDataAccess {
 					}
 				}
 			}
-			fieldGroupDataRemoveHandler.onAfter(group, dataId);
+			fieldGroupDataHandler.onAfter(HandlerType.FIELD_GROUP_DATA_REMOVE, group, param);
 		}
 		
-		formPageDataRemoveHandler.onAfter(formPage, dataId);
+		formPageDataHandler.onAfter(HandlerType.FORM_PAGE_DATA_REMOVE, formPage, param);
 	}
 	
-	private static final FormPageDataRemoveHandler defaultFormPageDataRemoveHandler = new DefaultFormPageDataRemoveHandler();
+	private static final FormPageDataHandler defaultFormPageDataHandler = new DefaultFormPageDataHandler();
 	
-	private static final class DefaultFormPageDataRemoveHandler implements FormPageDataRemoveHandler {
+	private static final class DefaultFormPageDataHandler implements FormPageDataHandler {
 
 		@Override
-		public void onBefore(FormPage formPage, String dataId) {
+		public void onBefore(HandlerType handlerType, FormPage formPage, Map<String, Object> param) {
 			
 		}
 
 		@Override
-		public void onAfter(FormPage formPage, String dataId) {
-			
-		}
-		
-	}
-
-	private static final DefaultFieldGroupDataRemoveHandler defaultFieldGroupDataRemoveHandler = new DefaultFieldGroupDataRemoveHandler();
-	
-	private static final class DefaultFieldGroupDataRemoveHandler implements FieldGroupDataRemoveHandler {
-
-		@Override
-		public void onBefore(FieldGroup fieldGroup, String dataId) {
-
-		}
-
-		@Override
-		public void onAfter(FieldGroup fieldGroup, String dataId) {
-
-		}
-		
-	}
-	
-	private static final DefaultFieldGroupDataModifyHandler defaultFieldGroupDataModifyHandler = new DefaultFieldGroupDataModifyHandler();
-	
-	private static final class DefaultFieldGroupDataModifyHandler implements FieldGroupDataModifyHandler {
-
-		@Override
-		public void onBefore(FieldGroup fieldGroup, Map<String, Object> groupData) {
-			
-		}
-
-		@Override
-		public void onAfter(FieldGroup fieldGroup, Map<String, Object> groupData) {
-			
-		}
-		
-	}
-	
-	private static final DefaultFieldGroupDataQueryHandler defaultFieldGroupDataQueryHandler = new DefaultFieldGroupDataQueryHandler();
-	
-	private static final class DefaultFieldGroupDataQueryHandler implements FieldGroupDataQueryHandler {
-
-		@Override
-		public void onBefore(FieldGroup fieldGroup, String dataId) {
-			
-		}
-
-		@Override
-		public void onAfter(FieldGroup fieldGroup, Map<String, Object> groupData) {
-			
-		}
-		
-	}
-	
-	private static final DefaultFormPageDataModifyHandler defaultFormPageDataModifyHandler = new DefaultFormPageDataModifyHandler();
-	
-	private static final class DefaultFormPageDataModifyHandler implements FormPageDataModifyHandler {
-
-		@Override
-		public void onBefore(FormPage formPage, Map<String, Map<String, Object>> requestParam) {
-			
-		}
-
-		@Override
-		public void onAfter(FormPage formPage, Map<String, Map<String, Object>> requestParam) {
+		public void onAfter(HandlerType handlerType, FormPage formPage, Map<String, Object> param) {
 			
 		}
 
 	}
+
+	private static final DefaultFieldGroupDataHandler defaultFieldGroupDataHandler = new DefaultFieldGroupDataHandler();
 	
-	private static final DefaultFormPageDataQueryHandler defaultFormPageDataQueryHandler = new DefaultFormPageDataQueryHandler();
-	
-	private static final class DefaultFormPageDataQueryHandler implements FormPageDataQueryHandler {
+	private static final class DefaultFieldGroupDataHandler implements FieldGroupDataHandler {
 
 		@Override
-		public void onBefore(FormPage formPage, String dataId) {
+		public void onBefore(HandlerType HandlerType, FieldGroup fieldGroup, Map<String, Object> param) {
 			
 		}
 
 		@Override
-		public void onAfter(FormPage formPage, String dataId) {
+		public void onAfter(HandlerType handlerType, FieldGroup fieldGroup, Map<String, Object> param) {
 			
 		}
-		
 	}
 	
-	private static final DefaultFormPageDataListHandler defaultFormPageDataListHandler = new DefaultFormPageDataListHandler();
-	
-	private static final class DefaultFormPageDataListHandler implements FormPageDataListHandler {
+	private FieldGroupDataHandler getFieldGroupDataHandler(String groupName) {
 
-		@Override
-		public void onBefore(FormPage formPage, Map<String, Map<String, Object>> requestParam) {
-			
-		}
-
-		@Override
-		public void onAfter(FormPage formPage, Map<String, Map<String, Object>> requestParam) {
-			
-		}
-		
+		return SpringContextUtil.getBean(groupName + "DataHandler", FieldGroupDataHandler.class, defaultFieldGroupDataHandler);
 	}
-	
-	private static final DefaultFieldGroupDataListHandler defaultFieldGroupDataListHandler = new DefaultFieldGroupDataListHandler();
-	
-	private static final class DefaultFieldGroupDataListHandler implements FieldGroupDataListHandler {
 
-		@Override
-		public void onBefore(FieldGroup fieldGroup, Map<String, Object> requestData) {
-			
-		}
+	private FormPageDataHandler getFormPageDataHandler(String pageName) {
 
-		@Override
-		public void onAfter(FieldGroup fieldGroup, Map<String, Object> requestData) {
-			
-		}
-		
-	}
-	
-	private static final DefaultFieldGroupDataCreateHandler defaultFieldGroupDataCreateHandler = new DefaultFieldGroupDataCreateHandler();
-	
-	private static final class DefaultFieldGroupDataCreateHandler implements FieldGroupDataCreateHandler {
-
-		@Override
-		public void onBefore(FieldGroup fieldGroup, Map<String, Object> groupData) {
-			
-		}
-
-		@Override
-		public void onAfter(FieldGroup fieldGroup, Map<String, Object> groupData) {
-			
-		}
-		
-	}
-	
-	private static final DefaultFormPageDataCreateHandler defaultFormPageDataCreateHandler = new DefaultFormPageDataCreateHandler();
-	
-	private static final class DefaultFormPageDataCreateHandler implements FormPageDataCreateHandler {
-
-		@Override
-		public void onBefore(FormPage formPage, Map<String, Map<String, Object>> requestParam) {
-			
-		}
-
-		@Override
-		public void onAfter(FormPage formPage, Map<String, Map<String, Object>> requestParam) {
-			
-		}
-		
+		return SpringContextUtil.getBean(pageName + "DataHandler", FormPageDataHandler.class, defaultFormPageDataHandler);
 	}
 }
