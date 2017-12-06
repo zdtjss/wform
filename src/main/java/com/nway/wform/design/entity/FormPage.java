@@ -5,6 +5,10 @@ import java.util.Map;
 
 public class FormPage {
 
+	public static final int PAGE_CREATE_WAY_DESIGN = 1;
+	
+	public static final int PAGE_CREATE_WAY_PROCESS = 2;
+	
 	public static final int PAGE_TYPE_CREATE = 1;
 
 	public static final int PAGE_TYPE_EDIT = 2;

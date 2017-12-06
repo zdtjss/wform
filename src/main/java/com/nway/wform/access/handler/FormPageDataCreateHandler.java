@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.nway.wform.design.entity.FormPage;
 
-public interface FormPageQueryHandler {
+public interface FormPageDataCreateHandler {
 
 	void onBefore(FormPage formPage, Map<String, Map<String, Object>> requestParam);
 	

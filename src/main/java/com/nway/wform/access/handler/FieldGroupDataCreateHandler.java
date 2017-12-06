@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.nway.wform.design.entity.FieldGroup;
 
-public interface FieldGroupModifiedHandler {
+public interface FieldGroupDataCreateHandler {
 
 	void onBefore(FieldGroup fieldGroup, Map<String, Object> groupData);
 	
