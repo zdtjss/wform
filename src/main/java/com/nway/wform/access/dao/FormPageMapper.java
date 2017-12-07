@@ -1,4 +1,4 @@
-package com.nway.wform.access.mapper;
+package com.nway.wform.access.dao;
 
 import com.nway.wform.design.entity.FormPage;
 

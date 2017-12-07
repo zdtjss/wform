@@ -3,13 +3,11 @@ package com.nway.wform.access.component;
 import java.util.List;
 import java.util.Map;
 
-import com.nway.wform.design.entity.FieldGroup;
-
 public interface MultiValueComponent<T> extends BaseComponent<T> {
 
-	void create(FieldGroup fieldGroup, Map<String, Map<String, String>> pageData);
+	void create(Map<String, String[]> pageData);
 	
-	void update(FieldGroup fieldGroup, Map<String, Map<String, String>> pageData);
+	void update(Map<String, String[]> pageData);
 	
 	/**
 	 * 根据页面数据解析
@@ -18,7 +16,7 @@ public interface MultiValueComponent<T> extends BaseComponent<T> {
 	 * @param pageData
 	 * @return
 	 */
-	T getValue(FieldGroup fieldGroup, Map<String, Map<String, String>> pageData);
+	T getValue(Map<String, String[]> pageData);
 	
 	/**
 	 * 数据库查询时关联的对象
@@ -27,7 +25,7 @@ public interface MultiValueComponent<T> extends BaseComponent<T> {
 	 * @param mainData
 	 * @return
 	 */
-	List<T> getAssociatedValue(FieldGroup fieldGroup, Map<String, Object> mainData);
+	List<T> getAssociatedValue(Map<String, String[]> mainData);
 	
-	void remove(FieldGroup fieldGroup, String mainDataId);
+	void remove(String mainDataId);
 }
