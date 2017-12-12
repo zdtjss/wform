@@ -1,5 +1,7 @@
 package com.nway.wform.design.entity;
 
+import java.util.Map;
+
 public class Field {
 	private String id;
 
@@ -28,6 +30,8 @@ public class Field {
 
 	/** 跨列数 **/
 	private int colSpan;
+	
+	private Map<String, String> attributes;
 	
 	// VO
 	private boolean editable;
@@ -94,6 +98,14 @@ public class Field {
 
 	public void setColSpan(int colSpan) {
 		this.colSpan = colSpan;
+	}
+
+	public Map<String, String> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(Map<String, String> attributes) {
+		this.attributes = attributes;
 	}
 
 	public boolean isEditable() {

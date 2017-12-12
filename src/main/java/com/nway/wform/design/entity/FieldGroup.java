@@ -6,25 +6,30 @@ import java.util.List;
  * 组件组
  */
 public class FieldGroup {
+	
+	public static final int DISPLAY_TYPE_FORM = 1;
+	
+	public static final int DISPLAY_TYPE_LIST = 2;
 
 	private String id;
 
 	private String name;
 	
+	private String formPageId;
+	
 	private boolean isManual;
+	
+	private String tableName;
 
+	// form：表单样式；list：列表样式
 	private int displayType;
 	
 	private boolean editable;
-
-	private int maxRowNum;
 
 	private int maxColumnNum;
 
 	private List<Field> fields;
 	
-	private String formPageId;
-
 	// VO
 	private String fullName;
 	
@@ -56,6 +61,14 @@ public class FieldGroup {
 		this.isManual = isManual;
 	}
 
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+
 	public int getDisplayType() {
 		return displayType;
 	}
@@ -70,14 +83,6 @@ public class FieldGroup {
 
 	public void setEditable(boolean editable) {
 		this.editable = editable;
-	}
-
-	public int getMaxRowNum() {
-		return maxRowNum;
-	}
-
-	public void setMaxRowNum(int maxRowNum) {
-		this.maxRowNum = maxRowNum;
 	}
 
 	public int getMaxColumnNum() {

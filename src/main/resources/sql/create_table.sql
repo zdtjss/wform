@@ -1,9 +1,24 @@
 
-create table t_form_def (
-	form_id int primary key,
-	form_name varchar(100),
-	form_title varchar(100),
-	table_name varchar(30)
+CREATE TABLE T_FORM_FORMPAGE (
+	FORM_ID VARCHAR(32) PRIMARY KEY,
+	FORM_NAME VARCHAR(100),
+	FORM_TITLE VARCHAR(100),
+	PAGE_TYPE   INT(1),
+	SUMMARY VARCHAR(255),
+	MODULE_ID VARCHAR(32),
+	STATUS INT(1)
+);
+
+CREATE TABLE T_FORM_FIELD_GROUP (
+	GROUP_ID VARCHAR(32) PRIMARY KEY,
+	GROUP_NAME VARCHAR(64),
+	FORMPAGEID VARCHAR(32),
+	IS_MANUAL INT(1),
+	TABLE_NAME VARCHAR(30),
+	DISPLAYTYPE INT(1),
+	EDITABLE INT(1),
+	MAXCOLUMNNUM INT(2),
+	STATUS INT(1)
 );
 
 create table t_form_component_def

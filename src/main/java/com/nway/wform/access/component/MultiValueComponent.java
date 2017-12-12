@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface MultiValueComponent<T> extends BaseComponent<T> {
 
-	void create(Map<String, String[]> pageData);
+	void save(Map<String, String[]> pageData);
 	
 	void update(Map<String, String[]> pageData);
 	
