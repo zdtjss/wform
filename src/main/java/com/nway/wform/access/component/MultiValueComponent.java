@@ -1,13 +1,14 @@
 package com.nway.wform.access.component;
 
-import java.util.List;
 import java.util.Map;
 
-public interface MultiValueComponent<T> extends BaseComponent<T> {
+public interface MultiValueComponent extends BaseComponent {
 
-	void create(Map<String, String[]> pageData);
+	void save(Object comp);
 	
-	void update(Map<String, String[]> pageData);
+	void update(Object comp);
+	
+	void remove(String bizId);
 	
 	/**
 	 * 根据页面数据解析
@@ -16,7 +17,7 @@ public interface MultiValueComponent<T> extends BaseComponent<T> {
 	 * @param pageData
 	 * @return
 	 */
-	T getValue(Map<String, String[]> pageData);
+	Object getValue(Map<String, String[]> pageData);
 	
 	/**
 	 * 数据库查询时关联的对象
@@ -25,7 +26,6 @@ public interface MultiValueComponent<T> extends BaseComponent<T> {
 	 * @param mainData
 	 * @return
 	 */
-	List<T> getAssociatedValue(Map<String, String[]> mainData);
+	Object getAssociatedValue(String bizId);
 	
-	void remove(String mainDataId);
 }

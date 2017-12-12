@@ -24,6 +24,8 @@ public class FieldGroup {
 	private List<Field> fields;
 	
 	private String formPageId;
+	
+	private int order;
 
 	// VO
 	private String fullName;
@@ -118,6 +120,14 @@ public class FieldGroup {
 
 	public void setViewFieldNames(String viewFieldNames) {
 		this.viewFieldNames = viewFieldNames;
+	}
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
 	}
 
 	public String getFormPageId() {
