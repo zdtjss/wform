@@ -1,7 +1,6 @@
 package com.nway.wform.design.entity;
 
 import java.util.List;
-import java.util.Map;
 
 public class FormPage {
 
@@ -20,19 +19,19 @@ public class FormPage {
 	private String id;
 
 	private String name;
+	
+	private String title;
 
 	// 增、改、查、列
 	private int pageType;
 
 	private int status;
-
+	// 简介
 	private String summary;
 
 	private String moduleId;
 
 	private List<FieldGroup> componentGroups;
-
-	private Map<String, Map<String, String>> componentAttributes;
 
 	public String getId() {
 		return id;
@@ -48,6 +47,14 @@ public class FormPage {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public int getPageType() {
@@ -88,14 +95,6 @@ public class FormPage {
 
 	public void setComponentGroups(List<FieldGroup> componentGroups) {
 		this.componentGroups = componentGroups;
-	}
-
-	public Map<String, Map<String, String>> getComponentAttributes() {
-		return componentAttributes;
-	}
-
-	public void setComponentAttributes(Map<String, Map<String, String>> componentAttributes) {
-		this.componentAttributes = componentAttributes;
 	}
 
 }
