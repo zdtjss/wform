@@ -30,8 +30,6 @@ public class FieldGroup {
 
 	private List<Field> fields;
 	
-	private String formPageId;
-	
 	private int order;
 
 	// VO
