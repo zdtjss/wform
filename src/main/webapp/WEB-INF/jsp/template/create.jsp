@@ -26,9 +26,13 @@
 							<tr>
 							<c:set var="rowNum" value="${field.rowNum }"/>
 						</c:if>
-						<th id="${field.name }_label">${field.display }</th>
+						<!-- 独占一行的不现实 <th> -->
+						<c:if test="${field.colSpan ne group.maxColumnNum }">
+							<th id="${field.name }_label">${field.display }</th>
+						</c:if>
 						<td id="${field.name }_text" colspan="${field.colSpan }">
-							<c:import url="${componentPath }/${field.type }/${field.type }_edit.jsp">
+							<c:import url="${componentPath }/${field.type }/${field.type }_edit.jsp"/>
+							<c:import url="${componentPath }/${field.type }/${field.type }_edit_js.jsp">
 								<c:param name="attributes" value="{\"name\":121}"/>
 							</c:import>
 						</td>
@@ -40,5 +44,7 @@
 			</c:if>
 		</div>
 	</c:forEach>
+	<script type="text/javascript" src=""></script>
+	<script type="text/javascript" src="${contextPath }/js/${formPage.moduleName}/${formPage.name}_create.js"></script>
 </body>
 </html>
