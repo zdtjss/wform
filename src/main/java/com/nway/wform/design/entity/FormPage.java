@@ -1,5 +1,6 @@
 package com.nway.wform.design.entity;
 
+import java.util.Date;
 import java.util.List;
 
 public class FormPage {
@@ -30,8 +31,10 @@ public class FormPage {
 	private String summary;
 
 	private String moduleId;
+	
+	private Date createTime;
 
-	private List<FieldGroup> componentGroups;
+	private List<FieldGroup> fielsGroups;
 
 	public String getId() {
 		return id;
@@ -89,12 +92,20 @@ public class FormPage {
 		this.moduleId = moduleId;
 	}
 
-	public List<FieldGroup> getComponentGroups() {
-		return componentGroups;
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setComponentGroups(List<FieldGroup> componentGroups) {
-		this.componentGroups = componentGroups;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public List<FieldGroup> getFielsGroups() {
+		return fielsGroups;
+	}
+
+	public void setFielsGroups(List<FieldGroup> fielsGroups) {
+		this.fielsGroups = fielsGroups;
 	}
 
 }

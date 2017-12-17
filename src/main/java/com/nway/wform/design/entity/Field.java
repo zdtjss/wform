@@ -15,6 +15,7 @@ public class Field {
 	 */
 	private String display;
 
+	/** 所属模块  **/
 	private String moduleId;
 
 	/**
@@ -22,6 +23,11 @@ public class Field {
 	 */
 	private String type;
 
+	private Map<String, String> attributes;
+	
+	// VO
+	private boolean editable;
+	
 	/** 行号 **/
 	private int rowNum;
 
@@ -30,11 +36,6 @@ public class Field {
 
 	/** 跨列数 **/
 	private int colSpan;
-	
-	private Map<String, String> attributes;
-	
-	// VO
-	private boolean editable;
 
 	public String getId() {
 		return id;

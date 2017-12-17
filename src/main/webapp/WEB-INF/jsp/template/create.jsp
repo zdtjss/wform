@@ -10,28 +10,29 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+<jsp:include page="/WEB-INF/jsp/include.jsp"/>
 <title>${formPage.title }</title>
 </head>
 <body>
-	<c:forEach var="group" items="${formPage.componentGroups }">
-		<div id="${group.name }">
+	<c:forEach var="group" items="${formPage.fielsGroups }">
+		<div id="${group.name }" class="page_group">
 			<c:if test="${group.displayType eq displayForm}">
 				<table>
-				<c:set var="rowNum" value="0"/>
+					<c:set var="rowNum" value="1"/>
 					<tr>
-						<c:forEach var="field" items="${group.fields }">
-							<th id="${field.name }_label">${field.display }</th>
-							<td id="${field.name }_text" colspan="${field.colSpan }">
-								<jsp:include page="${componentPath }/${field.type }/${field.type }_edit.jsp">
-									<jsp:param value="attributes" name="${field.attributes }"/>
-								</jsp:include>
-							</td>
-							<c:if test="${rowNum ne field.rowNum }"> 
-								</tr>
-								<tr>
-								<c:set var="rowNum" value="${field.rowNum }"/>
-							</c:if>
-						</c:forEach>
+					<c:forEach var="field" items="${group.fields }">
+						<c:if test="${rowNum ne field.rowNum }"> 
+							</tr>
+							<tr>
+							<c:set var="rowNum" value="${field.rowNum }"/>
+						</c:if>
+						<th id="${field.name }_label">${field.display }</th>
+						<td id="${field.name }_text" colspan="${field.colSpan }">
+							<c:import url="${componentPath }/${field.type }/${field.type }_edit.jsp">
+								<c:param name="attributes" value="{\"name\":121}"/>
+							</c:import>
+						</td>
+					</c:forEach>
 					<tr>
 				</table>
 			</c:if>

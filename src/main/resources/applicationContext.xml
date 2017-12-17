@@ -16,21 +16,27 @@
 
 	<import resource="wform-servlet.xml" />
 
-	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName">
+			<value>java:comp/env/jdbc/wform</value>
+		</property>
+	</bean>
+
+	<!-- <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
 		<constructor-arg>
 			<bean id="poolProperties" class="org.apache.tomcat.jdbc.pool.PoolProperties">
 
 				<property name="username" value="root" />
-				<property name="password" value="P@ssw0rd" />
+				<property name="password" value="Zdt12345#" />
 
 				<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-				<property name="url" value="jdbc:mysql://192.168.137.88:3306/wform" />
+				<property name="url" value="jdbc:mysql://192.168.3.6:3306/wform" />
 
 				<property name="initialSize" value="2" />
 				<property name="maxActive" value="5" />
 			</bean>
 		</constructor-arg>
-	</bean>
+	</bean> -->
 
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -65,13 +71,13 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations">
 			<list>
-				<value>classpath*:com/nway/wform/**/*-mapper.xml</value>
+				<value>classpath*:com/nway/wform/**/*Mapper.xml</value>
 			</list>
 		</property>
 	</bean>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.nway.wform.**.mapper" />
+		<property name="basePackage" value="com.nway.wform.**.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 
