@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-	<Resource name="jdbc/wform" auth="Container" type="javax.sql.DataSource"
-		maxTotal="10" maxIdle="3" maxWaitMillis="10000" username="root"
-		password="wform" driverClassName="org.mariadb.jdbc.Driver" url="jdbc:mariadb://localhost:3306/wform" />
+	<Resource auth="Container"
+		name="jdbc/wform"
+		type="javax.sql.DataSource"
+		factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+		initialSize="3"
+		maxActive="5"
+		maxIdle="1000"
+		maxWait="50000"
+		username="root"
+		password="Zdt12345#"
+		driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://192.168.3.6:3306/wform?useUnicode=true&amp;characterEncoding=utf8" />
 </Context>

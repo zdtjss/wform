@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.nway.wform.access.mapper.FormPageMapper">
+<mapper namespace="com.nway.wform.access.dao.FormPageMapper">
 	
 	<select id="getFormPage" parameterType="string" resultMap="getFormPageMap">
 		SELECT 
-		    a.id form_page_id,
-		    a.name form_page_name,
-		    a.page_type form_page_type,
-		    a.summary form_page_summary,
-		    a.create_time form_page_create_time,
-		    a.status form_page_status,
-		    a.module_id form_page_module_id,
-		    b.id group_id,
-		    b.name group_name,
-		    CONCAT_WS('_', a.name, b.name) group_full_name,
-		    b.is_manual group_is_manual,
-		    b.display_type group_display_type,
-		    b.is_modify group_is_modify,
-		    b.max_row_num group_max_row_num,
-		    b.max_column_num group_max_column_num,
-		    b.form_page_id group_form_page_id,
-		    d.id component_id,
-		    d.name component_name,
-		    d.module_id component_module_id,
-		    d.type component_type,
-		    d.row component_num,
-		    d.column component_column,
-		    d.column_span component_column_span
+		    A.FORM_ID FORM_PAGE_ID,
+		    A.FORM_NAME FORM_PAGE_NAME,
+		    A.PAGE_TYPE FORM_PAGE_TYPE,
+		    A.SUMMARY FORM_PAGE_SUMMARY,
+		    A.CREATE_TIME FORM_PAGE_CREATE_TIME,
+		    A.STATUS FORM_PAGE_STATUS,
+		    A.MODULE_ID FORM_PAGE_MODULE_ID,
+		    B.GROUP_ID GROUP_ID,
+		    B.NAME GROUP_NAME,
+		    CONCAT_WS('_', A.FORM_NAME, B.NAME) GROUP_FULL_NAME,
+		    B.IS_MANUAL GROUP_IS_MANUAL,
+		    B.DISPLAY_TYPE GROUP_DISPLAY_TYPE,
+		    B.EDITABLE GROUP_EDITABLE,
+		    B.MAX_COLUMN_NUM GROUP_MAX_COLUMN_NUM,
+		    B.FORM_PAGE_ID GROUP_FORM_PAGE_ID,
+		    D.FIELD_ID FIELD_ID,
+		    D.NAME FIELD_NAME,
+		    D.MODULE_ID FIELD_MODULE_ID,
+		    D.TYPE FIELD_TYPE,
+		    D.DISPLAY FIELD_DISPLAY,
+		    C.ROW_NUM FIELD_ROW_NUM,
+		    C.COLUMN_NUM FIELD_COLUMN_NUM,
+		    C.COLUMN_SPAN FIELD_COLUMN_SPAN,
+			C.EDITABLE FIELD_EDITABLE
 		FROM
-		    t_form_page a
+		    T_FORM_FORMPAGE A
 		        LEFT JOIN
-		    t_component_group b ON a.id = b.form_page_id
+		    T_FORM_FIELD_GROUP B ON A.FORM_ID = B.FORM_PAGE_ID
 		        LEFT JOIN
-		    t_r_component_group c ON b.id = c.group_id
+		    T_R_FIELD_GROUP C ON B.GROUP_ID = C.GROUP_ID
 		        LEFT JOIN
-		    t_component d ON c.component_id = d.id
-		where
-			a.id = #{formId}
+		    T_FORM_FIELD D ON C.FIELD_ID = D.FIELD_ID
+		WHERE A.FORM_ID = #{formId}
 	</select>
 	
 	<resultMap type="com.nway.wform.design.entity.FormPage" id="getFormPageMap">
 		<result column="form_page_id" property="id"/>
 		<result column="form_page_name" property="name"/>
-		<result column="form_page_type" property="type"/>
+		<result column="form_page_type" property="pageType"/>
 		<result column="status" property="status"/>
 		<result column="form_page_module_id" property="modulId"/>
 		<result column="form_page_create_time" property="createTime"/>
-		<collection property="componentGroups" ofType="com.nway.wform.design.entity.ComponentGroup">
+		<collection property="fielsGroups" ofType="com.nway.wform.design.entity.FieldGroup">
 			<result column="group_id" property="id"/>
 			<result column="group_name" property="name"/>
 			<result column="group_full_name" property="fullName"/>
@@ -57,17 +57,24 @@
 			<result column="group_max_row_num" property="maxRowNum"/>
 			<result column="group_max_column_num" property="maxColumnNum"/>
 			<result column="group_form_page_id" property="formPageId"/>
-			<collection property="components" ofType="com.nway.wform.design.entity.Component">
-				<result column="component_id" property="id"/>
-				<result column="component_name" property="name"/>
-				<result column="component_form_id" property="formId"/>
-				<result column="component_type" property="type"/>
-				<result column="component_row" property="row"/>
-				<result column="component_column" property="column"/>
-				<result column="component_column_span" property="columnSpan"/>
+			<collection property="fields" ofType="com.nway.wform.design.entity.Field" columnPrefix="FIELD_">
+				<result column="id" property="id"/>
+				<result column="name" property="name"/>
+				<result column="module_id" property="moduleId"/>
+				<result column="display" property="display"/>
+				<result column="type" property="type"/>
+				<result column="row_num" property="rowNum"/>
+				<result column="column_num" property="colNum"/>
+				<result column="column_span" property="colSpan"/>
+				<result column="editable" property="editable"/>
 			</collection>
+			<collection property="fieldAttr" column="group_id" ofType="map" select="selectFieldAttr"/>
 		</collection>
 	</resultMap>
+	
+	<select id="selectFieldAttr" resultType="map">
+		select FIELD_ID 'name',group_concat(CONCAT_WS('|:|',ATTR_NAME,ATTR_VALUE) separator '|;|') 'text' from T_FORM_FIELD_ATTRIBUTE where FIELD_GROUP_ID = #{group_id} group by FIELD_ID
+	</select>
 	
 	<select id="listFormPage" parameterType="string" resultType="com.nway.wform.design.entity.FormPage">
 		select 
@@ -81,9 +88,9 @@
 		from t_form_page
 	</select>
 	
-	<resultMap type="map" id="com.nway.wform.design.entity.FormPage">
-		<result column="id" property="id"/>
-		<result column="name" property="name"/>
+	<resultMap id="formPageMap" type="com.nway.wform.design.entity.FormPage">
+		<result column="FORM_ID" property="id"/>
+		<result column="FORM_NAME" property="name"/>
 		<result column="page_type" property="pageType"/>
 		<result column="summary" property="summary"/>
 		<result column="create_time" property="createTime"/>

@@ -42,7 +42,7 @@ public class FormDataAccess implements InitializingBean {
 		
 		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_CREATE, formPage, (Map) formData);
 		
-		for(FieldGroup group : formPage.getComponentGroups()) {
+		for(FieldGroup group : formPage.getFielsGroups()) {
 			
 			Map<String, Object> groupData = formData.get(group.getName());
 			
@@ -82,7 +82,7 @@ public class FormDataAccess implements InitializingBean {
 
 		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_MODIFY, formPage, (Map) formData);
 		
-		for(FieldGroup group : formPage.getComponentGroups()) {
+		for(FieldGroup group : formPage.getFielsGroups()) {
 			
 			Map<String, Object> groupData = formData.get(group.getName());
 			
@@ -126,7 +126,7 @@ public class FormDataAccess implements InitializingBean {
 
 		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_QUERY, formPage, param);
 		
-		for(FieldGroup group : formPage.getComponentGroups()) {
+		for(FieldGroup group : formPage.getFielsGroups()) {
 			
 			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(group.getName());
 			
@@ -173,7 +173,7 @@ public class FormDataAccess implements InitializingBean {
 		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_LIST, formPage, param);
 		
 		// 这里可能是条件组  有待调整
-		FieldGroup group = formPage.getComponentGroups().get(0);
+		FieldGroup group = formPage.getFielsGroups().get(0);
 
 		FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(group.getName());
 
@@ -210,7 +210,7 @@ public class FormDataAccess implements InitializingBean {
 
 		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_REMOVE, formPage, param);
 		
-		for(FieldGroup group : formPage.getComponentGroups()) {
+		for(FieldGroup group : formPage.getFielsGroups()) {
 
 			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(formPage.getName());
 

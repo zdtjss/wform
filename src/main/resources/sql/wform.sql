@@ -1,148 +1,80 @@
-/*
-Navicat MariaDB Data Transfer
 
-Source Server         : mariadb
-Source Server Version : 100113
-Source Host           : localhost:3306
-Source Database       : wform
+CREATE TABLE `T_FORM_FIELD`  (
+  `FIELD_ID` varchar(32) NOT NULL,
+  `MODULE_ID` varchar(32) NULL DEFAULT NULL,
+  `NAME` varchar(64) NULL DEFAULT NULL,
+  `DISPLAY` varchar(64) NULL DEFAULT NULL,
+  `TYPE` varchar(63) NULL DEFAULT NULL,
+  `LAST_UPDATE_DATE` timestamp(0) NULL DEFAULT NULL,
+  `CREATE_TIME` timestamp(0) NULL DEFAULT NULL,
+  `STATUS` int(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`FIELD_ID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
-Target Server Type    : MariaDB
-Target Server Version : 100113
-File Encoding         : 65001
+INSERT INTO `T_FORM_FIELD` VALUES ('1', NULL, 'title', '标题', 'text', '2017-12-16 20:42:50', '2017-12-16 20:42:52', 1);
+INSERT INTO `T_FORM_FIELD` VALUES ('2', NULL, 'note', '注释', 'text', '2017-12-16 20:43:44', '2017-12-16 20:43:47', 1);
+INSERT INTO `T_FORM_FIELD` VALUES ('3', NULL, 'content', '内容', 'textarea', '2017-12-16 20:43:44', '2017-12-16 20:43:47', 1);
 
-Date: 2016-05-23 18:16:14
-*/
+CREATE TABLE `T_FORM_FIELD_ATTRIBUTE`  (
+  `FIELD_GROUP_ID` varchar(32) NULL DEFAULT NULL,
+  `FIELD_ID` varchar(32) NULL DEFAULT NULL,
+  `ATTR_NAME` varchar(64) NULL DEFAULT NULL,
+  `ATTR_VALUE` varchar(255) NULL DEFAULT NULL,
+  `STATUS` int(1) NULL DEFAULT NULL
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
-SET FOREIGN_KEY_CHECKS=0;
+CREATE TABLE `T_FORM_FIELD_GROUP`  (
+  `GROUP_ID` varchar(32) NOT NULL,
+  `NAME` varchar(64) NULL DEFAULT NULL,
+  `FORM_PAGE_ID` varchar(32) NULL DEFAULT NULL,
+  `IS_MANUAL` int(1) NULL DEFAULT NULL,
+  `TABLE_NAME` varchar(30) NULL DEFAULT NULL,
+  `DISPLAY_TYPE` int(1) NULL DEFAULT NULL,
+  `EDITABLE` int(1) NULL DEFAULT NULL,
+  `MAX_COLUMN_NUM` int(2) NULL DEFAULT NULL,
+  `LAST_UPDATE_DATE` timestamp(0) NULL DEFAULT NULL,
+  `CREATE_TIME` timestamp(0) NULL DEFAULT NULL,
+  `STATUS` int(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`GROUP_ID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Table structure for t_fixed_form
--- ----------------------------
-DROP TABLE IF EXISTS `t_fixed_form`;
-CREATE TABLE `t_fixed_form` (
-  `id` varchar(50) DEFAULT NULL,
-  `mc` varchar(50) DEFAULT NULL,
-  `lx` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `T_FORM_FIELD_GROUP` VALUES ('100101', 'first_group', '1001', 0, 't_auto_1001', 1, 1, 4, '2017-12-16 20:17:53', '2017-12-16 20:17:56', 1);
 
--- ----------------------------
--- Records of t_fixed_form
--- ----------------------------
-INSERT INTO `t_fixed_form` VALUES ('1', '没有', '1');
+CREATE TABLE `T_FORM_FORMPAGE`  (
+  `FORM_ID` varchar(32) NOT NULL,
+  `FORM_NAME` varchar(100) NULL DEFAULT NULL,
+  `FORM_TITLE` varchar(100) NULL DEFAULT NULL,
+  `PAGE_TYPE` int(1) NULL DEFAULT NULL,
+  `SUMMARY` varchar(255) NULL DEFAULT NULL,
+  `MODULE_ID` varchar(32) NULL DEFAULT NULL,
+  `LAST_UPDATE_DATE` timestamp(0) NULL DEFAULT NULL,
+  `CREATE_TIME` timestamp(0) NULL DEFAULT NULL,
+  `STATUS` int(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`FORM_ID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Table structure for t_fixed_form_10002
--- ----------------------------
-DROP TABLE IF EXISTS `t_fixed_form_10002`;
-CREATE TABLE `t_fixed_form_10002` (
-  `id` int(11) NOT NULL,
-  `value` varchar(50) DEFAULT NULL,
-  `b_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `T_FORM_FORMPAGE` VALUES ('1001', 'first_page', ' 第一个页面', 1, '测试', NULL, '2017-12-16 20:14:52', '2017-12-16 20:14:54', 1);
 
--- ----------------------------
--- Records of t_fixed_form_10002
--- ----------------------------
-INSERT INTO `t_fixed_form_10002` VALUES ('1', '2', '1');
+CREATE TABLE `T_FORM_MODULE`  (
+  `MODULE_ID` varchar(32) NOT NULL,
+  `MODULE_NAME` varchar(100) NULL DEFAULT NULL,
+  `SUMMARY` varchar(255) NULL DEFAULT NULL,
+  `LAST_UPDATE_DATE` timestamp(0) NULL DEFAULT NULL,
+  `CREATE_TIME` timestamp(0) NULL DEFAULT NULL,
+  `STATUS` int(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`MODULE_ID`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Table structure for t_form
--- ----------------------------
-DROP TABLE IF EXISTS `t_form`;
-CREATE TABLE `t_form` (
-  `id` int(11) NOT NULL,
-  `version` int(3) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `title` varchar(50) DEFAULT NULL,
-  `table_name` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `T_R_FIELD_GROUP`  (
+  `GROUP_ID` varchar(32) NULL DEFAULT NULL,
+  `FIELD_ID` varchar(32) NULL DEFAULT NULL,
+  `ROW_NUM` int(2) NULL DEFAULT NULL,
+  `COLUMN_NUM` int(2) NULL DEFAULT NULL,
+  `COLUMN_SPAN` int(2) NULL DEFAULT NULL,
+  `EDITABLE` int(1) NULL DEFAULT NULL,
+  `SIZE` int(2) NULL DEFAULT NULL
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
--- ----------------------------
--- Records of t_form
--- ----------------------------
-INSERT INTO `t_form` VALUES ('1001', '1', 'firstForm', '什么东西', 't_fixed_form');
-
--- ----------------------------
--- Table structure for t_form_component
--- ----------------------------
-DROP TABLE IF EXISTS `t_form_component`;
-CREATE TABLE `t_form_component` (
-  `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `render_type` int(1) DEFAULT NULL,
-  `type` varchar(50) DEFAULT NULL,
-  `display` varchar(50) DEFAULT NULL,
-  `form_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of t_form_component
--- ----------------------------
-INSERT INTO `t_form_component` VALUES ('10001', 'mc', '1', 'text', '名称', '1001');
-INSERT INTO `t_form_component` VALUES ('10002', 'lx', '2', 'select', '类型', '1001');
-INSERT INTO `t_form_component` VALUES ('10003', 'bq', '3', 'label', '标签', '1001');
-
--- ----------------------------
--- Table structure for t_form_form
--- ----------------------------
-DROP TABLE IF EXISTS `t_form_form`;
-CREATE TABLE `t_form_form` (
-  `id` int(11) NOT NULL,
-  `cmp_id` int(11) DEFAULT NULL,
-  `is_editable` int(1) DEFAULT NULL,
-  `form_version` int(3) DEFAULT NULL,
-  `row` int(2) DEFAULT NULL,
-  `column` int(2) DEFAULT NULL,
-  `column_span` int(2) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of t_form_form
--- ----------------------------
-INSERT INTO `t_form_form` VALUES ('1', '10001', '1', '1', '2', '1', '1');
-INSERT INTO `t_form_form` VALUES ('2', '10002', '1', '1', '3', '2', '1');
-INSERT INTO `t_form_form` VALUES ('3', '10003', '0', '1', '1', '1', '2');
-
--- ----------------------------
--- Table structure for t_form_list
--- ----------------------------
-DROP TABLE IF EXISTS `t_form_list`;
-CREATE TABLE `t_form_list` (
-  `id` int(11) NOT NULL,
-  `cmp_id` int(11) DEFAULT NULL,
-  `form_id` int(1) DEFAULT NULL,
-  `form_version` int(3) DEFAULT NULL,
-  `order` int(2) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
--- Records of t_form_list
--- ----------------------------
-INSERT INTO `t_form_list` VALUES ('101', '10001', '1001', '1', '1');
-INSERT INTO `t_form_list` VALUES ('102', '10002', '1001', '1', '2');
-
--- ----------------------------
--- Table structure for t_form_list_search
--- ----------------------------
-DROP TABLE IF EXISTS `t_form_list_search`;
-CREATE TABLE `t_form_list_search` (
-  `id` int(11) NOT NULL,
-  `cmp_id` int(11) DEFAULT NULL,
-  `is_editable` int(1) DEFAULT NULL,
-  `list_id` int(11) DEFAULT NULL,
-  `column` int(2) DEFAULT NULL,
-  `row` int(2) DEFAULT NULL,
-  `column_span` int(2) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
--- Records of t_form_list_search
--- ----------------------------
-INSERT INTO `t_form_list_search` VALUES ('1', '1', '1', '101', '1', '1', null);
-INSERT INTO `t_form_list_search` VALUES ('2', '2', '1', '102', '1', '2', null);
+INSERT INTO `T_R_FIELD_GROUP` VALUES ('100101', '1', 1, 1, 1, 1, 10);
+INSERT INTO `T_R_FIELD_GROUP` VALUES ('100101', '2', 1, 2, 1, 1, 100);
+INSERT INTO `T_R_FIELD_GROUP` VALUES ('100101', '3', 2, 1, 1, 1, 100);

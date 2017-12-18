@@ -21,7 +21,7 @@ public class MybatisMapper {
 		
 		StringBuilder xml = new StringBuilder();
 		
-		for(FieldGroup group : formPage.getComponentGroups()) {
+		for(FieldGroup group : formPage.getFielsGroups()) {
 			
 			if(formPage.getPageType() == FormPage.PAGE_TYPE_CREATE && group.isEditable()) {
 				

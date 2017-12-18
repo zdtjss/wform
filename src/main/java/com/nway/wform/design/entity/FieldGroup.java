@@ -1,6 +1,7 @@
 package com.nway.wform.design.entity;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 组件组
@@ -29,6 +30,8 @@ public class FieldGroup {
 	private int maxColumnNum;
 
 	private List<Field> fields;
+	
+	private List<Map<String,String>> fieldAttr;
 	
 	private int order;
 
@@ -101,6 +104,14 @@ public class FieldGroup {
 
 	public void setFields(List<Field> fields) {
 		this.fields = fields;
+	}
+
+	public List<Map<String, String>> getFieldAttr() {
+		return fieldAttr;
+	}
+
+	public void setFieldAttr(List<Map<String, String>> fieldAttr) {
+		this.fieldAttr = fieldAttr;
 	}
 
 	public String getFullName() {
