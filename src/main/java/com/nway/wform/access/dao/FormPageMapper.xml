@@ -68,13 +68,19 @@
 				<result column="column_span" property="colSpan"/>
 				<result column="editable" property="editable"/>
 			</collection>
-			<collection property="fieldAttr" column="group_id" ofType="map" select="selectFieldAttr"/>
+			<collection property="fieldAttr" column="group_id" resultMap="fieldAttrMap" select="selectFieldAttr"/>
 		</collection>
 	</resultMap>
 	
-	<select id="selectFieldAttr" resultType="map">
-		select FIELD_ID 'name',group_concat(CONCAT_WS('|:|',ATTR_NAME,ATTR_VALUE) separator '|;|') 'text' from T_FORM_FIELD_ATTRIBUTE where FIELD_GROUP_ID = #{group_id} group by FIELD_ID
+	<select id="selectFieldAttr">
+		select FIELD_ID,ATTR_NAME,ATTR_VALUE from T_FORM_FIELD_ATTRIBUTE where FIELD_GROUP_ID = #{group_id}
 	</select>
+	
+	<resultMap type="map" id="fieldAttrMap">
+		<result column="FIELD_ID" property="fieldId"/>
+		<result column="ATTR_NAME" property="attrName"/>
+		<result column="ATTR_VALUE" property="attrValue"/>
+	</resultMap>
 	
 	<select id="listFormPage" parameterType="string" resultType="com.nway.wform.design.entity.FormPage">
 		select 

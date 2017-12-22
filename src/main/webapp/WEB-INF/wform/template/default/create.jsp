@@ -32,7 +32,7 @@
 						</c:if>
 						<td id="${field.name }_text" colspan="${field.colSpan }">
 							<c:import url="${componentPath }/${field.type }/${field.type }_edit.jsp"/>
-							<c:import url="${componentPath }/${field.type }/${field.type }_edit_js.jsp">
+							<c:import url="${componentPath }/${field.type }/${field.type }_edit.js">
 								<c:param name="attributes" value="{\"name\":121}"/>
 							</c:import>
 						</td>
@@ -44,7 +44,7 @@
 			</c:if>
 		</div>
 	</c:forEach>
-	<script type="text/javascript" src=""></script>
-	<script type="text/javascript" src="${contextPath }/js/${formPage.moduleName}/${formPage.name}_create.js"></script>
+	<jsp:include page="/WEB-INF/jsp/${formPage.moduleName}/${formPage.name}_create.js"/>
+	<jsp:include page="/WEB-INF/jsp/ext/${formPage.moduleName}/${formPage.name}_create_ext.js"/>
 </body>
 </html>

@@ -9,7 +9,7 @@
 		maxIdle="1000"
 		maxWait="50000"
 		username="root"
-		password="Zdt12345#"
+		password="Zdt123456#"
 		driverClassName="com.mysql.jdbc.Driver"
-		url="jdbc:mysql://192.168.3.6:3306/wform?useUnicode=true&amp;characterEncoding=utf8" />
+		url="jdbc:mysql://192.168.137.5:3306/wform?useUnicode=true&amp;characterEncoding=utf8" />
 </Context>
