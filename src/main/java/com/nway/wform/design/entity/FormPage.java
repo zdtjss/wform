@@ -6,16 +6,18 @@ import java.util.List;
 public class FormPage {
 
 	public static final int PAGE_CREATE_WAY_DESIGN = 1;
-	
 	public static final int PAGE_CREATE_WAY_PROCESS = 2;
 	
 	public static final int PAGE_TYPE_CREATE = 1;
-
 	public static final int PAGE_TYPE_EDIT = 2;
-
 	public static final int PAGE_TYPE_DETAILS = 3;
-
 	public static final int PAGE_TYPE_LIST = 4;
+	
+	public static final int PAGE_RENDER_TYPE_PC = 1;
+	public static final int PAGE_RENDER_TYPE_ANDROID_PHONE = 2;
+	public static final int PAGE_RENDER_TYPE_ANDROID_PAD = 3;
+	public static final int PAGE_RENDER_TYPE_IOS_PHONE = 4;
+	public static final int PAGE_RENDER_TYPE_IOS_PAD = 5;
 
 	private String id;
 
@@ -31,6 +33,8 @@ public class FormPage {
 	private String summary;
 
 	private String moduleId;
+	
+	private String moduleName;
 	
 	private Date createTime;
 
@@ -90,6 +94,14 @@ public class FormPage {
 
 	public void setModuleId(String moduleId) {
 		this.moduleId = moduleId;
+	}
+
+	public String getModuleName() {
+		return moduleName;
+	}
+
+	public void setModuleName(String moduleName) {
+		this.moduleName = moduleName;
 	}
 
 	public Date getCreateTime() {

@@ -31,7 +31,7 @@ public class FieldGroup {
 
 	private List<Field> fields;
 	
-	private List<Map<String,String>> fieldAttr;
+	private List<Map<String, String>> fieldAttr;
 	
 	private int order;
 

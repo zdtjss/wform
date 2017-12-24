@@ -1,4 +1,4 @@
-Hello ${r'${ name }'} #{name}
+Hello ${r'${ name }'} ${name}
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -7,6 +7,8 @@ Hello ${r'${ name }'} #{name}
 <title>Insert title here</title>
 </head>
 <body>
-
+<@exists path="log4j2.xml">
+abc
+</@file>
 </body>
 </html>

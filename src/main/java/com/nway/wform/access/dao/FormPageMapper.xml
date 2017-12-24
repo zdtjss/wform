@@ -12,6 +12,7 @@
 		    A.CREATE_TIME FORM_PAGE_CREATE_TIME,
 		    A.STATUS FORM_PAGE_STATUS,
 		    A.MODULE_ID FORM_PAGE_MODULE_ID,
+		    E.MODULE_NAME FORM_PAGE_MODULE_NAME,
 		    B.GROUP_ID GROUP_ID,
 		    B.NAME GROUP_NAME,
 		    CONCAT_WS('_', A.FORM_NAME, B.NAME) GROUP_FULL_NAME,
@@ -32,6 +33,8 @@
 		FROM
 		    T_FORM_FORMPAGE A
 		        LEFT JOIN
+		    T_FORM_MODULE E on A.MODULE_ID = E.MODULE_ID
+		    LEFT JOIN
 		    T_FORM_FIELD_GROUP B ON A.FORM_ID = B.FORM_PAGE_ID
 		        LEFT JOIN
 		    T_R_FIELD_GROUP C ON B.GROUP_ID = C.GROUP_ID
@@ -45,7 +48,8 @@
 		<result column="form_page_name" property="name"/>
 		<result column="form_page_type" property="pageType"/>
 		<result column="status" property="status"/>
-		<result column="form_page_module_id" property="modulId"/>
+		<result column="form_page_module_id" property="moduleId"/>
+		<result column="form_page_module_name" property="moduleName"/>
 		<result column="form_page_create_time" property="createTime"/>
 		<collection property="fielsGroups" ofType="com.nway.wform.design.entity.FieldGroup">
 			<result column="group_id" property="id"/>
@@ -68,16 +72,15 @@
 				<result column="column_span" property="colSpan"/>
 				<result column="editable" property="editable"/>
 			</collection>
-			<collection property="fieldAttr" column="group_id" resultMap="fieldAttrMap" select="selectFieldAttr"/>
 		</collection>
 	</resultMap>
 	
-	<select id="selectFieldAttr">
-		select FIELD_ID,ATTR_NAME,ATTR_VALUE from T_FORM_FIELD_ATTRIBUTE where FIELD_GROUP_ID = #{group_id}
+	<select id="listFieldAttr" resultMap="fieldAttrMap">
+		select FIELD_NAME,ATTR_NAME,ATTR_VALUE from T_FORM_FIELD_ATTRIBUTE where FIELD_GROUP_ID = #{groupId}
 	</select>
 	
 	<resultMap type="map" id="fieldAttrMap">
-		<result column="FIELD_ID" property="fieldId"/>
+		<result column="FIELD_NAME" property="fieldName"/>
 		<result column="ATTR_NAME" property="attrName"/>
 		<result column="ATTR_VALUE" property="attrValue"/>
 	</resultMap>
