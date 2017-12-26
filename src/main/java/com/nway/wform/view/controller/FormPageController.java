@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,10 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.nway.wform.access.FormPageAccess;
 import com.nway.wform.design.entity.FieldGroup;
 import com.nway.wform.design.entity.FormPage;
@@ -49,7 +53,7 @@ public class FormPageController {
 		
 		mv.addObject("formPage", formPage);
 		
-		System.out.println(JSONObject.toJSONString(formPage));
+		System.out.println(new Gson().toJson((formPage)));
 		
 		Template template = freemarker.getTemplate("/default/create.ftl");
 		
@@ -93,6 +97,20 @@ public class FormPageController {
 		mv.addObject("fieldAttr", groupFieldAttr);
 		
 		return mv;
+	}
+	
+	@RequestMapping("save")
+	@ResponseBody
+	public Map<String, Object> save(@RequestBody Map<String, Map<String, String>> json) {
+		
+		String pageId = json.get("formPage").get("pageId");
+		
+		for(FieldGroup group : formPageAccess.getFormPage(pageId).getFielsGroups()) {
+			
+			System.out.println(json.get(group.getName()));
+		}
+		
+		return Collections.<String, Object>singletonMap("status", 1);
 	}
 	
 	@RequestMapping("details")

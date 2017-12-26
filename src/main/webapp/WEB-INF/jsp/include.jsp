@@ -2,7 +2,10 @@
 <%
 	pageContext.setAttribute("contextPath", request.getContextPath());
 %>
-<script type="text/javascript">
-	var contextPath = ${contextPath };
-</script>
 <script src="${contextPath }/js/easyui/jquery.min.js"></script>
+<script src="${contextPath }/js/json2.js"></script>
+<script src="${contextPath }/js/commons.js"></script>
+
+<script type="text/javascript">
+	var contextPath = "${contextPath }";
+</script>

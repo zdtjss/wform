@@ -16,6 +16,6 @@ public interface BaseComponent {
 	 * 
 	 * @return
 	 */
-	Object getValue(String pageData);
+	Object getValue(String value);
 	
 }

@@ -8,19 +8,18 @@
 <title>${formPage.title!"" }</title>
 </head>
 <body>
-	<#--<c:forEach var="group" items="${formPage.fielsGroups }">-->
+	<input id="pageId" name="pageId" type="hidden" value="${formPage.id}">
 	<#list formPage.fielsGroups as group>
-		<div id="${group.name }" class="page_group">
 			<#if group.displayType == 1>
+			<form id="${group.name }" class="page_group">
+				<input name="groupName" type="hidden" value="${group.name }">
 				<table>
-					<#--<c:set var="rowNum" value="1"/>-->
 					<#assign rowNum = 1>
 					<tr>
 					<#list group.fields as field>
 						<#if rowNum != field.rowNum> 
 							</tr>
 							<tr>
-							<#--<c:set var="rowNum" value="${field.rowNum }"/>-->
 							<#assign rowNum = field.rowNum>
 						</#if>
 						<#-- 独占一行的不现实 <th> -->
@@ -32,20 +31,42 @@
 								<jsp:param name="groupId" value="${group.id}"/>
 								<jsp:param name="fieldName" value="${field.name}"/>
 							</jsp:include>
-							<#--<c:import url="${componentPath }/${field.type }/${field.type }_edit.js">
-								<c:param name="attributes" value="{\"name\":121}"/>
-							</c:import>-->
 						</td>
 					</#list>
 					<tr>
 				</table>
+				</form>
 			</#if>
 			<#if group.displayType == 2>
 			</#if>
-		</div>
+			<div id="processbar">
+				<a href="javascript:void(0)" onclick="submit()">保存</a>
+			</div>
 	</#list>
-	<@exists path="/WEB-INF/wform/${formPage.moduleName}/${formPage.name}_create.js">
-		<jsp:include page="/WEB-INF/wform/${formPage.moduleName}/${formPage.name}_create.js"/>
+	<script type="text/javascript">
+		function submit() {
+			var formData = {}; 
+			formData["formPage"] = {pageId : $("#pageId").val()};
+			$(".page_group").each(function() {
+				formData[this.id] = $(this).serializeObject();
+			});
+			$.ajax({
+				type : "post",
+				dataType : "json",
+				contentType:"application/json",
+				data : JSON.stringify(formData),
+				url : contextPath + "/form/save",
+				success : function(resp) {
+					
+				},
+				error : function() {
+						
+				}
+			});
+		}
+	</script>
+	<@exists path="/WEB-INF/jsp/${formPage.moduleName}/${formPage.name}_create.js">
+		<jsp:include page="/WEB-INF/jsp/${formPage.moduleName}/${formPage.name}_create.js"/>
 	</@exists>
 </body>
 </html>
