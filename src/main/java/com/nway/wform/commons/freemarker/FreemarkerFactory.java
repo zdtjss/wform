@@ -29,6 +29,7 @@ public class FreemarkerFactory implements FactoryBean<Configuration>, ObjectFact
 
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setOutputEncoding("UTF-8");
+		cfg.unsetCacheStorage();
 		cfg.setSharedVariable("exists", new FileExistsDirective());
 		cfg.setSharedVariable("baseWebPath", new SimpleScalar(baseWebPath));
 		try {

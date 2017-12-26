@@ -21,7 +21,7 @@
 							</tr>
 							<tr>
 							<#--<c:set var="rowNum" value="${field.rowNum }"/>-->
-							<#assign rowNum = field.rowNum + rowNum>
+							<#assign rowNum = field.rowNum>
 						</#if>
 						<#-- 独占一行的不现实 <th> -->
 						<#if field.colSpan != group.maxColumnNum >

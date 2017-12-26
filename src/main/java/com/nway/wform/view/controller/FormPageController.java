@@ -2,9 +2,7 @@ package com.nway.wform.view.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,9 +39,11 @@ public class FormPageController {
 	}
 	
 	@RequestMapping("create")
-	public ModelAndView create(String formPageId, HttpServletRequest request, HttpServletResponse reaponse) throws Exception {
+	public ModelAndView create(HttpServletRequest request, HttpServletResponse reaponse) throws Exception {
 		
 		ModelAndView mv = new ModelAndView();
+		
+		String formPageId = request.getParameter("formPageId");
 		
 		FormPage formPage = formPageAccess.getFormPage(formPageId);
 		
@@ -58,7 +58,7 @@ public class FormPageController {
 		viewModel.put("formPage", formPage);
 		
 		File jspFile = new File(request.getSession().getServletContext().getRealPath("/") + File.separator
-				+ "WEB-INF/jsp/" + formPage.getName()+".jsp");
+				+ "WEB-INF/jsp/" + formPage.getName() + ".jsp");
 		
 		jspFile.getParentFile().mkdirs();
 		
@@ -73,18 +73,24 @@ public class FormPageController {
 		fos.close();
 		osw.close();
 		
-		Map<String, Object> dataModel = new HashMap<String, Object>();
+		template.getConfiguration().clearTemplateCache();
 		
-		dataModel.put("title", "这是标题啊");
+		Map<String, Object> dataModel = new HashMap<String, Object>();
 		
 		mv.setViewName(formPage.getName());
 		
+		dataModel.put("title", "标题行不行");
+		
 		mv.addObject("dataModel", dataModel);
+		
+		Map<String, Object> groupFieldAttr = new HashMap<String, Object>();
 		
 		for(FieldGroup group :formPage.getFielsGroups()) {
 			
-			mv.addObject("fieldAttr", Collections.singletonMap(group.getId(), formPageAccess.listFieldAttr(group.getId())));
+			groupFieldAttr.put(group.getId(), formPageAccess.listFieldAttr(group.getId()));
 		}
+		
+		mv.addObject("fieldAttr", groupFieldAttr);
 		
 		return mv;
 	}
@@ -99,8 +105,4 @@ public class FormPageController {
 		return mv;
 	}
 	
-	public static void main(String[] args) {
-		
-		System.out.println(java.util.UUID.randomUUID().toString().replace("-", ""));
-	}
 }

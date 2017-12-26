@@ -4,18 +4,18 @@
 	version="2.0">
 
 	<tlib-version>1.1</tlib-version>
-	<short-name>formFn</short-name>
+	<short-name>efn</short-name>
 	<uri>http://wform.nway.com/jsp/tag/functions</uri>
 
 	<function>
 		<description>
-            Tests if an input string contains the specified substring.
+            
         </description>
 		<name>css</name>
 		<function-class>com.nway.wform.commons.tag.FormFunction</function-class>
 		<function-signature>String css(java.lang.String, java.lang.String)</function-signature>
 		<example>
-            &lt;c:if test="${formFn:css(name, value)}">
+            ${efn:css(name, value)}
         </example>
 	</function>
 </taglib>
