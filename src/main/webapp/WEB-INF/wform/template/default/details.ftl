@@ -11,6 +11,7 @@
 	<#list formPage.fielsGroups as group>
 			<#if group.displayType == 1>
 			<form id="${group.name }" class="page_group">
+				<input id="${group.name }Pkid" name="pkId" type="hidden" value="${r"${dataModel['"}${group.id }${r"']['pkId']}"}">
 				<table>
 					<#assign rowNum = 1>
 					<tr>
@@ -25,7 +26,7 @@
 							<th id="${field.name }_label">${field.display }</th>
 						</#if>
 						<td id="${field.name }_text" colspan="${field.colSpan!1 }">
-							<jsp:include page="/WEB-INF/wform/component/${field.type }/${field.type }_edit.jsp">
+							<jsp:include page="/WEB-INF/wform/component/${field.type }/${field.type }_detail.jsp">
 								<jsp:param name="groupId" value="${group.id}"/>
 								<jsp:param name="fieldName" value="${field.name}"/>
 							</jsp:include>
@@ -38,33 +39,12 @@
 			<#if group.displayType == 2>
 			</#if>
 			<div id="processbar">
-				<a href="javascript:void(0)" onclick="submit()">保存</a>
 			</div>
 	</#list>
 	<script type="text/javascript">
-		function submit() {
-			var formData = {}; 
-			formData["formPage"] = {pageId : $("#pageId").val()};
-			$(".page_group").each(function() {
-				formData[this.id] = $(this).serializeObject();
-			});
-			$.ajax({
-				type : "post",
-				dataType : "json",
-				contentType:"application/json",
-				data : JSON.stringify(formData),
-				url : contextPath + "/form/save",
-				success : function(resp) {
-					
-				},
-				error : function() {
-						
-				}
-			});
-		}
 	</script>
-	<@exists path="/WEB-INF/jsp/${formPage.moduleName}/${formPage.name}_create.js">
-		<jsp:include page="/WEB-INF/jsp/${formPage.moduleName}/${formPage.name}_create.js"/>
+	<@exists path="/WEB-INF/jsp/${formPage.moduleName}/${formPage.name}_details.js">
+		<jsp:include page="/WEB-INF/jsp/${formPage.moduleName}/${formPage.name}_details.js"/>
 	</@exists>
 </body>
 </html>

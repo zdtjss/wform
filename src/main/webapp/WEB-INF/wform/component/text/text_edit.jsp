@@ -4,7 +4,7 @@
 
 <c:set var="width" value="${fieldAttr[param.groupId][param.fieldName]['width'] }"/>
 <c:set var="height" value="${fieldAttr[param.groupId][param.fieldName]['height'] }"/>
-<input type="text" name="${param.fieldName }" value="${dataModel[param.fieldName] }" style="${efn:css('width', width)}${efn:css('height', height)}">
+<input type="text" name="${param.fieldName }" value="${dataModel[param.groupId][param.fieldName] }" style="${efn:css('width', width)}${efn:css('height', height)}">
 <script type="text/javascript">
 
 </script>

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,16 @@ import com.nway.wform.design.entity.FormPage;
 @Component
 public class FormDataAccess {
 
+	private static final String ACCESS_TYPE_CREATE = "save";
+	
+	private static final String ACCESS_TYPE_UPDATE = "update";
+	
+	private static final String ACCESS_TYPE_DETAILS = "details";
+	
+	private static final String ACCESS_TYPE_LIST = "list";
+	
+	private static final String ACCESS_TYPE_REMOVE = "remove";
+	
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 	
@@ -42,12 +53,14 @@ public class FormDataAccess {
 			
 			Map<String, Object> groupData = formData.get(group.getName());
 			
+			groupData.put("pkId", UUID.randomUUID().toString());
+			
 			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(page.getName(), group.getName());
 						
 			fieldGroupDataHandler.handleParam(HandlerType.FIELD_GROUP_DATA_CREATE, group, groupData);
 			
 			int effectCount = sqlSessionTemplate.insert(
-					TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), groupData);
+					TemporaryStatementRegistry.getLastestName(page.getName(), group.getName(), ACCESS_TYPE_CREATE), groupData);
 			
 			group.setEffectCount(effectCount);
 			
@@ -86,7 +99,7 @@ public class FormDataAccess {
 			
 			fieldGroupDataHandler.handleParam(HandlerType.FIELD_GROUP_DATA_MODIFY, group, groupData);
 			
-			int effectCount = sqlSessionTemplate.update(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), groupData);
+			int effectCount = sqlSessionTemplate.update(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName(), ACCESS_TYPE_UPDATE), groupData);
 			
 			group.setEffectCount(effectCount);
 			
@@ -128,7 +141,7 @@ public class FormDataAccess {
 			
 			fieldGroupDataHandler.handleParam(HandlerType.FIELD_GROUP_DATA_QUERY, group, param);
 			
-			Map<String, Object> groupData = sqlSessionTemplate.selectOne(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), dataId);
+			Map<String, Object> groupData = sqlSessionTemplate.selectOne(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName(), ACCESS_TYPE_DETAILS), dataId);
 
 			// 子表操作
 			for (Field field : group.getFields()) {
@@ -139,7 +152,7 @@ public class FormDataAccess {
 				}
 			}
 
-			pageData.put(group.getName(), groupData);
+			pageData.put(group.getId(), groupData);
 
 			fieldGroupDataHandler.handleResult(HandlerType.FIELD_GROUP_DATA_QUERY, group, groupData);
 		}
@@ -181,7 +194,7 @@ public class FormDataAccess {
 
 			if (group.getDisplayType() == FieldGroup.DISPLAY_TYPE_LIST) {
 				
-				pageData = sqlSessionTemplate.selectList(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), param);
+				pageData = sqlSessionTemplate.selectList(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName(), ACCESS_TYPE_LIST), param);
 
 				// 子表操作
 				for (Field field : group.getFields()) {
@@ -219,7 +232,7 @@ public class FormDataAccess {
 
 			fieldGroupDataHandler.handleParam(HandlerType.FIELD_GROUP_DATA_REMOVE, group, param);
 
-			int effectCount = sqlSessionTemplate.delete(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), dataId);
+			int effectCount = sqlSessionTemplate.delete(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName(), ACCESS_TYPE_REMOVE), dataId);
 			
 			group.setEffectCount(effectCount);
 			

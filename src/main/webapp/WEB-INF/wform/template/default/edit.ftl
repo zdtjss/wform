@@ -11,6 +11,7 @@
 	<#list formPage.fielsGroups as group>
 			<#if group.displayType == 1>
 			<form id="${group.name }" class="page_group">
+			<input id="${group.name }Pkid" name="pkId" type="hidden" value="${r"${dataModel['"}${group.id }${r"']['pkId']}"}">
 				<table>
 					<#assign rowNum = 1>
 					<tr>
@@ -44,7 +45,7 @@
 	<script type="text/javascript">
 		function submit() {
 			var formData = {}; 
-			formData["formPage"] = {pageId : $("#pageId").val()};
+			formData["formPage"] = {pageId : $("#pageId").val(), pageType : "update"};
 			$(".page_group").each(function() {
 				formData[this.id] = $(this).serializeObject();
 			});

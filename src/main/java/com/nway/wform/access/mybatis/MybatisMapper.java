@@ -23,7 +23,7 @@ public class MybatisMapper {
 		
 		for(FieldGroup group : formPage.getFielsGroups()) {
 			
-			if(formPage.getPageType() == FormPage.PAGE_TYPE_CREATE && group.isEditable()) {
+			/*if(formPage.getPageType() == FormPage.PAGE_TYPE_CREATE && group.isEditable()) {
 				
 				
 				xml.append(group.getUpdateFieldNames());
@@ -42,7 +42,7 @@ public class MybatisMapper {
 				
 				
 				xml.append(group.getUpdateFieldNames());
-			}
+			}*/
 		}
 	}
 

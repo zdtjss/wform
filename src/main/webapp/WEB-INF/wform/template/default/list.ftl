@@ -54,6 +54,7 @@
 				    url:contextPath + "/form/listData",
 				    queryParams : queryParam,
 				    columns:[[
+				    		
 				        <#list group.fields as field>
 					        {field:'${field.name }',title:'${field.display }',width:100}${field?has_next?then(',','')}
 					    </#list>

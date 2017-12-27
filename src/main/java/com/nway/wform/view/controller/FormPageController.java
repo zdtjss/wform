@@ -41,27 +41,27 @@ public class FormPageController {
 	private FormDataAccess formDataAccess;
 	@Autowired
 	private Configuration freemarker;
-
-	@RequestMapping("create")
-	public ModelAndView create(HttpServletRequest request, HttpServletResponse reaponse) throws Exception {
+	
+	@RequestMapping("toUI")
+	public ModelAndView toUI(HttpServletRequest request, HttpServletResponse reaponse) throws Exception {
 		
 		ModelAndView mv = new ModelAndView();
+		
+		Map<String, Object> viewModel = new HashMap<String, Object>();
+		
+		Map<String, Map<String, Object>> dataModel = Collections.emptyMap();
+		
+		String pageType = request.getParameter("pageType");
+		
+		String bizId = request.getParameter("pkId");
 		
 		String formPageId = request.getParameter("formPageId");
 		
 		FormPage formPage = formPageAccess.getFormPage(formPageId);
 		
-		Map<String, Object> viewModel = new HashMap<String, Object>();
-		
 		viewModel.put("formPage", formPage);
 		
-		makeJsp("/default/create.ftl", viewModel, formPage.getName(), request);
-		
-		Map<String, Object> dataModel = new HashMap<String, Object>();
-		
-		mv.setViewName(formPage.getName());
-		
-		mv.addObject("dataModel", dataModel);
+		makeJsp(pageType, viewModel, formPage.getName(), request);
 		
 		Map<String, Object> groupFieldAttr = new HashMap<String, Object>();
 		
@@ -70,42 +70,15 @@ public class FormPageController {
 			groupFieldAttr.put(group.getId(), formPageAccess.listFieldAttr(group.getId()));
 		}
 		
-		mv.addObject("fieldAttr", groupFieldAttr);
-		
-		return mv;
-	}
-	
-	@RequestMapping("list")
-	public ModelAndView list(HttpServletRequest request, HttpServletResponse reaponse) throws Exception {
-		
-		ModelAndView mv = new ModelAndView();
-		
-		String formPageId = request.getParameter("pageId");
-		
-		FormPage formPage = formPageAccess.getFormPage(formPageId);
-		
-		mv.addObject("formPage", formPage);
-		
-		Map<String, Object> viewModel = new HashMap<String, Object>();
-		
-		viewModel.put("formPage", formPage);
-		
-		makeJsp("/default/list.ftl", viewModel, formPage.getName(), request);
-		
-		Map<String, Object> dataModel = new HashMap<String, Object>();
-		
-		mv.setViewName(formPage.getName());
-		
-		mv.addObject("dataModel", dataModel);
-		
-		Map<String, Object> groupFieldAttr = new HashMap<String, Object>();
-		
-		for(FieldGroup group :formPage.getFielsGroups()) {
+		if(FormPage.PAGE_TYPE_DETAILS.equals(pageType) || FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
 			
-			groupFieldAttr.put(group.getId(), formPageAccess.listFieldAttr(group.getId()));
+			dataModel = formDataAccess.get(formPage, bizId);
 		}
 		
+		mv.addObject("dataModel", dataModel);
 		mv.addObject("fieldAttr", groupFieldAttr);
+		
+		mv.setViewName(formPage.getName() + "_" + pageType);
 		
 		return mv;
 	}
@@ -115,6 +88,8 @@ public class FormPageController {
 	public Map<String, Object> save(@RequestBody Map<String, Map<String, String>> json) {
 		
 		String pageId = json.get("formPage").get("pageId");
+		
+		String pageType = json.get("formPage").get("pageType");
 		
 		FormPage formPage = formPageAccess.getFormPage(pageId);
 		
@@ -131,10 +106,19 @@ public class FormPageController {
 				groupData.put(field.getName(), field.getObjType().getValue(groupDataOrigin.get(field.getName())));
 			}
 			
+			groupData.put("pkId", groupDataOrigin.get("pkId"));
+			
 			formData.put(group.getName(), groupData);
 		}
 		
-		formDataAccess.create(formPage, formData);
+		if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
+			
+			formDataAccess.create(formPage, formData);
+		}
+		else if(FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
+			
+			formDataAccess.update(formPage, formData);
+		}
 		
 		return Collections.<String, Object>singletonMap("status", 1);
 	}
@@ -177,14 +161,30 @@ public class FormPageController {
 		return formDataAccess.list(formPage, queryParam);
 	}
 	
-
-	private void makeJsp(String templateName, Map<String, Object> viewModel, String pageName,
+	private void makeJsp(String type, Map<String, Object> viewModel, String pageName,
 			HttpServletRequest request) throws IOException, TemplateException {
 
-		Template template = freemarker.getTemplate(templateName);
+		Template template = null;
+		
+		if("create".equals(type)) {
+			
+			template = freemarker.getTemplate("/default/create.ftl");
+		}
+		else if("details".equals(type)) {
+			
+			template = freemarker.getTemplate("/default/details.ftl");
+		}
+		else if("update".equals(type)) {
+			
+			template = freemarker.getTemplate("/default/edit.ftl");
+		}
+		else if("list".equals(type)) {
+			
+			template = freemarker.getTemplate("/default/list.ftl");
+		}
 
 		File jspFile = new File(request.getSession().getServletContext().getRealPath("/") + File.separator
-				+ "WEB-INF/jsp/" + pageName + ".jsp");
+				+ "WEB-INF/jsp/" + pageName + "_" + type + ".jsp");
 
 		jspFile.getParentFile().mkdirs();
 

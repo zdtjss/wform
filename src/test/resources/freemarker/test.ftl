@@ -9,6 +9,6 @@ Hello ${r'${ name }'} ${name}
 <body>
 <@exists path="log4j2.xml">
 abc
-</@file>
+</@exists>
 </body>
 </html>

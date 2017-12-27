@@ -8,10 +8,10 @@ public class FormPage {
 	public static final int PAGE_CREATE_WAY_DESIGN = 1;
 	public static final int PAGE_CREATE_WAY_PROCESS = 2;
 	
-	public static final int PAGE_TYPE_CREATE = 1;
-	public static final int PAGE_TYPE_EDIT = 2;
-	public static final int PAGE_TYPE_DETAILS = 3;
-	public static final int PAGE_TYPE_LIST = 4;
+	public static final String PAGE_TYPE_CREATE = "create";
+	public static final String PAGE_TYPE_EDIT = "update";
+	public static final String PAGE_TYPE_DETAILS = "details";
+	public static final String PAGE_TYPE_LIST = "list";
 	
 	public static final int PAGE_RENDER_TYPE_PC = 1;
 	public static final int PAGE_RENDER_TYPE_ANDROID_PHONE = 2;
