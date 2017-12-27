@@ -45,15 +45,15 @@ public class FormPageController {
 	@RequestMapping("toUI")
 	public ModelAndView toUI(HttpServletRequest request, HttpServletResponse reaponse) throws Exception {
 		
-		ModelAndView mv = new ModelAndView();
+		ModelAndView view = new ModelAndView();
 		
 		Map<String, Object> viewModel = new HashMap<String, Object>();
 		
 		Map<String, Map<String, Object>> dataModel = Collections.emptyMap();
 		
-		String pageType = request.getParameter("pageType");
-		
 		String bizId = request.getParameter("pkId");
+		
+		String pageType = request.getParameter("pageType");
 		
 		String formPageId = request.getParameter("formPageId");
 		
@@ -75,12 +75,11 @@ public class FormPageController {
 			dataModel = formDataAccess.get(formPage, bizId);
 		}
 		
-		mv.addObject("dataModel", dataModel);
-		mv.addObject("fieldAttr", groupFieldAttr);
+		view.addObject("dataModel", dataModel);
+		view.addObject("fieldAttr", groupFieldAttr);
+		view.setViewName(formPage.getName() + "_" + pageType);
 		
-		mv.setViewName(formPage.getName() + "_" + pageType);
-		
-		return mv;
+		return view;
 	}
 	
 	@RequestMapping("save")
@@ -121,16 +120,6 @@ public class FormPageController {
 		}
 		
 		return Collections.<String, Object>singletonMap("status", 1);
-	}
-	
-	@RequestMapping("details")
-	public ModelAndView details(String formPageId) {
-		
-		ModelAndView mv = new ModelAndView("template/details");
-		
-		mv.addObject("formPage", formPageAccess.getFormPage(formPageId));
-		
-		return mv;
 	}
 	
 	@RequestMapping("listData")
@@ -183,8 +172,12 @@ public class FormPageController {
 			template = freemarker.getTemplate("/default/list.ftl");
 		}
 
-		File jspFile = new File(request.getSession().getServletContext().getRealPath("/") + File.separator
-				+ "WEB-INF/jsp/" + pageName + "_" + type + ".jsp");
+		StringBuilder jsp = new StringBuilder();
+
+		jsp.append(request.getSession().getServletContext().getRealPath("/")).append(File.separator)
+				.append("WEB-INF/jsp/").append("_").append(type).append(".jsp");
+
+		File jspFile = new File(jsp.toString());
 
 		jspFile.getParentFile().mkdirs();
 

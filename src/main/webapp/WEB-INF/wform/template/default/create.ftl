@@ -16,15 +16,15 @@
 					<tr>
 					<#list group.fields as field>
 						<#if rowNum != field.rowNum> 
-							</tr>
-							<tr>
-							<#assign rowNum = field.rowNum>
+						</tr>
+						<tr>
+						<#assign rowNum = field.rowNum>
 						</#if>
 						<#-- 独占一行的不现实 <th> -->
 						<#if field.colSpan != group.maxColumnNum >
-							<th id="${field.name }_label">${field.display }</th>
+						<th id="${field.name }_label">${field.display }</th>
 						</#if>
-						<td id="${field.name }_text" colspan="${field.colSpan!1 }">
+						<td id="${field.name }_view" colspan="${field.colSpan!1 }">
 							<jsp:include page="/WEB-INF/wform/component/${field.type }/${field.type }_edit.jsp">
 								<jsp:param name="groupId" value="${group.id}"/>
 								<jsp:param name="fieldName" value="${field.name}"/>
