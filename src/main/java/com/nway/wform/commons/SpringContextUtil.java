@@ -1,7 +1,7 @@
 package com.nway.wform.commons;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Map;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SpringContextUtil implements ApplicationContextAware {
 	
-	private static final Logger logger = LoggerFactory.getLogger(SpringContextUtil.class);
-
 	// Spring应用上下文环境
 	private static ApplicationContext applicationContext;
 
@@ -38,49 +36,32 @@ public class SpringContextUtil implements ApplicationContextAware {
 	 */
 	public static Object getBean(String name) {
 		
-		Object bean = null;
-		
-		try {
-			
-			bean = applicationContext.getBean(name);
-		}
-		catch (Exception e) {
-			
-			logger.error(e.toString(), e);
-		}
-		
-		return bean;
+		return applicationContext.getBean(name);
 	}
 
 	public static <T> T getBean(String name, Class<T> requiredType) {
 		
-		T bean = null;
-		
-		try {
-			
-			bean = applicationContext.getBean(name, requiredType);
-		}
-		catch (Exception e) {
-			
-			logger.error(e.toString(), e);
-		}
-		
-		return bean;
+		return applicationContext.getBean(name, requiredType);
 	}
 	
 	public static <T> T getBean(String name, Class<T> requiredType, T defaultObj) {
-		
+
 		T bean = null;
-		
-		try {
-			
+
+		if (applicationContext.containsBean(name)) {
+
 			bean = applicationContext.getBean(name, requiredType);
 		}
-		catch (Exception e) {
+		else {
+
 			bean = defaultObj;
-			logger.error(e.toString(), e);
 		}
-		
+
 		return bean;
+	}
+	
+	public static <T> Map<String, T> getBeansOfType(Class<T> type) {
+
+		return applicationContext.getBeansOfType(type);
 	}
 }

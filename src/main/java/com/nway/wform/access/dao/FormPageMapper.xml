@@ -15,7 +15,6 @@
 		    E.MODULE_NAME FORM_PAGE_MODULE_NAME,
 		    B.GROUP_ID GROUP_ID,
 		    B.NAME GROUP_NAME,
-		    CONCAT_WS('_', A.FORM_NAME, B.NAME) GROUP_FULL_NAME,
 		    B.IS_MANUAL GROUP_IS_MANUAL,
 		    B.DISPLAY_TYPE GROUP_DISPLAY_TYPE,
 		    B.EDITABLE GROUP_EDITABLE,
@@ -54,7 +53,6 @@
 		<collection property="fielsGroups" ofType="com.nway.wform.design.entity.FieldGroup">
 			<result column="group_id" property="id"/>
 			<result column="group_name" property="name"/>
-			<result column="group_full_name" property="fullName"/>
 			<result column="group_is_manual" property="isManual"/>
 			<result column="group_display_type" property="displayType"/>
 			<result column="group_is_modify" property="isModify"/>

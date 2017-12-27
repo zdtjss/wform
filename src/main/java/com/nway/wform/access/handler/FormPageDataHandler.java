@@ -6,7 +6,7 @@ import com.nway.wform.design.entity.FormPage;
 
 public interface FormPageDataHandler {
 
-	void onBefore(HandlerType handlerType, FormPage formPage, Map<String, Object> param);
+	void handleParam(HandlerType handlerType, FormPage formPage, Map<String, Object> param);
 
-	void onAfter(HandlerType handlerType, FormPage formPage, Map<String, Object> param);
+	void handleData(HandlerType handlerType, FormPage formPage, Object data);
 }

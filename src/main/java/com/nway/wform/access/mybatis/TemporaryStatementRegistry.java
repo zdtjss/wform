@@ -7,27 +7,29 @@ public class TemporaryStatementRegistry {
 
 	private static final Map<String, String> STATEMENT_NAMES = new HashMap<String,String>();
 	
-	public static void addName(String fullGroupName) {
+	public static void addName(String mapperName) {
 		
-		if(STATEMENT_NAMES.containsKey(fullGroupName)) {
-			
-			STATEMENT_NAMES.put(fullGroupName, generatorStatementName(fullGroupName));
-		}
-		else {
-			
-			STATEMENT_NAMES.put(fullGroupName, fullGroupName);
-		}
+		STATEMENT_NAMES.put(mapperName, generatorStatementName(mapperName));
 	}
 	
-	public static String getLastestName(String fullGroupName) {
+	public static String getLastestName(String pageName, String groupName) {
+
+		String originMapperName = pageName + "." + groupName;
 		
-		return STATEMENT_NAMES.get(fullGroupName);
+		String temporaryStatement = STATEMENT_NAMES.get(originMapperName);
+
+		return temporaryStatement == null ? originMapperName : temporaryStatement;
 	}
 	
-	private static String generatorStatementName(String fullGroupName) {
+	private static String generatorStatementName(String mapperName) {
 		
-		String lastest = getLastestName(fullGroupName);
+		String lastest = STATEMENT_NAMES.get(mapperName);
 		
-		return fullGroupName + "_" + (Integer.parseInt(lastest.substring(lastest.lastIndexOf('_'))) + 1);
+		if (lastest == null) {
+
+			lastest = lastest + "_0";
+		}
+		
+		return mapperName + "_" + (Integer.parseInt(lastest.substring(lastest.lastIndexOf('_'))) + 1);
 	}
 }

@@ -7,11 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nway.wform.access.component.BaseComponent;
 import com.nway.wform.access.component.MultiValueComponent;
 import com.nway.wform.access.handler.FieldGroupDataHandler;
 import com.nway.wform.access.handler.FormPageDataHandler;
@@ -23,134 +21,126 @@ import com.nway.wform.design.entity.FieldGroup;
 import com.nway.wform.design.entity.FormPage;
 
 @Component
-public class FormDataAccess implements InitializingBean {
+public class FormDataAccess {
 
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 	
-	private Map<String, BaseComponent> components = new HashMap<String, BaseComponent>();
-	
 	/**
 	 * FormPage.PAGE_TYPE_CREATE && group.isEditable()
 	 * 
-	 * @param formPage
+	 * @param page
 	 * @param formData
 	 */
-	public void create(FormPage formPage, Map<String, Map<String, Object>> formData) {
+	public void create(FormPage page, Map<String, Map<String, Object>> formData) {
 		
-		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(formPage.getName());
+		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(page.getName());
 		
-		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_CREATE, formPage, (Map) formData);
+		formPageDataHandler.handleParam(HandlerType.FORM_PAGE_DATA_CREATE, page, (Map) formData);
 		
-		for(FieldGroup group : formPage.getFielsGroups()) {
+		for(FieldGroup group : page.getFielsGroups()) {
 			
 			Map<String, Object> groupData = formData.get(group.getName());
 			
-			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(group.getName());
+			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(page.getName(), group.getName());
 						
-			fieldGroupDataHandler.onBefore(HandlerType.FIELD_GROUP_DATA_CREATE, group, groupData);
+			fieldGroupDataHandler.handleParam(HandlerType.FIELD_GROUP_DATA_CREATE, group, groupData);
 			
-			sqlSessionTemplate.insert(TemporaryStatementRegistry.getLastestName(group.getFullName()), groupData);
+			sqlSessionTemplate.insert(
+					TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), groupData);
 			
 			// 子表操作
 			for(Field field : group.getFields()) {
 				
-				BaseComponent cmp = components.get(field.getType());
-				
-				if(MultiValueComponent.class.isInstance(cmp)) {
+				if(MultiValueComponent.class.isInstance(field.getObjType())) {
 
-					((MultiValueComponent) cmp).save(groupData.get(field.getName()));
+					((MultiValueComponent) field.getObjType()).save(groupData.get(field.getName()));
 				}
 			}
 			
-			fieldGroupDataHandler.onAfter(HandlerType.FIELD_GROUP_DATA_CREATE, group, formData.get(group.getName()));
+			fieldGroupDataHandler.handleData(HandlerType.FIELD_GROUP_DATA_CREATE, group, formData.get(group.getName()));
 		}
 		
-		formPageDataHandler.onAfter(HandlerType.FORM_PAGE_DATA_CREATE, formPage, (Map) formData);
+		formPageDataHandler.handleData(HandlerType.FORM_PAGE_DATA_CREATE, page, (Map) formData);
 	}
-	
 	
 	/**
 	 * FormPage.PAGE_TYPE_EDIT && group.isEditable()
 	 * 
-	 * @param formPage
+	 * @param page
 	 * @param formData
 	 */
-	public void update(FormPage formPage, Map<String, Map<String, Object>> formData) {
+	public void update(FormPage page, Map<String, Map<String, Object>> formData) {
 		
-		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(formPage.getName());
+		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(page.getName());
 
-		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_MODIFY, formPage, (Map) formData);
+		formPageDataHandler.handleParam(HandlerType.FORM_PAGE_DATA_MODIFY, page, (Map) formData);
 		
-		for(FieldGroup group : formPage.getFielsGroups()) {
+		for(FieldGroup group : page.getFielsGroups()) {
 			
 			Map<String, Object> groupData = formData.get(group.getName());
 			
-			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(group.getName());
+			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(page.getName(), group.getName());
 						
-			fieldGroupDataHandler.onBefore(HandlerType.FIELD_GROUP_DATA_MODIFY, group, groupData);
+			fieldGroupDataHandler.handleParam(HandlerType.FIELD_GROUP_DATA_MODIFY, group, groupData);
 			
-			sqlSessionTemplate.update(TemporaryStatementRegistry.getLastestName(group.getFullName()), groupData);
+			sqlSessionTemplate.update(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), groupData);
 			
 			// 子表操作
 			for(Field field : group.getFields()) {
 				
-				BaseComponent cmp = components.get(field.getType());
-				
-				if(MultiValueComponent.class.isInstance(cmp)) {
+				if(MultiValueComponent.class.isInstance(field.getObjType())) {
 
-					((MultiValueComponent) cmp).save(groupData.get(field.getName()));
+					((MultiValueComponent) field.getObjType()).save(groupData.get(field.getName()));
 				}
 			}
 			
-			fieldGroupDataHandler.onBefore(HandlerType.FIELD_GROUP_DATA_MODIFY, group, formData.get(group.getName()));
+			fieldGroupDataHandler.handleParam(HandlerType.FIELD_GROUP_DATA_MODIFY, group, formData.get(group.getName()));
 		}
 		
-		formPageDataHandler.onAfter(HandlerType.FORM_PAGE_DATA_MODIFY, formPage, (Map) formData);
+		formPageDataHandler.handleData(HandlerType.FORM_PAGE_DATA_MODIFY, page, (Map) formData);
 	}
 	
 	/**
 	 * 对应详情页面
 	 * 
-	 * @param formPage
+	 * @param page
 	 * @param param
 	 * @return
 	 */
-	public Map<String, Map<String, Object>> get(FormPage formPage, String dataId) {
+	public Map<String, Map<String, Object>> get(FormPage page, String dataId) {
 		
 		Map<String, Map<String, Object>> pageData = new HashMap<String, Map<String, Object>>();
 		
 		Map<String, Object> param = Collections.<String, Object>singletonMap("id", dataId);
 		
-		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(formPage.getName());
+		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(page.getName());
 
-		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_QUERY, formPage, param);
+		formPageDataHandler.handleParam(HandlerType.FORM_PAGE_DATA_QUERY, page, param);
 		
-		for(FieldGroup group : formPage.getFielsGroups()) {
+		for(FieldGroup group : page.getFielsGroups()) {
 			
-			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(group.getName());
+			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(page.getName(), group.getName());
 			
-			fieldGroupDataHandler.onBefore(HandlerType.FIELD_GROUP_DATA_QUERY, group, param);
+			fieldGroupDataHandler.handleParam(HandlerType.FIELD_GROUP_DATA_QUERY, group, param);
 			
-			Map<String, Object> groupData = sqlSessionTemplate.selectOne(TemporaryStatementRegistry.getLastestName(group.getFullName()), dataId);
+			Map<String, Object> groupData = sqlSessionTemplate.selectOne(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), dataId);
 
 			// 子表操作
 			for (Field field : group.getFields()) {
 
-				BaseComponent cmp = components.get(field.getType());
-				
-				if(MultiValueComponent.class.isInstance(cmp)) {
+				if(MultiValueComponent.class.isInstance(field.getObjType())) {
 					
-					groupData.put(field.getName(), ((MultiValueComponent) cmp).getAssociatedValue(String.valueOf(groupData.get(field.getName()))));
+					groupData.put(field.getName(), ((MultiValueComponent) field.getObjType()).getAssociatedValue(String.valueOf(groupData.get(field.getName()))));
 				}
 			}
 
 			pageData.put(group.getName(), groupData);
 
-			fieldGroupDataHandler.onAfter(HandlerType.FIELD_GROUP_DATA_QUERY, group, param);
+			fieldGroupDataHandler.handleData(HandlerType.FIELD_GROUP_DATA_QUERY, group, param);
 		}
 		
-		formPageDataHandler.onAfter(HandlerType.FORM_PAGE_DATA_QUERY, formPage, param);
+		formPageDataHandler.handleData(HandlerType.FORM_PAGE_DATA_QUERY, page, param);
 		
 		return pageData;
 	}
@@ -160,81 +150,88 @@ public class FormDataAccess implements InitializingBean {
 	 * 
 	 * 对于点击列表在本页显示详情的情况，使用详情页中加list组件解决
 	 * 
-	 * @param formPage
+	 * @param page
 	 * @param param
 	 * @return
 	 */
-	public List<Map<String, Object>> list(FormPage formPage, Map<String, Object> param) {
+	public List<Map<String, Object>> list(FormPage page, Map<String, Object> param) {
 		
 		List<Map<String, Object>> pageData = new ArrayList<Map<String, Object>>();
 		
-		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(formPage.getName());
+		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(page.getName());
 		
-		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_LIST, formPage, param);
+		formPageDataHandler.handleParam(HandlerType.FORM_PAGE_DATA_LIST, page, param);
 		
 		// 这里可能是条件组  有待调整
-		FieldGroup group = formPage.getFielsGroups().get(0);
+		for (FieldGroup group : page.getFielsGroups()) {
 
-		FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(group.getName());
+			if (group.getDisplayType() == FieldGroup.DISPLAY_TYPE_FORM) {
 
-		fieldGroupDataHandler.onBefore(HandlerType.FIELD_GROUP_DATA_LIST, group, param);
-
-		pageData = sqlSessionTemplate.selectList(TemporaryStatementRegistry.getLastestName(group.getFullName()), param);
-
-		// 子表操作
-		for (Field field : group.getFields()) {
-
-			BaseComponent cmp = components.get(field.getType());
-
-			if (MultiValueComponent.class.isInstance(cmp)) {
+				getFieldGroupDataHandler(page.getName(), group.getName()).handleParam(HandlerType.FIELD_GROUP_DATA_LIST, group, param);
 				
-				for(Map<String, Object> row : pageData) {
+				break;
+			}
+		}
+		
+		for (FieldGroup group : page.getFielsGroups()) {
 
-					row.put(field.getName(), ((MultiValueComponent) cmp).getAssociatedValue(String.valueOf(row.get(field.getName()))));
+			if (group.getDisplayType() == FieldGroup.DISPLAY_TYPE_LIST) {
+				
+				pageData = sqlSessionTemplate.selectList(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), param);
+
+				// 子表操作
+				for (Field field : group.getFields()) {
+
+					if (MultiValueComponent.class.isInstance(field.getObjType())) {
+
+						for (Map<String, Object> row : pageData) {
+
+							row.put(field.getName(), ((MultiValueComponent) field.getObjType())
+									.getAssociatedValue(String.valueOf(row.get(field.getName()))));
+						}
+					}
 				}
+				
+				getFieldGroupDataHandler(page.getName(), group.getName()).handleData(HandlerType.FIELD_GROUP_DATA_LIST, group, pageData);
 			}
 		}
 
-		fieldGroupDataHandler.onAfter(HandlerType.FIELD_GROUP_DATA_LIST, group, param);
-	
-		formPageDataHandler.onAfter(HandlerType.FORM_PAGE_DATA_LIST, formPage, param);
+		formPageDataHandler.handleData(HandlerType.FORM_PAGE_DATA_LIST, page, pageData);
 		
 		return pageData;
 	}
 	
-	public void remove(FormPage formPage, String dataId) {
+	public void remove(FormPage page, String dataId) {
 		
-		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(formPage.getName());
+		FormPageDataHandler formPageDataHandler = getFormPageDataHandler(page.getName());
 		
 		Map<String, Object> param = Collections.<String, Object>singletonMap("id", dataId);
 
-		formPageDataHandler.onBefore(HandlerType.FORM_PAGE_DATA_REMOVE, formPage, param);
+		formPageDataHandler.handleParam(HandlerType.FORM_PAGE_DATA_REMOVE, page, param);
 		
-		for(FieldGroup group : formPage.getFielsGroups()) {
+		for(FieldGroup group : page.getFielsGroups()) {
 
-			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(formPage.getName());
+			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(page.getName(), group.getName());
 
-			fieldGroupDataHandler.onBefore(HandlerType.FIELD_GROUP_DATA_REMOVE, group, param);
+			fieldGroupDataHandler.handleParam(HandlerType.FIELD_GROUP_DATA_REMOVE, group, param);
 
-			int effectCount = sqlSessionTemplate.delete(TemporaryStatementRegistry.getLastestName(group.getFullName()), dataId);
+			int effectCount = sqlSessionTemplate.delete(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), dataId);
 			
 			if (effectCount > 0) {
 
 				// 子表操作
 				for (Field field : group.getFields()) {
 					
-					BaseComponent cmp = components.get(field.getType());
-					
-					if(MultiValueComponent.class.isInstance(cmp)) {
+					if(MultiValueComponent.class.isInstance(field.getObjType())) {
 						
-						((MultiValueComponent) cmp).remove(dataId);
+						((MultiValueComponent) field.getObjType()).remove(dataId);
 					}
 				}
 			}
-			fieldGroupDataHandler.onAfter(HandlerType.FIELD_GROUP_DATA_REMOVE, group, param);
+			fieldGroupDataHandler.handleData(HandlerType.FIELD_GROUP_DATA_REMOVE, group, param);
 		}
 		
-		formPageDataHandler.onAfter(HandlerType.FORM_PAGE_DATA_REMOVE, formPage, param);
+		formPageDataHandler.handleData(HandlerType.FORM_PAGE_DATA_REMOVE, page, param);
 	}
 	
 	private static final FormPageDataHandler defaultFormPageDataHandler = new DefaultFormPageDataHandler();
@@ -242,12 +239,12 @@ public class FormDataAccess implements InitializingBean {
 	private static final class DefaultFormPageDataHandler implements FormPageDataHandler {
 
 		@Override
-		public void onBefore(HandlerType handlerType, FormPage formPage, Map<String, Object> param) {
+		public void handleParam(HandlerType handlerType, FormPage formPage, Map<String, Object> param) {
 			
 		}
 
 		@Override
-		public void onAfter(HandlerType handlerType, FormPage formPage, Map<String, Object> param) {
+		public void handleData(HandlerType handlerType, FormPage formPage, Object param) {
 			
 		}
 
@@ -258,19 +255,21 @@ public class FormDataAccess implements InitializingBean {
 	private static final class DefaultFieldGroupDataHandler implements FieldGroupDataHandler {
 
 		@Override
-		public void onBefore(HandlerType HandlerType, FieldGroup fieldGroup, Map<String, Object> param) {
+		public void handleParam(HandlerType HandlerType, FieldGroup fieldGroup, Map<String, Object> param) {
 			
 		}
 
 		@Override
-		public void onAfter(HandlerType handlerType, FieldGroup fieldGroup, Map<String, Object> param) {
+		public void handleData(HandlerType handlerType, FieldGroup fieldGroup, Object param) {
 			
 		}
 	}
 	
-	private FieldGroupDataHandler getFieldGroupDataHandler(String groupName) {
+	private FieldGroupDataHandler getFieldGroupDataHandler(String pageName, String groupName) {
 
-		return SpringContextUtil.getBean(groupName + "DataHandler", FieldGroupDataHandler.class, defaultFieldGroupDataHandler);
+		String baseName = pageName + String.valueOf(groupName.charAt(0)).toUpperCase() + groupName.substring(1);
+		
+		return SpringContextUtil.getBean(baseName + "DataHandler", FieldGroupDataHandler.class, defaultFieldGroupDataHandler);
 	}
 
 	private FormPageDataHandler getFormPageDataHandler(String pageName) {
@@ -278,10 +277,4 @@ public class FormDataAccess implements InitializingBean {
 		return SpringContextUtil.getBean(pageName + "DataHandler", FormPageDataHandler.class, defaultFormPageDataHandler);
 	}
 
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		
-		
-	}
 }

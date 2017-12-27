@@ -36,8 +36,6 @@ public class FieldGroup {
 	private int order;
 
 	// VO
-	private String fullName;
-	
 	private String updateFieldNames;
 
 	private String viewFieldNames;
@@ -112,14 +110,6 @@ public class FieldGroup {
 
 	public void setFieldAttr(List<Map<String, String>> fieldAttr) {
 		this.fieldAttr = fieldAttr;
-	}
-
-	public String getFullName() {
-		return fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
 	}
 
 	public String getUpdateFieldNames() {

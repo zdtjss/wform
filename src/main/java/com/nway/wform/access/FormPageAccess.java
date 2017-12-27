@@ -7,7 +7,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.nway.wform.access.component.ComponentRegister;
 import com.nway.wform.access.dao.FormPageMapper;
+import com.nway.wform.design.entity.Field;
 import com.nway.wform.design.entity.FieldGroup;
 import com.nway.wform.design.entity.FormPage;
 
@@ -17,18 +19,18 @@ public class FormPageAccess {
 	@Autowired
 	private FormPageMapper formPageMapper;
 	
+	@Autowired
+	private ComponentRegister componentRegister;
+	
 	public FormPage getFormPage(String id) {
 		
 		FormPage page = formPageMapper.getFormPage(id);
 		
-		Map<String, Map<String, String>> fieldAttr = new HashMap<String, Map<String, String>>();
-		
-		for(FieldGroup group : page.getFielsGroups()) {
-			
-			Map<String, String> groupFieldAttr = fieldAttr.get(group.getName());
-			
-			if(groupFieldAttr == null) {
-				
+		for (FieldGroup group : page.getFielsGroups()) {
+
+			for (Field field : group.getFields()) {
+
+				field.setObjType(componentRegister.getComponent(field.getType()));
 			}
 		}
 		
