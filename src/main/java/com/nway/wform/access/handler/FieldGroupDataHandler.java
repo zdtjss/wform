@@ -8,5 +8,5 @@ public interface FieldGroupDataHandler {
 
 	void handleParam(HandlerType HandlerType, FieldGroup fieldGroup, Map<String, Object> param);
 
-	void handleData(HandlerType handlerType, FieldGroup fieldGroup, Object data);
+	void handleResult(HandlerType handlerType, FieldGroup fieldGroup, Object data);
 }

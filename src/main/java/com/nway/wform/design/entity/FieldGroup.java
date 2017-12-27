@@ -39,6 +39,8 @@ public class FieldGroup {
 	private String updateFieldNames;
 
 	private String viewFieldNames;
+	
+	private int effectCount;
 
 	public String getId() {
 		return id;
@@ -142,6 +144,14 @@ public class FieldGroup {
 
 	public void setFormPageId(String formPageId) {
 		this.formPageId = formPageId;
+	}
+
+	public int getEffectCount() {
+		return effectCount;
+	}
+
+	public void setEffectCount(int effectCount) {
+		this.effectCount = effectCount;
 	}
 
 }

@@ -46,22 +46,24 @@ public class FormDataAccess {
 						
 			fieldGroupDataHandler.handleParam(HandlerType.FIELD_GROUP_DATA_CREATE, group, groupData);
 			
-			sqlSessionTemplate.insert(
+			int effectCount = sqlSessionTemplate.insert(
 					TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), groupData);
+			
+			group.setEffectCount(effectCount);
 			
 			// 子表操作
 			for(Field field : group.getFields()) {
 				
-				if(MultiValueComponent.class.isInstance(field.getObjType())) {
+				if(effectCount > 0 && MultiValueComponent.class.isInstance(field.getObjType())) {
 
 					((MultiValueComponent) field.getObjType()).save(groupData.get(field.getName()));
 				}
 			}
 			
-			fieldGroupDataHandler.handleData(HandlerType.FIELD_GROUP_DATA_CREATE, group, formData.get(group.getName()));
+			fieldGroupDataHandler.handleResult(HandlerType.FIELD_GROUP_DATA_CREATE, group, formData.get(group.getName()));
 		}
 		
-		formPageDataHandler.handleData(HandlerType.FORM_PAGE_DATA_CREATE, page, (Map) formData);
+		formPageDataHandler.handleResult(HandlerType.FORM_PAGE_DATA_CREATE, page, (Map) formData);
 	}
 	
 	/**
@@ -81,24 +83,26 @@ public class FormDataAccess {
 			Map<String, Object> groupData = formData.get(group.getName());
 			
 			FieldGroupDataHandler fieldGroupDataHandler = getFieldGroupDataHandler(page.getName(), group.getName());
-						
+			
 			fieldGroupDataHandler.handleParam(HandlerType.FIELD_GROUP_DATA_MODIFY, group, groupData);
 			
-			sqlSessionTemplate.update(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), groupData);
+			int effectCount = sqlSessionTemplate.update(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), groupData);
+			
+			group.setEffectCount(effectCount);
 			
 			// 子表操作
 			for(Field field : group.getFields()) {
 				
-				if(MultiValueComponent.class.isInstance(field.getObjType())) {
+				if(effectCount > 0 && MultiValueComponent.class.isInstance(field.getObjType())) {
 
 					((MultiValueComponent) field.getObjType()).save(groupData.get(field.getName()));
 				}
 			}
 			
-			fieldGroupDataHandler.handleParam(HandlerType.FIELD_GROUP_DATA_MODIFY, group, formData.get(group.getName()));
+			fieldGroupDataHandler.handleResult(HandlerType.FIELD_GROUP_DATA_MODIFY, group, formData.get(group.getName()));
 		}
 		
-		formPageDataHandler.handleData(HandlerType.FORM_PAGE_DATA_MODIFY, page, (Map) formData);
+		formPageDataHandler.handleResult(HandlerType.FORM_PAGE_DATA_MODIFY, page, (Map) formData);
 	}
 	
 	/**
@@ -137,10 +141,10 @@ public class FormDataAccess {
 
 			pageData.put(group.getName(), groupData);
 
-			fieldGroupDataHandler.handleData(HandlerType.FIELD_GROUP_DATA_QUERY, group, param);
+			fieldGroupDataHandler.handleResult(HandlerType.FIELD_GROUP_DATA_QUERY, group, groupData);
 		}
 		
-		formPageDataHandler.handleData(HandlerType.FORM_PAGE_DATA_QUERY, page, param);
+		formPageDataHandler.handleResult(HandlerType.FORM_PAGE_DATA_QUERY, page, pageData);
 		
 		return pageData;
 	}
@@ -192,11 +196,11 @@ public class FormDataAccess {
 					}
 				}
 				
-				getFieldGroupDataHandler(page.getName(), group.getName()).handleData(HandlerType.FIELD_GROUP_DATA_LIST, group, pageData);
+				getFieldGroupDataHandler(page.getName(), group.getName()).handleResult(HandlerType.FIELD_GROUP_DATA_LIST, group, pageData);
 			}
 		}
 
-		formPageDataHandler.handleData(HandlerType.FORM_PAGE_DATA_LIST, page, pageData);
+		formPageDataHandler.handleResult(HandlerType.FORM_PAGE_DATA_LIST, page, pageData);
 		
 		return pageData;
 	}
@@ -217,6 +221,8 @@ public class FormDataAccess {
 
 			int effectCount = sqlSessionTemplate.delete(TemporaryStatementRegistry.getLastestName(page.getName(), group.getName()), dataId);
 			
+			group.setEffectCount(effectCount);
+			
 			if (effectCount > 0) {
 
 				// 子表操作
@@ -228,10 +234,10 @@ public class FormDataAccess {
 					}
 				}
 			}
-			fieldGroupDataHandler.handleData(HandlerType.FIELD_GROUP_DATA_REMOVE, group, param);
+			fieldGroupDataHandler.handleResult(HandlerType.FIELD_GROUP_DATA_REMOVE, group, param);
 		}
 		
-		formPageDataHandler.handleData(HandlerType.FORM_PAGE_DATA_REMOVE, page, param);
+		formPageDataHandler.handleResult(HandlerType.FORM_PAGE_DATA_REMOVE, page, param);
 	}
 	
 	private static final FormPageDataHandler defaultFormPageDataHandler = new DefaultFormPageDataHandler();
@@ -244,7 +250,7 @@ public class FormDataAccess {
 		}
 
 		@Override
-		public void handleData(HandlerType handlerType, FormPage formPage, Object param) {
+		public void handleResult(HandlerType handlerType, FormPage formPage, Object param) {
 			
 		}
 
@@ -260,7 +266,7 @@ public class FormDataAccess {
 		}
 
 		@Override
-		public void handleData(HandlerType handlerType, FieldGroup fieldGroup, Object param) {
+		public void handleResult(HandlerType handlerType, FieldGroup fieldGroup, Object param) {
 			
 		}
 	}

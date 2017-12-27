@@ -8,5 +8,5 @@ public interface FormPageDataHandler {
 
 	void handleParam(HandlerType handlerType, FormPage formPage, Map<String, Object> param);
 
-	void handleData(HandlerType handlerType, FormPage formPage, Object data);
+	void handleResult(HandlerType handlerType, FormPage formPage, Object data);
 }

@@ -17,7 +17,7 @@ public class FirstHandleTester implements FieldGroupDataHandler {
 	}
 
 	@Override
-	public void handleData(HandlerType handlerType, FieldGroup fieldGroup, Object data) {
+	public void handleResult(HandlerType handlerType, FieldGroup fieldGroup, Object data) {
 
 		System.out.println(data);
 	}
