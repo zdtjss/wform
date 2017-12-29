@@ -19,6 +19,8 @@ import freemarker.template.SimpleScalar;
 public class FreemarkerFactory implements FactoryBean<Configuration>, ObjectFactory<Configuration>, ApplicationContextAware {
 
 	private ApplicationContext context;
+	
+	private String templatePath;
 
 	@Override
 	public Configuration getObject() throws BeansException {
@@ -27,13 +29,16 @@ public class FreemarkerFactory implements FactoryBean<Configuration>, ObjectFact
 		
 		String baseWebPath = ((WebApplicationContext) context).getServletContext().getRealPath("/");
 
+		File templateDir = new File(baseWebPath, templatePath);
+		
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setOutputEncoding("UTF-8");
-		cfg.unsetCacheStorage();
 		cfg.setSharedVariable("exists", new FileExistsDirective());
 		cfg.setSharedVariable("baseWebPath", new SimpleScalar(baseWebPath));
+		cfg.setSharedVariable("absoluteTemplateDir", new SimpleScalar(templateDir.getAbsolutePath()));
+		
 		try {
-			cfg.setDirectoryForTemplateLoading(new File(baseWebPath, "WEB-INF/wform/template"));
+			cfg.setDirectoryForTemplateLoading(templateDir);
 		} catch (IOException e) {
 			throw new BeanCreationException(e.toString(), e);
 		}
@@ -58,4 +63,11 @@ public class FreemarkerFactory implements FactoryBean<Configuration>, ObjectFact
 		this.context = context;
 	}
 
+	public String getTemplatePath() {
+		return templatePath;
+	}
+
+	public void setTemplatePath(String templatePath) {
+		this.templatePath = templatePath;
+	}
 }

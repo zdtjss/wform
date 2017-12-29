@@ -44,7 +44,7 @@
 	<script type="text/javascript">
 		function submit() {
 			var formData = {}; 
-			formData["formPage"] = {pageId : $("#pageId").val()};
+			formData["formPage"] = {pageId : $("#pageId").val(), pageType : "create"};
 			$(".page_group").each(function() {
 				formData[this.id] = $(this).serializeObject();
 			});

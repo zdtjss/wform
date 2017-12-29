@@ -51,17 +51,19 @@ public class FormPageController {
 		
 		Map<String, Map<String, Object>> dataModel = Collections.emptyMap();
 		
+		String basePath = request.getSession().getServletContext().getRealPath("/");
+		
 		String bizId = request.getParameter("pkId");
 		
 		String pageType = request.getParameter("pageType");
 		
-		String formPageId = request.getParameter("formPageId");
+		String formPageId = request.getParameter("pageId");
 		
 		FormPage formPage = formPageAccess.getFormPage(formPageId);
 		
 		viewModel.put("formPage", formPage);
 		
-		makeJsp(pageType, viewModel, formPage.getName(), request);
+		makeJsp(pageType, viewModel, formPage.getModuleName(), formPage.getName(), basePath);
 		
 		Map<String, Object> groupFieldAttr = new HashMap<String, Object>();
 		
@@ -150,8 +152,8 @@ public class FormPageController {
 		return formDataAccess.list(formPage, queryParam);
 	}
 	
-	private void makeJsp(String type, Map<String, Object> viewModel, String pageName,
-			HttpServletRequest request) throws IOException, TemplateException {
+	private void makeJsp(String type, Map<String, Object> viewModel, String moduleName, String pageName,
+			String basePath) throws IOException, TemplateException {
 
 		Template template = null;
 		
@@ -171,44 +173,57 @@ public class FormPageController {
 			
 			template = freemarker.getTemplate("/default/list.ftl");
 		}
-
+		
 		StringBuilder jsp = new StringBuilder();
 
-		jsp.append(request.getSession().getServletContext().getRealPath("/")).append(File.separator)
-				.append("WEB-INF/jsp/").append("_").append(type).append(".jsp");
+		jsp.append(basePath).append(File.separator).append("WEB-INF/jsp/").append(pageName).append("_").append(type).append(".jsp");
 
 		File jspFile = new File(jsp.toString());
-
-		jspFile.getParentFile().mkdirs();
-
-		jspFile.createNewFile();
 		
-		FileOutputStream fos = null;
-		OutputStreamWriter osw = null;
+		File templateFile = new File(freemarker.getSharedVariable("absoluteTemplateDir").toString(), template.getName());
+		
+		if (templateFile.lastModified() > jspFile.lastModified()) {
+			
+			freemarker.removeTemplateFromCache(template.getName());
 
-		try {
-
-			fos = new FileOutputStream(jspFile);
-
-			osw = new OutputStreamWriter(fos, "utf-8");
-
-			template.process(viewModel, osw);
-		}
-		catch (IOException e) {
-			throw e;
-		} 
-		catch (TemplateException e) {
-			throw e;
-		}
-		finally {
-			if(fos != null) {
-				fos.close();
+			File parentFile = jspFile.getParentFile();
+			
+			if(!parentFile.exists()) {
+				
+				parentFile.mkdirs();
 			}
-			if(osw != null) {
-				osw.close();
-			}
-		}
 
-		template.getConfiguration().clearTemplateCache();
+			if(!jspFile.exists()) {
+				
+				jspFile.createNewFile();
+			}
+
+			FileOutputStream fos = null;
+			OutputStreamWriter osw = null;
+
+			try {
+
+				fos = new FileOutputStream(jspFile);
+
+				osw = new OutputStreamWriter(fos, "utf-8");
+
+				template.process(viewModel, osw);
+			}
+			catch (IOException e) {
+				throw e;
+			} 
+			catch (TemplateException e) {
+				throw e;
+			} 
+			finally {
+				if (fos != null) {
+					fos.close();
+				}
+				if (osw != null) {
+					osw.close();
+				}
+			}
+
+		}
 	}
 }
