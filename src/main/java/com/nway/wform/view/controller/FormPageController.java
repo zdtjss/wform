@@ -26,6 +26,7 @@ import com.nway.wform.access.FormPageAccess;
 import com.nway.wform.design.entity.Field;
 import com.nway.wform.design.entity.FieldGroup;
 import com.nway.wform.design.entity.FormPage;
+import com.nway.workflow.service.WorkFlowService;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -39,6 +40,8 @@ public class FormPageController {
 	private FormPageAccess formPageAccess;
 	@Autowired
 	private FormDataAccess formDataAccess;
+	@Autowired
+	private WorkFlowService workflowService;
 	@Autowired
 	private Configuration freemarker;
 	

@@ -43,4 +43,9 @@ public class WorkFlowService {
 			taskService.complete(task.getId());
 		}
 	}
+	
+	public void listOutcome() {
+		
+		// this.repositoryService.createDeploymentQuery().
+	}
 }
