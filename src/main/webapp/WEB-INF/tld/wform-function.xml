@@ -5,14 +5,14 @@
 
 	<tlib-version>1.1</tlib-version>
 	<short-name>efn</short-name>
-	<uri>http://wform.nway.com/jsp/tag/functions</uri>
+	<uri>http://wform.platform.nway.com/jsp/tag/functions</uri>
 
 	<function>
 		<description>
             
         </description>
 		<name>css</name>
-		<function-class>com.nway.wform.commons.tag.FormFunction</function-class>
+		<function-class>com.nway.platform.wform.commons.tag.FormFunction</function-class>
 		<function-signature>String css(java.lang.String, java.lang.String)</function-signature>
 		<example>
             ${efn:css(name, value)}

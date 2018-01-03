@@ -12,9 +12,9 @@
      http://www.springframework.org/schema/context
      http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<context:component-scan base-package="com.nway.wform" />
+	<context:component-scan base-package="com.nway.platform" />
 	
-	<bean id="freemarkerConfiguration" class="com.nway.wform.commons.freemarker.FreemarkerFactory">
+	<bean id="freemarkerConfiguration" class="com.nway.platform.wform.commons.freemarker.FreemarkerFactory">
 		<property name="templatePath" value="WEB-INF/wform/template"/>
 	</bean>
 
@@ -67,7 +67,7 @@
 
 	<aop:config>
 		<aop:pointcut id="operation"
-			expression="execution(* com.nway.wform.service..*.*(..))" />
+			expression="execution(* com.nway.platform.service.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="operation" />
 	</aop:config>
 
@@ -75,28 +75,46 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations">
 			<list>
-				<value>classpath*:com/nway/wform/**/dao/*Mapper.xml</value>
+				<value>classpath*:com/nway/platform/**/dao/*Mapper.xml</value>
 			</list>
 		</property>
 		<property name="plugins">
-        <array>
-            <bean class="com.github.pagehelper.PageInterceptor">
-                <property name="properties">
-                    <value>
-                        params=pageNum=page;pageSize=rows;
-                    </value>
-                </property>
-            </bean>
-        </array>
-    </property>
+			<array>
+				<bean class="com.github.pagehelper.PageInterceptor">
+					<property name="properties">
+						<value>
+							params=pageNum=page;pageSize=rows;
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
 	</bean>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.nway.wform.**.dao" />
+		<property name="basePackage" value="com.nway.platform.**.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSessionFactory" />
 	</bean>
+	
+	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+		<property name="dataSource" ref="dataSource" />
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="databaseSchemaUpdate" value="true" />
+		<property name="jobExecutorActivate" value="false" />
+		<property name="deploymentResources" value="classpath*:/activiti/*.bpmn20.xml" />
+	</bean>
+
+	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
+	</bean>
+
+	<bean id="repositoryService" factory-bean="processEngine" factory-method="getRepositoryService" />
+	<bean id="runtimeService" factory-bean="processEngine" factory-method="getRuntimeService" />
+	<bean id="taskService" factory-bean="processEngine" factory-method="getTaskService" />
+	<bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService" />
+	<bean id="managementService" factory-bean="processEngine" factory-method="getManagementService" />
 </beans>

@@ -51,7 +51,7 @@
 	
 	<jsp-config>
 	<taglib>
-		<taglib-uri>http://wform.nway.com/jsp/tag/functions</taglib-uri>
+		<taglib-uri>http://wform.platform.nway.com/jsp/tag/functions</taglib-uri>
 		<taglib-location>/WEB-INF/tld/wform-function.xml</taglib-location>
 	</taglib>
 	</jsp-config>

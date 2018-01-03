@@ -6,10 +6,13 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Root level="info">
+		<Root level="debug">
 			<AppenderRef ref="console" />
 		</Root>
 		<Logger name="com.nway.wform" level="debug" additivity="false">
+			<AppenderRef ref="console" />
+		</Logger>
+		<Logger name="firstPage" level="debug" additivity="false">
 			<AppenderRef ref="console" />
 		</Logger>
 	</Loggers>
