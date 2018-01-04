@@ -1,6 +1,7 @@
 package com.nway.wform;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.HistoryService;
@@ -39,26 +40,41 @@ public class ActivitiTest {
 		
 		Map<String,Object> var = new HashMap<String,Object>();
 		
-		ProcessInstance pi = runtimeService.startProcessInstanceByKey("designByExplorerId");
+		ProcessInstance pi = runtimeService.startProcessInstanceByKey("designByExplorer");
 		
 		var.put("title", "check");
+		
 		// 草稿
-		handleTask(pi.getId(), var);
+		Task firstTask = taskService.createTaskQuery().processInstanceId(pi.getId()).singleResult();
+		
+			
+		List<Task> nextTasks = handleTask(pi.getId(), firstTask.getId(), var);
 		
 		// 审批、核查
-		handleTask(pi.getId(), var);
+		for(Task task : nextTasks) {
+			
+			handleTask(pi.getId(), task.getId(), var);
+		}
 		
 		// 处理
-		handleTask(pi.getId(), var);
+		for(Task task : nextTasks) {
+			
+			handleTask(pi.getId(), task.getId(), var);
+		}
+		
+		for(Task task : nextTasks) {
+			
+			handleTask(pi.getId(), task.getId(), var);
+		}
 
         HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(pi.getId()).singleResult();  
         
         System.out.println("流程结束时间是: " + historicProcessInstance.getEndTime());  
 	}
 	
-	private void handleTask(String pid,  Map<String, Object> variables) {
+	private List<Task> handleTask(String pid, String taskId,  Map<String, Object> variables) {
 		
-		Task task = taskService.createTaskQuery().processInstanceId(pid).singleResult();
+		Task task = taskService.createTaskQuery().processInstanceId(pid).taskId(taskId).singleResult();
 		
 		System.out.println(task.getId() + " \t " + task.getName());
 		
@@ -71,9 +87,7 @@ public class ActivitiTest {
 			taskService.complete(task.getId());
 		}
 		
-		task = taskService.createTaskQuery().processInstanceId(pid).active().singleResult();
-		
-		taskService.setAssignee(task.getId(), "unkown");
+		return taskService.createTaskQuery().processInstanceId(pid).list();
 	}
 
 }
