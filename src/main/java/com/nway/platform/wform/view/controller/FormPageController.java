@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.nway.platform.wform.access.FormDataAccess;
 import com.nway.platform.wform.design.entity.Field;
@@ -93,7 +95,10 @@ public class FormPageController {
 	public Map<String, Object> save(@RequestBody Map<String, Map<String, String>> json) {
 		
 		Map<String, String> formPageParam = json.get("formPage");
-		HandleInfo handleInfo= json.get("workflow");
+		
+		HandleInfo handleInfo = new HandleInfo();
+		
+		BeanUtils.copyProperties(json.get("workflow"), handleInfo);
 		
 		FormPage formPage = formPageAccess.getFormPage(formPageParam.get("pageId"));
 		
