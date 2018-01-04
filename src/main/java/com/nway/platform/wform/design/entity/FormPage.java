@@ -26,7 +26,7 @@ public class FormPage {
 	private String title;
 
 	// 增、改、查、列
-	private int pageType;
+	private String pageType;
 
 	private int status;
 	// 简介
@@ -64,11 +64,11 @@ public class FormPage {
 		this.title = title;
 	}
 
-	public int getPageType() {
+	public String getPageType() {
 		return pageType;
 	}
 
-	public void setPageType(int pageType) {
+	public void setPageType(String pageType) {
 		this.pageType = pageType;
 	}
 

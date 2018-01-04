@@ -5,11 +5,35 @@ import java.util.Map;
 
 public class HandleInfo {
 
-	private String pid;
+	private String processKey;
 	
-	private Map<String, String> params;
+	private Map<String, Object> params;
 	
 	private List<SimpleUser> handleUsers;
+
+	public String getProcessKey() {
+		return processKey;
+	}
+
+	public void setProcessKey(String processKey) {
+		this.processKey = processKey;
+	}
+
+	public void setParams(Map<String, Object> params) {
+		this.params = params;
+	}
+
+	public Map<String, Object> getParams() {
+		return params;
+	}
+
+	public List<SimpleUser> getHandleUsers() {
+		return handleUsers;
+	}
+
+	public void setHandleUsers(List<SimpleUser> handleUsers) {
+		this.handleUsers = handleUsers;
+	}
 
 	public static class SimpleUser {
 		

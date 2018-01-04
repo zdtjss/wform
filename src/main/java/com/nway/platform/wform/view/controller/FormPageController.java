@@ -22,11 +22,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.github.pagehelper.PageHelper;
 import com.nway.platform.wform.access.FormDataAccess;
-import com.nway.platform.wform.access.FormPageAccess;
 import com.nway.platform.wform.design.entity.Field;
 import com.nway.platform.wform.design.entity.FieldGroup;
 import com.nway.platform.wform.design.entity.FormPage;
-import com.nway.platform.workflow.service.WorkFlowService;
+import com.nway.platform.wform.design.service.FormPageAccess;
+import com.nway.platform.wform.view.service.FormPageService;
+import com.nway.platform.workflow.entity.HandleInfo;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -41,7 +42,7 @@ public class FormPageController {
 	@Autowired
 	private FormDataAccess formDataAccess;
 	@Autowired
-	private WorkFlowService workflowService;
+	private FormPageService formPageService;
 	@Autowired
 	private Configuration freemarker;
 	
@@ -91,11 +92,10 @@ public class FormPageController {
 	@ResponseBody
 	public Map<String, Object> save(@RequestBody Map<String, Map<String, String>> json) {
 		
-		String pageId = json.get("formPage").get("pageId");
+		Map<String, String> formPageParam = json.get("formPage");
+		HandleInfo handleInfo= json.get("workflow");
 		
-		String pageType = json.get("formPage").get("pageType");
-		
-		FormPage formPage = formPageAccess.getFormPage(pageId);
+		FormPage formPage = formPageAccess.getFormPage(formPageParam.get("pageId"));
 		
 		Map<String, Map<String, Object>> formData = new HashMap<String, Map<String,Object>>();
 		
@@ -115,9 +115,11 @@ public class FormPageController {
 			formData.put(group.getName(), groupData);
 		}
 		
+		String pageType = formPageParam.get("pageType");
+		
 		if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
 			
-			formDataAccess.create(formPage, formData);
+			formPageService.createAndStartProcess(formPage, handleInfo, formData);
 		}
 		else if(FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
 			

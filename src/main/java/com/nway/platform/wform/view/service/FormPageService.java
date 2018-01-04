@@ -1,0 +1,49 @@
+package com.nway.platform.wform.view.service;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nway.platform.wform.access.FormDataAccess;
+import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.workflow.entity.HandleInfo;
+import com.nway.platform.workflow.service.WorkFlowService;
+
+@Service
+public class FormPageService {
+
+	@Autowired
+	private FormDataAccess formDataAccess;
+	
+	@Autowired
+	private WorkFlowService workFlowService;
+	
+	public void createAndStartProcess(FormPage page, HandleInfo handleInfo, Map<String, Map<String, Object>> formData) {
+		
+		if (handleInfo.getProcessKey() != null) {
+			
+			String pid = workFlowService.startProcess(handleInfo);
+
+			for (Map<String, Object> groupData : formData.values()) {
+
+				groupData.put("processInstanceId", pid);
+			}
+		}
+		
+		formDataAccess.create(page, formData);
+	}
+	
+	public void saveAndHandle(FormPage page, HandleInfo handleInfo, Map<String, Map<String, Object>> formData) {
+		
+		if (handleInfo.getProcessKey() != null) {
+			
+			workFlowService.handleTask(handleInfo);
+		}
+		
+		if(FormPage.PAGE_TYPE_EDIT.equals(page.getPageType())) {
+			
+			formDataAccess.update(page, formData);
+		}
+	}
+}

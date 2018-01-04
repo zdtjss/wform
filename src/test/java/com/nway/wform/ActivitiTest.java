@@ -58,7 +58,7 @@ public class ActivitiTest {
 	
 	private void handleTask(String pid,  Map<String, Object> variables) {
 		
-		Task task = taskService.createTaskQuery().processInstanceId(pid).active().singleResult();
+		Task task = taskService.createTaskQuery().processInstanceId(pid).singleResult();
 		
 		System.out.println(task.getId() + " \t " + task.getName());
 		
@@ -70,6 +70,10 @@ public class ActivitiTest {
 			
 			taskService.complete(task.getId());
 		}
+		
+		task = taskService.createTaskQuery().processInstanceId(pid).active().singleResult();
+		
+		taskService.setAssignee(task.getId(), "unkown");
 	}
 
 }

@@ -6,9 +6,12 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.nway.platform.workflow.entity.HandleInfo;
 
 @Service
 public class WorkFlowService {
@@ -25,18 +28,25 @@ public class WorkFlowService {
 	@Autowired
 	private HistoryService historyService;
 	
-	public void handleTask(String pid) {
+	
+	public String startProcess(HandleInfo handleInfo) {
 		
-		handleTask(pid, null);
+		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(handleInfo.getProcessKey());
+		
+		Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
+		
+		task.setAssignee(handleInfo.getHandleUsers().get(0).getUserId());
+		
+		return processInstance.getId();
 	}
 	
-	public void handleTask(String pid,  Map<String, Object> variables) {
+	public void handleTask(HandleInfo handleInfo) {
 		
-		Task task = taskService.createTaskQuery().processInstanceId(pid).active().singleResult();
+		Task task = taskService.createTaskQuery().processInstanceId(handleInfo.getProcessKey()).singleResult();
 		
-		if(variables != null) {
+		if(handleInfo.getParams() != null) {
 			
-			taskService.complete(task.getId(), variables);
+			taskService.complete(task.getId(), handleInfo.getParams());
 		}
 		else {
 			

@@ -1,4 +1,4 @@
-package com.nway.platform.wform.access;
+package com.nway.platform.wform.design.service;
 
 import java.util.HashMap;
 import java.util.List;
