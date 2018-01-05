@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.nway.platform.wform.access.FormDataAccess;
 import com.nway.platform.wform.design.entity.Field;
@@ -92,13 +91,9 @@ public class FormPageController {
 	
 	@RequestMapping("save")
 	@ResponseBody
-	public Map<String, Object> save(@RequestBody Map<String, Map<String, String>> json) {
+	public Map<String, Object> save(@RequestBody Map<String, Map<String, String>> jsonObj) {
 		
-		Map<String, String> formPageParam = json.get("formPage");
-		
-		HandleInfo handleInfo = new HandleInfo();
-		
-		BeanUtils.copyProperties(json.get("workflow"), handleInfo);
+		Map<String, String> formPageParam = jsonObj.get("formPage");
 		
 		FormPage formPage = formPageAccess.getFormPage(formPageParam.get("pageId"));
 		
@@ -106,7 +101,7 @@ public class FormPageController {
 		
 		for(FieldGroup group : formPage.getFielsGroups()) {
 			
-			Map<String, String> groupDataOrigin = json.get(group.getName());
+			Map<String, String> groupDataOrigin = jsonObj.get(group.getName());
 			
 			Map<String, Object> groupData = new HashMap<String, Object>();
 			
@@ -121,6 +116,8 @@ public class FormPageController {
 		}
 		
 		String pageType = formPageParam.get("pageType");
+		
+		HandleInfo handleInfo = getHandleInfo(jsonObj);
 		
 		if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
 			
@@ -235,5 +232,14 @@ public class FormPageController {
 			}
 
 		}
+	}
+	
+	private HandleInfo getHandleInfo(Map<String, Map<String, String>> jsonObj) {		
+		
+		HandleInfo handleInfo = new HandleInfo();
+		
+		BeanUtils.copyProperties(jsonObj.get("workflow"), handleInfo);
+		
+		return handleInfo;
 	}
 }

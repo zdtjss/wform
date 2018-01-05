@@ -1,15 +1,19 @@
 package com.nway.platform.workflow.entity;
 
-import java.util.List;
 import java.util.Map;
 
 public class HandleInfo {
 
+	// 当前办理流程定义key或者流程实例id
 	private String processKey;
 	
-	private Map<String, Object> params;
+	// 当前办理的任务id
+	private String taskId;
 	
-	private List<SimpleUser> handleUsers;
+	private String outcome;
+	
+	// <下一步任务名：对应的办理人>
+	private Map<String, SimpleUser[]> handlerTaskMap;
 
 	public String getProcessKey() {
 		return processKey;
@@ -19,20 +23,28 @@ public class HandleInfo {
 		this.processKey = processKey;
 	}
 
-	public void setParams(Map<String, Object> params) {
-		this.params = params;
+	public String getTaskId() {
+		return taskId;
 	}
 
-	public Map<String, Object> getParams() {
-		return params;
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
 	}
 
-	public List<SimpleUser> getHandleUsers() {
-		return handleUsers;
+	public String getOutcome() {
+		return outcome;
 	}
 
-	public void setHandleUsers(List<SimpleUser> handleUsers) {
-		this.handleUsers = handleUsers;
+	public void setOutcome(String outcome) {
+		this.outcome = outcome;
+	}
+
+	public Map<String, SimpleUser[]> getHandlerTaskMap() {
+		return handlerTaskMap;
+	}
+
+	public void setHandlerTaskMap(Map<String, SimpleUser[]> handlerTaskMap) {
+		this.handlerTaskMap = handlerTaskMap;
 	}
 
 	public static class SimpleUser {
