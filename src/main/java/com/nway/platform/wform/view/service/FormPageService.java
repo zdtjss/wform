@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.nway.platform.wform.access.FormDataAccess;
 import com.nway.platform.wform.design.entity.FormPage;
-import com.nway.platform.workflow.entity.HandleInfo;
+import com.nway.platform.workflow.entity.Handle;
 import com.nway.platform.workflow.service.WorkFlowService;
 
 @Service
@@ -19,7 +19,7 @@ public class FormPageService {
 	@Autowired
 	private WorkFlowService workFlowService;
 	
-	public void createAndStartProcess(FormPage page, HandleInfo handleInfo, Map<String, Map<String, Object>> formData) {
+	public void createAndStartProcess(FormPage page, Handle handleInfo, Map<String, Map<String, Object>> formData) {
 		
 		if (handleInfo.getProcessKey() != null) {
 			
@@ -34,7 +34,7 @@ public class FormPageService {
 		formDataAccess.create(page, formData);
 	}
 	
-	public void saveAndHandle(FormPage page, HandleInfo handleInfo, Map<String, Map<String, Object>> formData) {
+	public void saveAndHandle(FormPage page, Handle handleInfo, Map<String, Map<String, Object>> formData) {
 		
 		if (handleInfo.getProcessKey() != null) {
 			

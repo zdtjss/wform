@@ -28,7 +28,7 @@ import com.nway.platform.wform.design.entity.FieldGroup;
 import com.nway.platform.wform.design.entity.FormPage;
 import com.nway.platform.wform.design.service.FormPageAccess;
 import com.nway.platform.wform.view.service.FormPageService;
-import com.nway.platform.workflow.entity.HandleInfo;
+import com.nway.platform.workflow.entity.Handle;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -117,7 +117,7 @@ public class FormPageController {
 		
 		String pageType = formPageParam.get("pageType");
 		
-		HandleInfo handleInfo = getHandleInfo(jsonObj);
+		Handle handleInfo = getHandleInfo(jsonObj);
 		
 		if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
 			
@@ -234,9 +234,9 @@ public class FormPageController {
 		}
 	}
 	
-	private HandleInfo getHandleInfo(Map<String, Map<String, String>> jsonObj) {		
+	private Handle getHandleInfo(Map<String, Map<String, String>> jsonObj) {		
 		
-		HandleInfo handleInfo = new HandleInfo();
+		Handle handleInfo = new Handle();
 		
 		BeanUtils.copyProperties(jsonObj.get("workflow"), handleInfo);
 		
