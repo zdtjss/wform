@@ -75,7 +75,6 @@
     <sequenceFlow id="sid-5FB28C9D-7A9E-49E9-990A-7D6AC7A75268" name="去审查" sourceRef="sid-F8279C7E-1B2D-48A7-A383-D797D5C03D83" targetRef="sid-81D98C38-B919-4FC6-A746-2BF53D98308C">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='chy'}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="sid-C88323C0-D79A-4B2A-80E0-E4DB9343688D" sourceRef="sid-57151FBC-3517-4F37-B61C-CB15BBA21967" targetRef="draft"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_designByExplorer">
     <bpmndi:BPMNPlane bpmnElement="designByExplorer" id="BPMNPlane_designByExplorer">
@@ -161,8 +160,8 @@
         <omgdi:waypoint x="1140.0" y="385.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-3CEC663B-60DF-4FFA-BB5A-72880176CFA8" id="BPMNEdge_sid-3CEC663B-60DF-4FFA-BB5A-72880176CFA8">
-        <omgdi:waypoint x="364.8050193050193" y="390.1949806949807"></omgdi:waypoint>
-        <omgdi:waypoint x="517.5" y="440.3102564102564"></omgdi:waypoint>
+        <omgdi:waypoint x="365.03846153846155" y="389.96153846153845"></omgdi:waypoint>
+        <omgdi:waypoint x="517.5" y="440.26214833759593"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-501DB444-E414-4DD7-8EA9-89F616A731FF" id="BPMNEdge_sid-501DB444-E414-4DD7-8EA9-89F616A731FF">
         <omgdi:waypoint x="204.0" y="385.0"></omgdi:waypoint>
@@ -179,10 +178,6 @@
       <bpmndi:BPMNEdge bpmnElement="sid-53FAF3A0-A830-4F3F-ACF5-58B7A9276DBF" id="BPMNEdge_sid-53FAF3A0-A830-4F3F-ACF5-58B7A9276DBF">
         <omgdi:waypoint x="767.5" y="588.0"></omgdi:waypoint>
         <omgdi:waypoint x="912.5" y="588.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="sid-C88323C0-D79A-4B2A-80E0-E4DB9343688D" id="BPMNEdge_sid-C88323C0-D79A-4B2A-80E0-E4DB9343688D">
-        <omgdi:waypoint x="330.4468085106383" y="385.4468085106383"></omgdi:waypoint>
-        <omgdi:waypoint x="204.0" y="385.1114058355438"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-88EF88F7-5C3C-43F3-B031-AC0C110AD241" id="BPMNEdge_sid-88EF88F7-5C3C-43F3-B031-AC0C110AD241">
         <omgdi:waypoint x="942.5" y="565.0"></omgdi:waypoint>
@@ -213,8 +208,8 @@
         <omgdi:waypoint x="508.5" y="207.83503836317135"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-E6C34089-3CBA-45CF-AC37-24E9AD923D57" id="BPMNEdge_sid-E6C34089-3CBA-45CF-AC37-24E9AD923D57">
-        <omgdi:waypoint x="361.8246951219512" y="393.1753048780488"></omgdi:waypoint>
-        <omgdi:waypoint x="515.5" y="497.32864450127875"></omgdi:waypoint>
+        <omgdi:waypoint x="361.9148936170213" y="393.0851063829787"></omgdi:waypoint>
+        <omgdi:waypoint x="515.5" y="497.30357142857144"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-5FB28C9D-7A9E-49E9-990A-7D6AC7A75268" id="BPMNEdge_sid-5FB28C9D-7A9E-49E9-990A-7D6AC7A75268">
         <omgdi:waypoint x="367.17391304347825" y="570.8260869565217"></omgdi:waypoint>

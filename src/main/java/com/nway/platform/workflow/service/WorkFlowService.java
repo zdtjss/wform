@@ -1,6 +1,7 @@
 package com.nway.platform.workflow.service;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -11,10 +12,14 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
+import org.activiti.engine.impl.pvm.process.TransitionImpl;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -80,6 +85,82 @@ public class WorkFlowService {
 		
 		return nextOutcome(activityImpl);
     }
+	
+	public void goBack(String taskId) {
+
+		Map<String, Object> variables;
+		
+		// 取得当前任务
+		HistoricTaskInstance currTask = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
+		// 取得流程实例
+		ProcessInstance instance = runtimeService.createProcessInstanceQuery().processInstanceId(currTask.getProcessInstanceId()).singleResult();
+		
+		if (instance == null) {
+			// 流程已经结束
+		}
+		
+		variables = instance.getProcessVariables();
+		
+		// 取得流程定义
+		ProcessDefinitionEntity definition = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService).getDeployedProcessDefinition(currTask.getProcessDefinitionId());
+		
+		if (definition == null) {
+			// 流程定义未找到
+		}
+		
+		// 取得上一步活动
+		ActivityImpl currActivity = ((ProcessDefinitionImpl) definition).findActivity(currTask.getTaskDefinitionKey());
+		
+		List<PvmTransition> nextTransitionList = currActivity.getIncomingTransitions();
+		
+		// 清除当前活动的出口
+		List<PvmTransition> oriPvmTransitionList = new ArrayList<PvmTransition>();
+		List<PvmTransition> pvmTransitionList = currActivity.getOutgoingTransitions();
+		
+		for (PvmTransition pvmTransition : pvmTransitionList) {
+			
+			oriPvmTransitionList.add(pvmTransition);
+		}
+		
+		pvmTransitionList.clear();
+
+		// 建立新出口
+		List<TransitionImpl> newTransitions = new ArrayList<TransitionImpl>();
+		
+		for (PvmTransition nextTransition : nextTransitionList) {
+			
+			PvmActivity nextActivity = nextTransition.getSource();
+			
+			ActivityImpl nextActivityImpl = ((ProcessDefinitionImpl) definition).findActivity(nextActivity.getId());
+			
+			TransitionImpl newTransition = currActivity.createOutgoingTransition();
+			
+			newTransition.setDestination(nextActivityImpl);
+			newTransitions.add(newTransition);
+		}
+		
+		// 完成任务
+		List<Task> tasks = taskService.createTaskQuery().processInstanceId(instance.getId()).taskDefinitionKey(currTask.getTaskDefinitionKey()).list();
+		
+		for (Task task : tasks) {
+			
+			taskService.complete(task.getId(), variables);
+			
+			historyService.deleteHistoricTaskInstance(task.getId());
+		}
+		
+		// 恢复方向
+		for (TransitionImpl transitionImpl : newTransitions) {
+			
+			currActivity.getOutgoingTransitions().remove(transitionImpl);
+		}
+		
+		for (PvmTransition pvmTransition : oriPvmTransitionList) {
+			
+			pvmTransitionList.add(pvmTransition);
+		}
+
+	}
 	
 	private ActivityImpl getActivityImplByTask(Task task) {
 
