@@ -1,9 +1,5 @@
 package com.nway.platform.workflow.service;
 
-import java.util.List;
-
-import com.nway.platform.workflow.entity.Handle;
-
 public interface AssigneeParser {
 
 	/**
@@ -12,5 +8,5 @@ public interface AssigneeParser {
 	 * 
 	 * @return
 	 */
-	 List<Handle.SimpleUser> parser(String taskAssignee);
+	 <T> T parser(String taskAssignee);
 }

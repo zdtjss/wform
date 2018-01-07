@@ -171,6 +171,21 @@ public class WorkFlowService {
 		return processDefinitionEntity.findActivity(activityId);
 	}
 	
+	public Task getTask(String taskId) {
+		
+		return taskService.createTaskQuery().taskId(taskId).singleResult();
+	}
+	
+	public List<Task> getCurentTasks(String pid) {
+		
+		return taskService.createTaskQuery().processInstanceId(pid).list();
+	}
+	
+	public String getTaskAssignee(String taskId) {
+		
+		return getTask(taskId).getAssignee();
+	}
+	
 	public InputStream getDiagram(String taskId) {
 		
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
