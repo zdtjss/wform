@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,9 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.github.pagehelper.PageHelper;
 import com.nway.platform.wform.access.FormDataAccess;
-import com.nway.platform.wform.design.entity.Field;
-import com.nway.platform.wform.design.entity.FieldGroup;
 import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.wform.design.entity.PageField;
 import com.nway.platform.wform.design.service.FormPageAccess;
 import com.nway.platform.wform.view.service.FormPageService;
 import com.nway.platform.workflow.entity.Handle;
@@ -54,28 +54,21 @@ public class FormPageController {
 		
 		Map<String, Object> viewModel = new HashMap<String, Object>();
 		
-		Map<String, Map<String, Object>> dataModel = Collections.emptyMap();
+		Map<String, Object> dataModel = Collections.emptyMap();
 		
 		String basePath = request.getSession().getServletContext().getRealPath("/");
 		
 		String bizId = request.getParameter("pkId");
-		
+		String pageId = request.getParameter("pageId");
 		String pageType = request.getParameter("pageType");
 		
-		String formPageId = request.getParameter("pageId");
+		FormPage formPage = formPageAccess.getFormPage(pageId);
 		
-		FormPage formPage = formPageAccess.getFormPage(formPageId);
-		
-		viewModel.put("formPage", formPage);
+		viewModel.put("page", formPage);
 		
 		makeJsp(pageType, viewModel, formPage.getModuleName(), formPage.getName(), basePath);
-		
-		Map<String, Object> groupFieldAttr = new HashMap<String, Object>();
-		
-		for(FieldGroup group :formPage.getFielsGroups()) {
 			
-			groupFieldAttr.put(group.getId(), formPageAccess.listFieldAttr(group.getId()));
-		}
+		Map<String, Map<String, String>> fieldAttr = formPageAccess.listFieldAttr(pageId);
 		
 		if(FormPage.PAGE_TYPE_DETAILS.equals(pageType) || FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
 			
@@ -83,7 +76,7 @@ public class FormPageController {
 		}
 		
 		view.addObject("dataModel", dataModel);
-		view.addObject("fieldAttr", groupFieldAttr);
+		view.addObject("fieldAttr", fieldAttr);
 		view.setViewName(formPage.getName() + "_" + pageType);
 		
 		return view;
@@ -93,29 +86,25 @@ public class FormPageController {
 	@ResponseBody
 	public Map<String, Object> save(@RequestBody Map<String, Map<String, String>> jsonObj) {
 		
-		Map<String, String> formPageParam = jsonObj.get("formPage");
+		Map<String, String> pageParam = jsonObj.get("formPage");
 		
-		FormPage formPage = formPageAccess.getFormPage(formPageParam.get("pageId"));
+		Map<String, String> pageData = jsonObj.get("pageData");
 		
-		Map<String, Map<String, Object>> formData = new HashMap<String, Map<String,Object>>();
+		Map<String, Object> formData = new HashMap<String, Object>();
 		
-		for(FieldGroup group : formPage.getFielsGroups()) {
+		FormPage formPage = formPageAccess.getFormPage(pageParam.get("pageId"));
+		
+		for(PageField field : formPage.getFields()) {
 			
-			Map<String, String> groupDataOrigin = jsonObj.get(group.getName());
+			formData.put(field.getName(), field.getObjType().getValue(pageData.get(field.getName())));
 			
-			Map<String, Object> groupData = new HashMap<String, Object>();
-			
-			for(Field field : group.getFields()) {
+			if(field.isPrimaryKey() && pageData.get(field.getName()) == null) {
 				
-				groupData.put(field.getName(), field.getObjType().getValue(groupDataOrigin.get(field.getName())));
+				formData.put(field.getName(), UUID.randomUUID().toString());
 			}
-			
-			groupData.put("pkId", groupDataOrigin.get("pkId"));
-			
-			formData.put(group.getName(), groupData);
 		}
 		
-		String pageType = formPageParam.get("pageType");
+		String pageType = pageParam.get("pageType");
 		
 		Handle handleInfo = getHandleInfo(jsonObj);
 		
@@ -141,16 +130,11 @@ public class FormPageController {
 		
 		Map<String,Object> queryParam = new HashMap<String, Object>();
 		
-		for(FieldGroup group : formPage.getFielsGroups()) {
-			
-			if(group.getDisplayType() == FieldGroup.DISPLAY_TYPE_FORM) {
-				
-				for(Field field : group.getFields()) {
-					
-					queryParam.put(field.getName(), field.getObjType().getValue(pageParam.get(field.getName())));
-				}
-				
-				break;
+		for (PageField field : formPage.getFields()) {
+
+			if (field.isCondition()) {
+
+				queryParam.put(field.getName(), field.getObjType().getValue(pageParam.get(field.getName())));
 			}
 		}
 		

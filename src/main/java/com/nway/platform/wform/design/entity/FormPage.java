@@ -5,9 +5,6 @@ import java.util.List;
 
 public class FormPage {
 
-	public static final int PAGE_CREATE_WAY_DESIGN = 1;
-	public static final int PAGE_CREATE_WAY_PROCESS = 2;
-	
 	public static final String PAGE_TYPE_CREATE = "create";
 	public static final String PAGE_TYPE_EDIT = "update";
 	public static final String PAGE_TYPE_DETAILS = "details";
@@ -24,21 +21,27 @@ public class FormPage {
 	private String name;
 	
 	private String title;
-
+	
 	// 增、改、查、列
-	private String pageType;
-
-	private int status;
-	// 简介
-	private String summary;
-
+	private String type;
+	
+	private int maxColumnNum;
+	
+	private boolean isMunual;
+	
+	private String tableName;
+	
 	private String moduleId;
 	
 	private String moduleName;
+	// 简介
+	private String summary;
 	
 	private Date createTime;
+	
+	private int status;
 
-	private List<FieldGroup> fielsGroups;
+	private List<PageField> fields;
 
 	public String getId() {
 		return id;
@@ -64,28 +67,36 @@ public class FormPage {
 		this.title = title;
 	}
 
-	public String getPageType() {
-		return pageType;
+	public String getType() {
+		return type;
 	}
 
-	public void setPageType(String pageType) {
-		this.pageType = pageType;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public int getStatus() {
-		return status;
+	public int getMaxColumnNum() {
+		return maxColumnNum;
 	}
 
-	public void setStatus(int status) {
-		this.status = status;
+	public void setMaxColumnNum(int maxColumnNum) {
+		this.maxColumnNum = maxColumnNum;
 	}
 
-	public String getSummary() {
-		return summary;
+	public boolean isMunual() {
+		return isMunual;
 	}
 
-	public void setSummary(String summary) {
-		this.summary = summary;
+	public void setMunual(boolean isMunual) {
+		this.isMunual = isMunual;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
 
 	public String getModuleId() {
@@ -104,6 +115,14 @@ public class FormPage {
 		this.moduleName = moduleName;
 	}
 
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -112,12 +131,20 @@ public class FormPage {
 		this.createTime = createTime;
 	}
 
-	public List<FieldGroup> getFielsGroups() {
-		return fielsGroups;
+	public int getStatus() {
+		return status;
 	}
 
-	public void setFielsGroups(List<FieldGroup> fielsGroups) {
-		this.fielsGroups = fielsGroups;
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public List<PageField> getFields() {
+		return fields;
+	}
+
+	public void setFields(List<PageField> fields) {
+		this.fields = fields;
 	}
 
 }

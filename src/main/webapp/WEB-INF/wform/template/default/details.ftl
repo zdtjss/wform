@@ -4,43 +4,34 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
 <jsp:include page="/WEB-INF/jsp/include.jsp"/>
-<title>${formPage.title!"" }</title>
+<title>${page.title!"" }</title>
 </head>
 <body>
-	<input id="pageId" name="pageId" type="hidden" value="${formPage.id}">
-	<#list formPage.fielsGroups as group>
-			<#if group.displayType == 1>
-			<form id="${group.name }" class="page_group">
-				<input id="${group.name }Pkid" name="pkId" type="hidden" value="${r"${dataModel['"}${group.id }${r"']['pkId']}"}">
-				<table>
-					<#assign rowNum = 1>
-					<tr>
-					<#list group.fields as field>
-						<#if rowNum != field.rowNum> 
-						</tr>
-						<tr>
-						<#assign rowNum = field.rowNum>
-						</#if>
-						<#-- 独占一行的不现实 <th> -->
-						<#if field.colSpan != group.maxColumnNum >
-						<th id="${field.name }_label">${field.display }</th>
-						</#if>
-						<td id="${field.name }_view" colspan="${field.colSpan!1 }">
-							<jsp:include page="/WEB-INF/wform/component/${field.type }/${field.type }_detail.jsp">
-								<jsp:param name="groupId" value="${group.id}"/>
-								<jsp:param name="fieldName" value="${field.name}"/>
-							</jsp:include>
-						</td>
-					</#list>
-					<tr>
-				</table>
-				</form>
+	<input id="pageId" name="pageId" type="hidden" value="${page.id}">
+	<form id="${page.name }" class="page">
+	<table>
+		<#assign rowNum = 1>
+		<tr>
+		<#list page.fields as field>
+			<#if rowNum != field.rowNum> 
+			</tr>
+			<tr>
+			<#assign rowNum = field.rowNum>
 			</#if>
-			<#if group.displayType == 2>
+			<#-- 独占一行的不现实 <th> -->
+			<#if field.colSpan != page.maxColumnNum >
+			<th id="${field.name }_label">${field.display }</th>
 			</#if>
-			<div id="processbar">
-			</div>
-	</#list>
+			<td id="${field.name }_view" colspan="${field.colSpan!1 }">
+				<jsp:include page="/WEB-INF/wform/component/${field.type }/${field.type }_detail.jsp">
+					<jsp:param name="pageId" value="${page.id}"/>
+					<jsp:param name="fieldName" value="${field.name}"/>
+				</jsp:include>
+			</td>
+		</#list>
+		<tr>
+	</table>
+	</form>
 	<script type="text/javascript">
 	</script>
 	<@exists path="/WEB-INF/jsp/${formPage.moduleName}/${formPage.name}_details.js">

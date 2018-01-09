@@ -21,7 +21,7 @@ public class FormPageService {
 	@Autowired
 	private WorkFlowService workFlowService;
 	
-	public void createAndStartProcess(FormPage page, Handle handleInfo, Map<String, Map<String, Object>> formData) {
+	public void createAndStartProcess(FormPage page, Handle handleInfo, Map<String, Object> formData) {
 		
 		if (handleInfo.getProcessKey() != null) {
 			
@@ -29,16 +29,13 @@ public class FormPageService {
 			
 			SpringContextUtil.publishEvent(new TaskCompleteEvent(handleInfo, page, formData));
 
-			for (Map<String, Object> groupData : formData.values()) {
-
-				groupData.put("processInstanceId", pid);
-			}
+			formData.put("processInstanceId", pid);
 		}
 		
 		formDataAccess.create(page, formData);
 	}
 	
-	public void saveAndHandle(FormPage page, Handle handleInfo, Map<String, Map<String, Object>> formData) {
+	public void saveAndHandle(FormPage page, Handle handleInfo, Map<String, Object> formData) {
 		
 		if (handleInfo.getProcessKey() != null) {
 			
@@ -47,7 +44,7 @@ public class FormPageService {
 			SpringContextUtil.publishEvent(new TaskCompleteEvent(handleInfo, page, formData));
 		}
 		
-		if(FormPage.PAGE_TYPE_EDIT.equals(page.getPageType())) {
+		if(FormPage.PAGE_TYPE_EDIT.equals(page.getType())) {
 			
 			formDataAccess.update(page, formData);
 		}

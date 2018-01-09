@@ -11,9 +11,9 @@ public class TaskCompleteEvent extends ApplicationEvent {
 	
 	private Handle handleInfo;
 	private FormPage page;
-	private Map<String, Map<String, Object>> formData;
+	private Map<String, Object> formData;
 	
-	public TaskCompleteEvent(Handle handleInfo, FormPage page, Map<String, Map<String, Object>> formData) {
+	public TaskCompleteEvent(Handle handleInfo, FormPage page, Map<String, Object> formData) {
 		super(handleInfo);
 		this.handleInfo = handleInfo;
 		this.page = page;
@@ -36,11 +36,11 @@ public class TaskCompleteEvent extends ApplicationEvent {
 		this.page = page;
 	}
 
-	public Map<String, Map<String, Object>> getFormData() {
+	public Map<String, Object> getFormData() {
 		return formData;
 	}
 
-	public void setFormData(Map<String, Map<String, Object>> formData) {
+	public void setFormData(Map<String, Object> formData) {
 		this.formData = formData;
 	}
 	

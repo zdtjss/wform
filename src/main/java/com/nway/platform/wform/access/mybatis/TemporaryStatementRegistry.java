@@ -12,9 +12,9 @@ public class TemporaryStatementRegistry {
 		STATEMENT_NAMES.put(mapperName, generatorStatementName(mapperName));
 	}
 	
-	public static String getLastestName(String pageName, String groupName, String type) {
+	public static String getLastestName(String pageName, String type) {
 
-		String originMapperName = pageName + "." + groupName + "_" + type;
+		String originMapperName = pageName + "_" + type;
 		
 		String temporaryStatement = STATEMENT_NAMES.get(originMapperName);
 
