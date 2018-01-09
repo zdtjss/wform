@@ -45,15 +45,15 @@
 		<result column="MODULE_ID" property="moduleId"/>
 		<result column="MODULE_NAME" property="moduleName"/>
 		<result column="SUMMARY" property="summary"/>
-		<collection property="fielsGroups" ofType="com.nway.platform.wform.design.entity.PageField">
+		<collection property="fields" ofType="com.nway.platform.wform.design.entity.PageField" columnPrefix="PAGE_FIELD_">
 			<result column="FIELD_ID" property="fieldId"/>
 			<result column="FIELD_NAME" property="name"/>
 			<result column="DISPLAY" property="display"/>
 			<result column="TYPE" property="type"/>
 			<result column="SIZE" property="size"/>
 			<result column="ROW_NUM" property="rowNum"/>
-			<result column="COLUMN_NUM" property="columnNum"/>
-			<result column="COLUMN_SPAN" property="columnSpan"/>
+			<result column="COLUMN_NUM" property="colNum"/>
+			<result column="COLUMN_SPAN" property="colSpan"/>
 			<result column="EDITABLE" property="editable"/>
 			<result column="IS_CONDITION" property="isCondition"/>
 		</collection>

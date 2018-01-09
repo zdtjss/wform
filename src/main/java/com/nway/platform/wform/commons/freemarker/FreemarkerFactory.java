@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.nway.platform.wform.commons.freemarker.directive.FileExistsDirective;
+import com.nway.platform.wform.commons.freemarker.directive.PdKeyPrinterDirective;
 
 import freemarker.template.Configuration;
 import freemarker.template.SimpleScalar;
@@ -34,6 +35,7 @@ public class FreemarkerFactory implements FactoryBean<Configuration>, ObjectFact
 		cfg.setDefaultEncoding("UTF-8");
 		cfg.setOutputEncoding("UTF-8");
 		cfg.setSharedVariable("exists", new FileExistsDirective());
+		cfg.setSharedVariable("pdKey", new PdKeyPrinterDirective());
 		cfg.setSharedVariable("baseWebPath", new SimpleScalar(baseWebPath));
 		cfg.setSharedVariable("absoluteTemplateDir", new SimpleScalar(templateDir.getAbsolutePath()));
 		

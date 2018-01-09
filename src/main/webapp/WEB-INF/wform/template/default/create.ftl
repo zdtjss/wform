@@ -46,16 +46,16 @@
 				};
 				
 			pageData["workflow"] = {
-					pdKey : "<@pdKey pageId="${page.id}"/>"
+					processKey : "<@pdKey pageId="${page.id}"/>"
 				};
 				
-			pageData["pageData"] = $(this).serializeObject();
+			pageData["pageData"] = $("#${page.name }").serializeObject();
 			
 			$.ajax({
 				type : "post",
 				dataType : "json",
 				contentType:"application/json",
-				data : JSON.stringify(formData),
+				data : JSON.stringify(pageData),
 				url : contextPath + "/form/save",
 				success : function(resp) {
 					

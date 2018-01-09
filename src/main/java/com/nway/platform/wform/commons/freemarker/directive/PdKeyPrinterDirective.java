@@ -13,7 +13,7 @@ import freemarker.template.TemplateDirectiveModel;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
 
-public class ProcessDefinitionPrinterDirective implements TemplateDirectiveModel {
+public class PdKeyPrinterDirective implements TemplateDirectiveModel {
 
 	@Override
 	public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body)
@@ -23,7 +23,7 @@ public class ProcessDefinitionPrinterDirective implements TemplateDirectiveModel
 		
 		WorkFlowDao workFlowDao = SpringContextUtil.getBean(WorkFlowDao.class);
 		
-		env.getOut().write(workFlowDao.getProcessDefinitionKey(pageId.getAsString()));
+		env.getOut().write(workFlowDao.getPdKey(pageId.getAsString()));
 	}
 
 }

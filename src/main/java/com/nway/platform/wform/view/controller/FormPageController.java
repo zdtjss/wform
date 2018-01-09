@@ -207,11 +207,11 @@ public class FormPageController {
 				throw e;
 			} 
 			finally {
-				if (fos != null) {
-					fos.close();
-				}
 				if (osw != null) {
 					osw.close();
+				}
+				if (fos != null) {
+					fos.close();
 				}
 			}
 

@@ -33,6 +33,8 @@ public class Field {
 	/** 跨列数 **/
 	private int colSpan;
 	
+	private int size;
+	
 	// VO
 	private BaseComponent objType;
 
@@ -98,6 +100,14 @@ public class Field {
 
 	public void setColSpan(int colSpan) {
 		this.colSpan = colSpan;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 
 	public BaseComponent getObjType() {
