@@ -1,10 +1,9 @@
 package com.nway.platform.wform.design.entity;
 
-import java.util.Map;
-
 import com.nway.platform.wform.access.component.BaseComponent;
 
 public class Field {
+	
 	private String id;
 
 	/**
@@ -25,11 +24,6 @@ public class Field {
 	 */
 	private String type;
 	
-	private Map<String, String> attributes;
-	
-	// VO
-	private boolean editable;
-	
 	/** 行号 **/
 	private int rowNum;
 
@@ -38,6 +32,8 @@ public class Field {
 
 	/** 跨列数 **/
 	private int colSpan;
+	
+	private int size;
 	
 	// VO
 	private BaseComponent objType;
@@ -106,20 +102,12 @@ public class Field {
 		this.colSpan = colSpan;
 	}
 
-	public Map<String, String> getAttributes() {
-		return attributes;
+	public int getSize() {
+		return size;
 	}
 
-	public void setAttributes(Map<String, String> attributes) {
-		this.attributes = attributes;
-	}
-
-	public boolean isEditable() {
-		return editable;
-	}
-
-	public void setEditable(boolean editable) {
-		this.editable = editable;
+	public void setSize(int size) {
+		this.size = size;
 	}
 
 	public BaseComponent getObjType() {

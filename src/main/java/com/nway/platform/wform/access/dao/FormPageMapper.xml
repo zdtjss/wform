@@ -5,76 +5,62 @@
 	
 	<select id="getFormPage" parameterType="string" resultMap="getFormPageMap">
 		SELECT 
-		    A.FORM_ID FORM_PAGE_ID,
-		    A.FORM_NAME FORM_PAGE_NAME,
-		    A.PAGE_TYPE FORM_PAGE_TYPE,
-		    A.SUMMARY FORM_PAGE_SUMMARY,
-		    A.CREATE_TIME FORM_PAGE_CREATE_TIME,
-		    A.STATUS FORM_PAGE_STATUS,
-		    A.MODULE_ID FORM_PAGE_MODULE_ID,
-		    E.MODULE_NAME FORM_PAGE_MODULE_NAME,
-		    B.GROUP_ID GROUP_ID,
-		    B.NAME GROUP_NAME,
-		    B.IS_MANUAL GROUP_IS_MANUAL,
-		    B.DISPLAY_TYPE GROUP_DISPLAY_TYPE,
-		    B.EDITABLE GROUP_EDITABLE,
-		    B.MAX_COLUMN_NUM GROUP_MAX_COLUMN_NUM,
-		    B.FORM_PAGE_ID GROUP_FORM_PAGE_ID,
-		    D.FIELD_ID FIELD_ID,
-		    D.NAME FIELD_NAME,
-		    D.MODULE_ID FIELD_MODULE_ID,
-		    D.TYPE FIELD_TYPE,
-		    D.DISPLAY FIELD_DISPLAY,
-		    C.ROW_NUM FIELD_ROW_NUM,
-		    C.COLUMN_NUM FIELD_COLUMN_NUM,
-		    C.COLUMN_SPAN FIELD_COLUMN_SPAN,
-			C.EDITABLE FIELD_EDITABLE
+		  A.PAGE_ID ,
+		  A.PAGE_NAME ,
+		  A.PAGE_TITLE,
+		  A.PAGE_TYPE,
+		  A.IS_MANUAL,
+		  A.TABLE_NAME,
+		  A.SUMMARY,
+		  A.MODULE_ID,
+		  B.MODULE_NAME,
+		  C.FIELD_ID PAGE_FIELD_FIELD_ID,
+		  D.NAME PAGE_FIELD_FIELD_NAME,
+		  D.DISPLAY PAGE_FIELD_DISPLAY,
+		  D.TYPE PAGE_FIELD_TYPE,
+		  D.SIZE PAGE_FIELD_SIZE,
+		  C.ROW_NUM PAGE_FIELD_ROW_NUM,
+		  C.COLUMN_NUM PAGE_FIELD_COLUMN_NUM,
+		  C.COLUMN_SPAN PAGE_FIELD_COLUMN_SPAN,
+		  C.EDITABLE PAGE_FIELD_EDITABLE,
+		  C.IS_CONDITION PAGE_FIELD_IS_CONDITION
 		FROM
-		    T_FORM_FORMPAGE A
-		        LEFT JOIN
-		    T_FORM_MODULE E on A.MODULE_ID = E.MODULE_ID
+		    T_FORM_PAGE A
+	        LEFT JOIN
+		    T_FORM_MODULE B on A.MODULE_ID = B.MODULE_ID
 		    LEFT JOIN
-		    T_FORM_FIELD_GROUP B ON A.FORM_ID = B.FORM_PAGE_ID
-		        LEFT JOIN
-		    T_R_FIELD_GROUP C ON B.GROUP_ID = C.GROUP_ID
-		        LEFT JOIN
+		    T_FORM_PAGE_FIELD C ON A.PAGE_ID = C.PAGE_ID
+	        LEFT JOIN
 		    T_FORM_FIELD D ON C.FIELD_ID = D.FIELD_ID
-		WHERE A.FORM_ID = #{formId}
+		WHERE A.PAGE_ID = #{pageId}
 	</select>
 	
 	<resultMap type="com.nway.platform.wform.design.entity.FormPage" id="getFormPageMap">
-		<result column="form_page_id" property="id"/>
-		<result column="form_page_name" property="name"/>
-		<result column="form_page_type" property="pageType"/>
-		<result column="status" property="status"/>
-		<result column="form_page_module_id" property="moduleId"/>
-		<result column="form_page_module_name" property="moduleName"/>
-		<result column="form_page_create_time" property="createTime"/>
-		<collection property="fielsGroups" ofType="com.nway.platform.wform.design.entity.FieldGroup">
-			<result column="group_id" property="id"/>
-			<result column="group_name" property="name"/>
-			<result column="group_is_manual" property="isManual"/>
-			<result column="group_display_type" property="displayType"/>
-			<result column="group_is_modify" property="isModify"/>
-			<result column="group_max_row_num" property="maxRowNum"/>
-			<result column="group_max_column_num" property="maxColumnNum"/>
-			<result column="group_form_page_id" property="formPageId"/>
-			<collection property="fields" ofType="com.nway.platform.wform.design.entity.Field" columnPrefix="FIELD_">
-				<result column="id" property="id"/>
-				<result column="name" property="name"/>
-				<result column="module_id" property="moduleId"/>
-				<result column="display" property="display"/>
-				<result column="type" property="type"/>
-				<result column="row_num" property="rowNum"/>
-				<result column="column_num" property="colNum"/>
-				<result column="column_span" property="colSpan"/>
-				<result column="editable" property="editable"/>
-			</collection>
+		<result column="PAGE_ID" property="id"/>
+		<result column="PAGE_NAME" property="name"/>
+		<result column="PAGE_TITLE" property="title"/>
+		<result column="PAGE_TYPE" property="type"/>
+		<result column="IS_MANUAL" property="isMunual"/>
+		<result column="TABLE_NAME" property="tableName"/>
+		<result column="MODULE_ID" property="moduleId"/>
+		<result column="MODULE_NAME" property="moduleName"/>
+		<result column="SUMMARY" property="summary"/>
+		<collection property="fields" ofType="com.nway.platform.wform.design.entity.PageField" columnPrefix="PAGE_FIELD_">
+			<result column="FIELD_ID" property="fieldId"/>
+			<result column="FIELD_NAME" property="name"/>
+			<result column="DISPLAY" property="display"/>
+			<result column="TYPE" property="type"/>
+			<result column="SIZE" property="size"/>
+			<result column="ROW_NUM" property="rowNum"/>
+			<result column="COLUMN_NUM" property="colNum"/>
+			<result column="COLUMN_SPAN" property="colSpan"/>
+			<result column="EDITABLE" property="editable"/>
+			<result column="IS_CONDITION" property="isCondition"/>
 		</collection>
 	</resultMap>
 	
 	<select id="listFieldAttr" resultMap="fieldAttrMap">
-		select FIELD_NAME,ATTR_NAME,ATTR_VALUE from T_FORM_FIELD_ATTRIBUTE where FIELD_GROUP_ID = #{groupId}
+		select FIELD_NAME,ATTR_NAME,ATTR_VALUE from T_FORM_FIELD_ATTRIBUTE where PAGE_ID = #{pageId}
 	</select>
 	
 	<resultMap type="map" id="fieldAttrMap">

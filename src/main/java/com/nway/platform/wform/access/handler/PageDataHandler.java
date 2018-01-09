@@ -4,9 +4,9 @@ import java.util.Map;
 
 import com.nway.platform.wform.design.entity.FormPage;
 
-public interface FormPageDataHandler {
+public interface PageDataHandler {
 
 	void handleParam(HandlerType handlerType, FormPage formPage, Map<String, Object> param);
 
-	void handleResult(HandlerType handlerType, FormPage formPage, Object data);
+	void handleResult(HandlerType handlerType, FormPage formPage, Map<String, Object> data);
 }
