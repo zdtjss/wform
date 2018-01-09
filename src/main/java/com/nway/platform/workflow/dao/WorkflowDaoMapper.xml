@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nway.platform.workflow.dao.WorkflowDao">
+	
+	<insert id="createWorkItem">
+		insert into T_WORK_ITEM (ITEM_ID,TITLE,FORM_URL,,STATUS) values(#{itemId},#{title},#{formUrl},#{taskId},1)
+	</insert>
+	
+	<update id="handleWorkItem">
+		update T_WORK_ITEM set status = 2 where item_id = #{itemId}
+	</update>
+</mapper>

@@ -22,6 +22,16 @@ public class WorkflowController {
 	@Autowired
 	private WorkFlowService workFlowService;
 	
+	public void startFlow() {
+		
+		
+	}
+	
+	public void handleTask() {
+		
+		
+	}
+	
 	@RequestMapping("nextOutcome")
 	public Set<String> nextOutcome(String taskId) {
 		
