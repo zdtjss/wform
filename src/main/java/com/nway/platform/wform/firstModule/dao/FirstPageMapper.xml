@@ -3,12 +3,12 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="first_page">
 	<insert id="save">
-		insert into t_first_group (pkId, title,note,content) value(#{pkId},#{title},#{note},#{content})
+		insert into t_first_group (pk_id, title,note,content) value(#{pkId},#{title},#{note},#{content})
 	</insert>
 	<select id="details" resultType="map">
-		select pkId,title,note,content from t_first_group where pkId = #{pkId}
+		select pk_id,title,note,content from t_first_group where pk_Id = #{pkId}
 	</select>
 	<update id="update">
-		update t_first_group set title = #{title}, note = #{note}, content=#{content} where pkId = #{pkId}
+		update t_first_group set title = #{title}, note = #{note}, content=#{content} where pk_Id = #{pkId}
 	</update>
 </mapper>

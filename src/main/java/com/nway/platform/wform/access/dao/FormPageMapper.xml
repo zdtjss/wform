@@ -23,6 +23,7 @@
 		  C.COLUMN_NUM PAGE_FIELD_COLUMN_NUM,
 		  C.COLUMN_SPAN PAGE_FIELD_COLUMN_SPAN,
 		  C.EDITABLE PAGE_FIELD_EDITABLE,
+		  C.SHOW_IN_WORKITEM PAGE_FIELD_SHOW_IN_WORKITEM,
 		  C.IS_CONDITION PAGE_FIELD_IS_CONDITION
 		FROM
 		    T_FORM_PAGE A
@@ -55,6 +56,7 @@
 			<result column="COLUMN_NUM" property="colNum"/>
 			<result column="COLUMN_SPAN" property="colSpan"/>
 			<result column="EDITABLE" property="editable"/>
+			<result column="SHOW_IN_WORKITEM" property="showInWorkItem"/>
 			<result column="IS_CONDITION" property="isCondition"/>
 		</collection>
 	</resultMap>

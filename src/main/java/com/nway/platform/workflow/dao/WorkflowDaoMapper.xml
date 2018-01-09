@@ -6,4 +6,8 @@
 	<select id="getPdKey" resultType="string">
 		select PD_KEY from T_FORM_FLOW where PAGE_ID = #{pageId}
 	</select>
+	
+	<insert id="createWorkItem">
+		insert into T_WORK_ITEM (PK_ID,TITLE,TASK_ID,FORM_URL,STATUS) values (#{pkId},#{title},#{taskId},#{formUrl},0)
+	</insert>
 </mapper>

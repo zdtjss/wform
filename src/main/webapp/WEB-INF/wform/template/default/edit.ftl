@@ -9,6 +9,7 @@
 <body>
 	<input id="pageId" name="pageId" type="hidden" value="${page.id}">
 	<form id="${page.name }" class="page">
+		<input name="pkId" type="hidden" value="${r'${ dataModel["pk_id"]  }'}">
 		<table>
 			<#assign rowNum = 1>
 			<tr>
@@ -38,20 +39,20 @@
 	<script type="text/javascript">
 		function submit() {
 		
-			var formData = {}; 
+			var pageData = {}; 
 			
-			formData["formPage"] = {
+			pageData["formPage"] = {
 					pageId : $("#pageId").val(),
 					pageType : "update"
 				};
 				
-			formData["pageData"] = $(this).serializeObject();
+			pageData["pageData"] = $("#${page.name }").serializeObject();
 			
 			$.ajax({
 				type : "post",
 				dataType : "json",
 				contentType:"application/json",
-				data : JSON.stringify(formData),
+				data : JSON.stringify(pageData),
 				url : contextPath + "/form/save",
 				success : function(resp) {
 					

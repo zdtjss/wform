@@ -27,9 +27,9 @@ public class FormPageService {
 			
 			String pid = workFlowService.startProcess(handleInfo);
 			
-			SpringContextUtil.publishEvent(new TaskCompleteEvent(handleInfo, page, formData));
-
 			formData.put("processInstanceId", pid);
+			
+			SpringContextUtil.publishEvent(new TaskCompleteEvent(handleInfo, page, formData));
 		}
 		
 		formDataAccess.create(page, formData);

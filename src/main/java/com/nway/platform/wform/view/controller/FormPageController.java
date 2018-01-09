@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.BeanUtils;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,7 @@ import com.nway.platform.wform.design.entity.PageField;
 import com.nway.platform.wform.design.service.FormPageAccess;
 import com.nway.platform.wform.view.service.FormPageService;
 import com.nway.platform.workflow.entity.Handle;
+import com.nway.platform.workflow.entity.Handle.SimpleUser;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -97,11 +99,6 @@ public class FormPageController {
 		for(PageField field : formPage.getFields()) {
 			
 			formData.put(field.getName(), field.getObjType().getValue(pageData.get(field.getName())));
-			
-			if(field.isPrimaryKey() && pageData.get(field.getName()) == null) {
-				
-				formData.put(field.getName(), UUID.randomUUID().toString());
-			}
 		}
 		
 		String pageType = pageParam.get("pageType");
@@ -110,9 +107,13 @@ public class FormPageController {
 		
 		if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
 			
+			formData.put("pkId", UUID.randomUUID().toString());
+			
 			formPageService.createAndStartProcess(formPage, handleInfo, formData);
 		}
 		else if(FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
+			
+			formData.put("pkId", pageData.get("pkId"));
 			
 			formDataAccess.update(formPage, formData);
 		}
@@ -222,7 +223,21 @@ public class FormPageController {
 		
 		Handle handleInfo = new Handle();
 		
-		BeanUtils.copyProperties(jsonObj.get("workflow"), handleInfo);
+		SimpleUser user1 = new SimpleUser();
+		
+		user1.setUserId("12312");
+		user1.setCnName("品牌");
+
+		try {
+			
+			BeanUtils.populate(handleInfo, jsonObj.get("workflow"));
+		} 
+		catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} 
+		catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
 		
 		return handleInfo;
 	}

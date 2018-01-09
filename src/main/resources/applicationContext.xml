@@ -57,6 +57,7 @@
 			<tx:method name="add*" read-only="false" />
 			<tx:method name="insert*" read-only="false" />
 			<tx:method name="save*" read-only="false" />
+			<tx:method name="create*" read-only="false" />
 			<tx:method name="update*" read-only="false" />
 			<tx:method name="edit*" read-only="false" />
 			<tx:method name="modify*" read-only="false" />
@@ -67,7 +68,13 @@
 
 	<aop:config>
 		<aop:pointcut id="operation"
-			expression="execution(* com.nway.platform.service.*.*(..))" />
+			expression="execution(* com.nway.platform..service.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="operation" />
+	</aop:config>
+	
+	<aop:config>
+		<aop:pointcut id="operation"
+			expression="execution(* com.nway.platform.wform.access.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="operation" />
 	</aop:config>
 

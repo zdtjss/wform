@@ -2,6 +2,8 @@ package com.nway.platform.wform.design.entity;
 
 public class PageField extends Field {
 	
+	public static final String PRIMARY_KEY_NAME = "PK_ID";
+	
 	private String id;
 	
 	private String fieldId;
@@ -10,7 +12,7 @@ public class PageField extends Field {
 	
 	private boolean editable;
 	
-	private boolean isPrimaryKey;
+	private boolean showInWorkItem;
 	
 	private boolean isCondition;
 
@@ -51,12 +53,12 @@ public class PageField extends Field {
 		this.editable = editable;
 	}
 
-	public boolean isPrimaryKey() {
-		return isPrimaryKey;
+	public boolean isShowInWorkItem() {
+		return showInWorkItem;
 	}
 
-	public void setPrimaryKey(boolean isPrimaryKey) {
-		this.isPrimaryKey = isPrimaryKey;
+	public void setShowInWorkItem(boolean showInWorkItem) {
+		this.showInWorkItem = showInWorkItem;
 	}
 
 	public boolean isCondition() {

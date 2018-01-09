@@ -43,17 +43,19 @@ public class FormDataAccess {
 		PageDataHandler formPageDataHandler = getPageDataHandler(page.getName());
 		
 		formPageDataHandler.handleParam(HandlerType.DATA_CREATE, page, formData);
-		
-		for(PageField field : page.getFields()) {
-			
-			int effectCount = sqlSessionTemplate.insert(
-					TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_CREATE), formData);
-			
-			if(effectCount > 0 && MultiValueComponent.class.isInstance(field.getObjType())) {
 
-				((MultiValueComponent) field.getObjType()).save(formData.get(field.getName()));
-			}
+		int effectCount = sqlSessionTemplate.insert(
+				TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_CREATE), formData);
+		
+		if (effectCount > 0) {
 			
+			for (PageField field : page.getFields()) {
+
+				if (MultiValueComponent.class.isInstance(field.getObjType())) {
+
+					((MultiValueComponent) field.getObjType()).save(formData.get(field.getName()));
+				}
+			}
 		}
 		
 		formPageDataHandler.handleResult(HandlerType.DATA_CREATE, page, formData);
@@ -71,16 +73,18 @@ public class FormDataAccess {
 
 		pageDataHandler.handleParam(HandlerType.DATA_MODIFY, page, formData);
 		
-		for(PageField field : page.getFields()) {
+		int effectCount = sqlSessionTemplate.update(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_UPDATE), formData);
+		
+		if (effectCount > 0) {
 			
-			int effectCount = sqlSessionTemplate.update(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_UPDATE), formData);
-			
-			// 子表操作
-			if(effectCount > 0 && MultiValueComponent.class.isInstance(field.getObjType())) {
+			for (PageField field : page.getFields()) {
 
-				((MultiValueComponent) field.getObjType()).save(formData.get(field.getName()));
+				// 子表操作
+				if (MultiValueComponent.class.isInstance(field.getObjType())) {
+
+					((MultiValueComponent) field.getObjType()).save(formData.get(field.getName()));
+				}
 			}
-			
 		}
 		
 		pageDataHandler.handleResult(HandlerType.DATA_MODIFY, page, formData);
@@ -103,11 +107,11 @@ public class FormDataAccess {
 
 		pageDataHandler.handleParam(HandlerType.DATA_QUERY, page, param);
 		
+		pageData = sqlSessionTemplate
+				.selectOne(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_DETAILS), dataId);
+		
 		for(PageField field : page.getFields()) {
 			
-			pageData = sqlSessionTemplate
-					.selectOne(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_DETAILS), dataId);
-
 			// 子表操作
 			if(MultiValueComponent.class.isInstance(field.getObjType())) {
 				
@@ -169,11 +173,11 @@ public class FormDataAccess {
 
 		pageDataHandler.handleParam(HandlerType.DATA_REMOVE, page, param);
 		
+		int effectCount = sqlSessionTemplate
+				.delete(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_REMOVE), dataId);
+		
 		for(PageField field : page.getFields()) {
 
-			int effectCount = sqlSessionTemplate
-					.delete(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_REMOVE), dataId);
-			
 			if (effectCount > 0 && MultiValueComponent.class.isInstance(field.getObjType())) {
 
 				((MultiValueComponent) field.getObjType()).remove(dataId);

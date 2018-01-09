@@ -34,8 +34,8 @@
 	</form>
 	<script type="text/javascript">
 	</script>
-	<@exists path="/WEB-INF/jsp/${formPage.moduleName}/${formPage.name}_details.js">
-		<jsp:include page="/WEB-INF/jsp/${formPage.moduleName}/${formPage.name}_details.js"/>
+	<@exists path="/WEB-INF/jsp/${page.moduleName}/${page.name}_details.js">
+		<jsp:include page="/WEB-INF/jsp/${page.moduleName}/${page.name}_details.js"/>
 	</@exists>
 </body>
 </html>

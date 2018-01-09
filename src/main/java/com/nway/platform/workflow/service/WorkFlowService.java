@@ -49,8 +49,6 @@ public class WorkFlowService {
 		
 		Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
 		
-		task.setAssignee(handleInfo.getCurrentUser().getCnName());
-		
 		taskService.complete(task.getId());
 		
 		return processInstance.getId();
