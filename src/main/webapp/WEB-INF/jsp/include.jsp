@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF8" pageEncoding="UTF8"%>
 <%
-	pageContext.setAttribute("contextPath", request.getContextPath());
+	request.setAttribute("contextPath", request.getContextPath());
 %>
 <link rel="stylesheet" type="text/css" href="${contextPath }/js/easyui/themes/default/easyui.css">
 <script src="${contextPath }/js/easyui/jquery.min.js"></script>

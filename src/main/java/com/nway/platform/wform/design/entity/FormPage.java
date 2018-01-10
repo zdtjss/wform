@@ -17,6 +17,8 @@ public class FormPage {
 	public static final int PAGE_RENDER_TYPE_IOS_PAD = 5;
 
 	private String id;
+	
+	private String formId;
 
 	private String name;
 	
@@ -41,7 +43,9 @@ public class FormPage {
 	
 	private int status;
 
-	private List<PageField> fields;
+	private List<PageFieldForm> formFields;
+	
+	private List<PageFieldList> listFields;
 
 	public String getId() {
 		return id;
@@ -139,12 +143,28 @@ public class FormPage {
 		this.status = status;
 	}
 
-	public List<PageField> getFields() {
-		return fields;
+	public String getFormId() {
+		return formId;
 	}
 
-	public void setFields(List<PageField> fields) {
-		this.fields = fields;
+	public void setFormId(String formId) {
+		this.formId = formId;
+	}
+
+	public List<PageFieldForm> getFormFields() {
+		return formFields;
+	}
+
+	public void setFormFields(List<PageFieldForm> formFields) {
+		this.formFields = formFields;
+	}
+
+	public List<PageFieldList> getListFields() {
+		return listFields;
+	}
+
+	public void setListFields(List<PageFieldList> listFields) {
+		this.listFields = listFields;
 	}
 
 }

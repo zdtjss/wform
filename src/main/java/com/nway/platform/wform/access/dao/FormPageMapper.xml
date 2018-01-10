@@ -13,26 +13,10 @@
 		  A.TABLE_NAME,
 		  A.SUMMARY,
 		  A.MODULE_ID,
-		  B.MODULE_NAME,
-		  C.FIELD_ID PAGE_FIELD_FIELD_ID,
-		  D.NAME PAGE_FIELD_FIELD_NAME,
-		  D.DISPLAY PAGE_FIELD_DISPLAY,
-		  D.TYPE PAGE_FIELD_TYPE,
-		  D.SIZE PAGE_FIELD_SIZE,
-		  C.ROW_NUM PAGE_FIELD_ROW_NUM,
-		  C.COLUMN_NUM PAGE_FIELD_COLUMN_NUM,
-		  C.COLUMN_SPAN PAGE_FIELD_COLUMN_SPAN,
-		  C.EDITABLE PAGE_FIELD_EDITABLE,
-		  C.SHOW_IN_WORKITEM PAGE_FIELD_SHOW_IN_WORKITEM,
-		  C.IS_CONDITION PAGE_FIELD_IS_CONDITION
+		  B.MODULE_NAME
 		FROM
-		    T_FORM_PAGE A
-	        LEFT JOIN
-		    T_FORM_MODULE B on A.MODULE_ID = B.MODULE_ID
-		    LEFT JOIN
-		    T_FORM_PAGE_FIELD C ON A.PAGE_ID = C.PAGE_ID
-	        LEFT JOIN
-		    T_FORM_FIELD D ON C.FIELD_ID = D.FIELD_ID
+		    T_FORM_PAGE A LEFT JOIN T_FORM_MODULE B
+		    ON A.MODULE_ID = B.MODULE_ID
 		WHERE A.PAGE_ID = #{pageId}
 	</select>
 	
@@ -46,19 +30,67 @@
 		<result column="MODULE_ID" property="moduleId"/>
 		<result column="MODULE_NAME" property="moduleName"/>
 		<result column="SUMMARY" property="summary"/>
-		<collection property="fields" ofType="com.nway.platform.wform.design.entity.PageField" columnPrefix="PAGE_FIELD_">
-			<result column="FIELD_ID" property="fieldId"/>
-			<result column="FIELD_NAME" property="name"/>
-			<result column="DISPLAY" property="display"/>
-			<result column="TYPE" property="type"/>
-			<result column="SIZE" property="size"/>
-			<result column="ROW_NUM" property="rowNum"/>
-			<result column="COLUMN_NUM" property="colNum"/>
-			<result column="COLUMN_SPAN" property="colSpan"/>
-			<result column="EDITABLE" property="editable"/>
-			<result column="SHOW_IN_WORKITEM" property="showInWorkItem"/>
-			<result column="IS_CONDITION" property="isCondition"/>
-		</collection>
+		<collection property="formFields" column="page_id" ofType="com.nway.platform.wform.design.entity.PageFieldForm" select="queryPageFormFields"/>
+		<collection property="listFields" column="page_id" ofType="com.nway.platform.wform.design.entity.PageFieldList" select="queryPageListFields"/>
+	</resultMap>
+	
+	<select id="queryPageFormFields" resultMap="queryPageFormFieldsMap">
+		select 
+			  A.FIELD_ID,
+			  B.NAME,
+			  B.DISPLAY,
+			  B.TYPE,
+			  B.SIZE,
+			  A.ROW_NUM,
+			  A.COLUMN_NUM,
+			  A.COLUMN_SPAN,
+			  A.EDITABLE,
+			  A.SHOW_IN_WORKITEM
+		FROM T_FORM_PAGE_FIELD_FORM A 
+        LEFT JOIN
+	    T_FORM_FIELD B ON A.FIELD_ID = B.FIELD_ID
+	    where page_id = #{id}
+	</select>
+	
+	<resultMap type="com.nway.platform.wform.design.entity.PageFieldForm" id="queryPageFormFieldsMap">
+		<result column="FIELD_ID" property="fieldId"/>
+		<result column="NAME" property="name"/>
+		<result column="DISPLAY" property="display"/>
+		<result column="TYPE" property="type"/>
+		<result column="ROW_NUM" property="rowNum"/>
+		<result column="COLUMN_NUM" property="colNum"/>
+		<result column="COLUMN_SPAN" property="colSpan"/>
+		<result column="EDITABLE" property="editable"/>
+		<result column="SHOW_IN_WORKITEM" property="showInWorkItem"/>
+	</resultMap>
+	
+	<select id="queryPageListFields" resultMap="queryPageListFieldsMap">
+		select 
+			  A.FIELD_ID,
+			  B.NAME,
+			  B.DISPLAY,
+			  B.TYPE,
+			  A.ROW_NUM ,
+			  A.COLUMN_NUM,
+			  A.COLUMN_SPAN,
+			  A.IS_LINK,
+			  A.IS_CONDITION
+		FROM T_FORM_PAGE_FIELD_LIST A 
+        LEFT JOIN
+	    T_FORM_FIELD B ON A.FIELD_ID = B.FIELD_ID
+	    where page_id = #{id}
+	</select>
+	
+	<resultMap type="com.nway.platform.wform.design.entity.PageFieldList" id="queryPageListFieldsMap">
+		<result column="FIELD_ID" property="fieldId"/>
+		<result column="NAME" property="name"/>
+		<result column="DISPLAY" property="display"/>
+		<result column="TYPE" property="type"/>
+		<result column="ROW_NUM" property="rowNum"/>
+		<result column="COLUMN_NUM" property="colNum"/>
+		<result column="COLUMN_SPAN" property="colSpan"/>
+		<result column="IS_LINK" property="isLink"/>
+		<result column="IS_CONDITION" property="isCondition"/>
 	</resultMap>
 	
 	<select id="listFieldAttr" resultMap="fieldAttrMap">

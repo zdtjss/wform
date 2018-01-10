@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 import com.nway.platform.wform.access.component.ComponentRegister;
 import com.nway.platform.wform.access.dao.FormPageMapper;
 import com.nway.platform.wform.design.entity.FormPage;
-import com.nway.platform.wform.design.entity.PageField;
+import com.nway.platform.wform.design.entity.PageFieldForm;
+import com.nway.platform.wform.design.entity.PageFieldList;
 
 @Component
 public class FormPageAccess {
@@ -25,17 +26,22 @@ public class FormPageAccess {
 		
 		FormPage page = formPageMapper.getFormPage(id);
 		
- 		for (PageField field : page.getFields()) {
+ 		for (PageFieldForm field : page.getFormFields()) {
 
 			field.setObjType(componentRegister.getComponent(field.getType()));
 		}
+ 		
+ 		for (PageFieldList field : page.getListFields()) {
+ 			
+ 			field.setObjType(componentRegister.getComponent(field.getType()));
+ 		}
 		
 		return page;
 	}
 	
-	public Map<String, Map<String, String>> listFieldAttr(String groupId) {		
+	public Map<String, Map<String, String>> listFieldAttr(String pageId) {		
 		
-		List<Map<String, String>> attrOrgin = formPageMapper.listFieldAttr(groupId);
+		List<Map<String, String>> attrOrgin = formPageMapper.listFieldAttr(pageId);
 		
 		Map<String, Map<String, String>> retVal = new HashMap<String,Map<String,String>>();
 		

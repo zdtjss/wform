@@ -6,11 +6,6 @@ import org.springframework.stereotype.Component;
 public class CheckboxComponent implements MultiValueComponent {
 
 	@Override
-	public String getPath() {
-		return null;
-	}
-
-	@Override
 	public Object getValue(String value) {
 		
 		return value != null && value.length() > 0 ? value.substring(2, value.length() - 2).split("\",\"") : null;

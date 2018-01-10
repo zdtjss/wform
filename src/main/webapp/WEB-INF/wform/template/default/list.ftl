@@ -4,65 +4,69 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
 <jsp:include page="/WEB-INF/jsp/include.jsp"/>
-<title>${formPage.title!"" }</title>
+<title>${page.title!"" }</title>
 </head>
 <body>
-	<input id="pageId" name="pageId" type="hidden" value="${formPage.id}">
-	<#list formPage.fielsGroups as group>
-		<#if group.displayType == 1>
-		<form id="${group.name }" class="page_group">
-			<input name="groupName" type="hidden" value="${group.name }">
-			<table>
-				<#assign rowNum = 1>
-				<tr>
-				<#list group.fields as field>
+	<form id="${page.name }_condition" class="page_group">
+	<input id="pageId" name="pageId" type="hidden" value="${page.id}">
+		<table>
+			<#assign rowNum = 1>
+			<tr>
+			<#list page.listFields as field>
+				<#if field.condition == true && field.type != 'key'>
 					<#if rowNum != field.rowNum> 
 					</tr>
 					<tr>
 					<#assign rowNum = field.rowNum>
 					</#if>
 					<#-- 独占一行的不现实 <th> -->
-					<#if field.colSpan != group.maxColumnNum >
+					<#if field.colSpan != page.maxColumnNum >
 					<th id="${field.name }_label">${field.display }</th>
 					</#if>
 					<td id="${field.name }_view" colspan="${field.colSpan!1 }">
 						<jsp:include page="/WEB-INF/wform/component/${field.type }/${field.type }_edit.jsp">
-							<jsp:param name="groupId" value="${group.id}"/>
+							<jsp:param name="pageId" value="${page.id}"/>
 							<jsp:param name="fieldName" value="${field.name}"/>
 						</jsp:include>
 					</td>
-				</#list>
-				<tr>
-			</table>
-			<div id="processbar">
-				<a href="javascript:void(0)" onclick="query()">查询</a>
-			</div>
-			</form>
-		</#if>
-		<#if group.displayType == 2>
-			<table id="${group.name }"></table>
-			<script type="text/javascript">
-				var queryParam = $($(".page_group")[0]).serializeObject(); 
-				queryParam["pageId"] = $("#pageId").val();
-				$('#${group.name }').datagrid({
-					striped:true,
-					fitColumns:true,
-					pagination:true,
-					rownumbers:true,
-					singleSelect:true,
-					ctrlSelect:true,
-				    url:contextPath + "/form/listData",
-				    queryParams : queryParam,
-				    columns:[[
-				    		
-				        <#list group.fields as field>
-					        {field:'${field.name }',title:'${field.display }',width:100}${field?has_next?then(',','')}
-					    </#list>
-				    ]]
-				});
-			</script>
-		</#if>
-	</#list>
+				</#if>
+			</#list>
+			<tr>
+		</table>
+		<div id="processbar">
+			<a href="javascript:void(0)" onclick="query()">查询</a>
+		</div>
+		</form>
+		<table id="${page.name }_list"></table>
+		<script type="text/javascript">
+			var queryParam = $("#${page.name}_condition").serializeObject(); 
+			$("#${page.name }_list").datagrid({
+				striped:true,
+				fitColumns:true,
+				pagination:true,
+				rownumbers:true,
+				singleSelect:true,
+				ctrlSelect:true,
+			    url:contextPath + "/form/listData",
+			    queryParams : queryParam,
+			    columns:[[
+			        <#list page.listFields as field>
+				        <#if field.type == 'key' >
+				        	<#assign key=field.name>
+				        	{field:'${field.name }',hidden:true}${field?has_next?then(',','')}
+				        </#if>
+				        <#if field.type != 'key' >
+				        	{field:'${field.name }',title:'${field.display }',width:100${field.link ?string(",formatter:showLink", "")}}${field?has_next?then(',','')}
+				        </#if>
+				    </#list>
+			    ]]
+			});
+			
+			function showLink(value, row, index) {
+				
+				return "<a href=\"${r'${contextPath}'}/form/toUI?pageType=details&pageId=${page.id}&pkId="+row.${key}+"\">"+value+"</a>";
+			}
+		</script>
 	<script type="text/javascript">
 	
 	</script>

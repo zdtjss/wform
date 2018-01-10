@@ -6,11 +6,6 @@ import org.springframework.stereotype.Component;
 public class TextareaComponent implements BaseComponent {
 
 	@Override
-	public String getPath() {
-		return null;
-	}
-
-	@Override
 	public Object getValue(String value) {
 		
 		return value;

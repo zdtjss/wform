@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import com.nway.platform.wform.design.entity.PageField;
+import com.nway.platform.wform.design.entity.PageFieldForm;
 import com.nway.platform.workflow.dao.WorkFlowDao;
 import com.nway.platform.workflow.entity.Handle;
 import com.nway.platform.workflow.entity.Handle.SimpleUser;
@@ -31,7 +31,7 @@ public class TaskCompleteLisntener implements ApplicationListener<TaskCompleteEv
 		Handle handleInfo = event.getHandleInfo();
 		Map<String, SimpleUser[]> taskUserMap = handleInfo.getHandlerTaskMap();
 		Map<String, Object> formData = event.getFormData();
-		List<PageField> fields = event.getPage().getFields();
+		List<PageFieldForm> fields = event.getPage().getFormFields();
 		
 		List<Task> tasks = taskService.createTaskQuery().processInstanceId(formData.get("processInstanceId").toString()).list();
 		
@@ -58,7 +58,7 @@ public class TaskCompleteLisntener implements ApplicationListener<TaskCompleteEv
 					/*workItem.put("handlerId", user.getUserId());
 					workItem.put("handlerName", user.getCnName());*/
 					
-					for(PageField field : fields) {
+					for(PageFieldForm field : fields) {
 						
 						if(field.isShowInWorkItem()) {
 							

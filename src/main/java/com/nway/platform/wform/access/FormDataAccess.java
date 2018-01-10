@@ -14,7 +14,7 @@ import com.nway.platform.wform.access.handler.PageDataHandler;
 import com.nway.platform.wform.access.mybatis.TemporaryStatementRegistry;
 import com.nway.platform.wform.commons.SpringContextUtil;
 import com.nway.platform.wform.design.entity.FormPage;
-import com.nway.platform.wform.design.entity.PageField;
+import com.nway.platform.wform.design.entity.PageFieldForm;
 
 @Component
 public class FormDataAccess {
@@ -49,7 +49,7 @@ public class FormDataAccess {
 		
 		if (effectCount > 0) {
 			
-			for (PageField field : page.getFields()) {
+			for (PageFieldForm field : page.getFormFields()) {
 
 				if (MultiValueComponent.class.isInstance(field.getObjType())) {
 
@@ -77,7 +77,7 @@ public class FormDataAccess {
 		
 		if (effectCount > 0) {
 			
-			for (PageField field : page.getFields()) {
+			for (PageFieldForm field : page.getFormFields()) {
 
 				// 子表操作
 				if (MultiValueComponent.class.isInstance(field.getObjType())) {
@@ -110,7 +110,7 @@ public class FormDataAccess {
 		pageData = sqlSessionTemplate
 				.selectOne(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_DETAILS), dataId);
 		
-		for(PageField field : page.getFields()) {
+		for(PageFieldForm field : page.getFormFields()) {
 			
 			// 子表操作
 			if(MultiValueComponent.class.isInstance(field.getObjType())) {
@@ -145,7 +145,7 @@ public class FormDataAccess {
 		pageData = sqlSessionTemplate
 				.selectList(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_LIST), param);
 
-		for (PageField field : page.getFields()) {
+		for (PageFieldForm field : page.getFormFields()) {
 			
 			if (MultiValueComponent.class.isInstance(field.getObjType())) {
 
@@ -176,7 +176,7 @@ public class FormDataAccess {
 		int effectCount = sqlSessionTemplate
 				.delete(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_REMOVE), dataId);
 		
-		for(PageField field : page.getFields()) {
+		for(PageFieldForm field : page.getFormFields()) {
 
 			if (effectCount > 0 && MultiValueComponent.class.isInstance(field.getObjType())) {
 

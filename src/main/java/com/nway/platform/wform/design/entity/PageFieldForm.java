@@ -1,20 +1,25 @@
 package com.nway.platform.wform.design.entity;
 
-public class PageField extends Field {
-	
-	public static final String PRIMARY_KEY_NAME = "PK_ID";
+public class PageFieldForm extends Field {
 	
 	private String id;
 	
 	private String fieldId;
+	
+	private String pageId;
 
-	private String name;
+	/** 行号 **/
+	private int rowNum;
+
+	/** 列 **/
+	private int colNum;
+
+	/** 跨列数 **/
+	private int colSpan;
 	
 	private boolean editable;
 	
 	private boolean showInWorkItem;
-	
-	private boolean isCondition;
 
 	// VO
 	private String updateFieldNames;
@@ -37,12 +42,36 @@ public class PageField extends Field {
 		this.fieldId = fieldId;
 	}
 
-	public String getName() {
-		return name;
+	public String getPageId() {
+		return pageId;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPageId(String pageId) {
+		this.pageId = pageId;
+	}
+
+	public int getRowNum() {
+		return rowNum;
+	}
+
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
+
+	public int getColNum() {
+		return colNum;
+	}
+
+	public void setColNum(int colNum) {
+		this.colNum = colNum;
+	}
+
+	public int getColSpan() {
+		return colSpan;
+	}
+
+	public void setColSpan(int colSpan) {
+		this.colSpan = colSpan;
 	}
 
 	public boolean isEditable() {
@@ -59,14 +88,6 @@ public class PageField extends Field {
 
 	public void setShowInWorkItem(boolean showInWorkItem) {
 		this.showInWorkItem = showInWorkItem;
-	}
-
-	public boolean isCondition() {
-		return isCondition;
-	}
-
-	public void setCondition(boolean isCondition) {
-		this.isCondition = isCondition;
 	}
 
 	public String getUpdateFieldNames() {

@@ -12,7 +12,11 @@
 	<table>
 		<#assign rowNum = 1>
 		<tr>
-		<#list page.fields as field>
+		<#list page.formFields as field>
+			<#if field.type == 'key'>
+				<input name="${field.name }" type="hidden" value="${r'${dataModel["'}${field.name }${r'"]}' }">
+			</#if>
+			<#if field.type != 'key'>
 			<#if rowNum != field.rowNum> 
 			</tr>
 			<tr>
@@ -28,6 +32,7 @@
 					<jsp:param name="fieldName" value="${field.name}"/>
 				</jsp:include>
 			</td>
+			</#if>
 		</#list>
 		<tr>
 	</table>

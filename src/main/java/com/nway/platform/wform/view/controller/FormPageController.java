@@ -26,7 +26,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.github.pagehelper.PageHelper;
 import com.nway.platform.wform.access.FormDataAccess;
 import com.nway.platform.wform.design.entity.FormPage;
-import com.nway.platform.wform.design.entity.PageField;
+import com.nway.platform.wform.design.entity.PageFieldForm;
+import com.nway.platform.wform.design.entity.PageFieldList;
 import com.nway.platform.wform.design.service.FormPageAccess;
 import com.nway.platform.wform.view.service.FormPageService;
 import com.nway.platform.workflow.entity.Handle;
@@ -96,7 +97,7 @@ public class FormPageController {
 		
 		FormPage formPage = formPageAccess.getFormPage(pageParam.get("pageId"));
 		
-		for(PageField field : formPage.getFields()) {
+		for(PageFieldForm field : formPage.getFormFields()) {
 			
 			formData.put(field.getName(), field.getObjType().getValue(pageData.get(field.getName())));
 		}
@@ -107,13 +108,9 @@ public class FormPageController {
 		
 		if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
 			
-			formData.put("pkId", UUID.randomUUID().toString());
-			
 			formPageService.createAndStartProcess(formPage, handleInfo, formData);
 		}
 		else if(FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
-			
-			formData.put("pkId", pageData.get("pkId"));
 			
 			formDataAccess.update(formPage, formData);
 		}
@@ -131,7 +128,7 @@ public class FormPageController {
 		
 		Map<String,Object> queryParam = new HashMap<String, Object>();
 		
-		for (PageField field : formPage.getFields()) {
+		for (PageFieldList field : formPage.getListFields()) {
 
 			if (field.isCondition()) {
 
