@@ -1,4 +1,4 @@
-package com.nway.platform.wform.access.component;
+package com.nway.platform.wform.design.component;
 
 import org.springframework.stereotype.Component;
 

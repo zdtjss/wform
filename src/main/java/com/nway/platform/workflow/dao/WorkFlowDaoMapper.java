@@ -2,7 +2,7 @@ package com.nway.platform.workflow.dao;
 
 import java.util.Map;
 
-public interface WorkFlowDao {
+public interface WorkFlowDaoMapper {
 
 	String getPdKey(String pageId);
 	

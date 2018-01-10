@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import com.nway.platform.wform.design.entity.PageFieldForm;
-import com.nway.platform.workflow.dao.WorkFlowDao;
+import com.nway.platform.workflow.dao.WorkFlowDaoMapper;
 import com.nway.platform.workflow.entity.Handle;
 import com.nway.platform.workflow.entity.Handle.SimpleUser;
 
@@ -20,7 +20,7 @@ import com.nway.platform.workflow.entity.Handle.SimpleUser;
 public class TaskCompleteLisntener implements ApplicationListener<TaskCompleteEvent> {
 	
 	@Autowired
-	private WorkFlowDao workFlowDao;
+	private WorkFlowDaoMapper workFlowDao;
 	
 	@Autowired
 	private TaskService taskService;

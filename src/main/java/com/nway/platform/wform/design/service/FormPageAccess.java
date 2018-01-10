@@ -7,8 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nway.platform.wform.access.component.ComponentRegister;
 import com.nway.platform.wform.access.dao.FormPageMapper;
+import com.nway.platform.wform.design.component.ComponentRegister;
 import com.nway.platform.wform.design.entity.FormPage;
 import com.nway.platform.wform.design.entity.PageFieldForm;
 import com.nway.platform.wform.design.entity.PageFieldList;

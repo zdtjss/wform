@@ -62,13 +62,18 @@
 			    ]]
 			});
 			
-			function showLink(value, row, index) {
-				
-				return "<a href=\"${r'${contextPath}'}/form/toUI?pageType=details&pageId=${page.id}&pkId="+row.${key}+"\">"+value+"</a>";
-			}
-		</script>
-	<script type="text/javascript">
-	
+		function showLink(value, row, index) {
+			
+			return "<a href=\"${r'${contextPath}'}/form/toUI?pageType=details&pageId=${page.id}&pkId="+row.${key}+"\">"+value+"</a>";
+		}
+		
+		function query() {
+			
+			$("#${page.name }_list").datagrid("reload", $("#${page.name}_condition").serializeObject());
+		}
+		<@exists path="/WEB-INF/jsp/${page.moduleName}/${page.name}_list.js">
+			<%@ include file="/WEB-INF/jsp/${page.moduleName}/${page.name}_list.js" %>
+		</@exists>
 	</script>
 </body>
 </html>

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.nway.platform.wform.commons.SpringContextUtil;
-import com.nway.platform.workflow.dao.WorkFlowDao;
+import com.nway.platform.workflow.dao.WorkFlowDaoMapper;
 
 import freemarker.core.Environment;
 import freemarker.template.SimpleScalar;
@@ -21,7 +21,7 @@ public class PdKeyPrinterDirective implements TemplateDirectiveModel {
 
 		SimpleScalar pageId = (SimpleScalar) params.get("pageId");
 		
-		WorkFlowDao workFlowDao = SpringContextUtil.getBean(WorkFlowDao.class);
+		WorkFlowDaoMapper workFlowDao = SpringContextUtil.getBean(WorkFlowDaoMapper.class);
 		
 		env.getOut().write(workFlowDao.getPdKey(pageId.getAsString()));
 	}

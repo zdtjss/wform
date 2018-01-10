@@ -38,9 +38,10 @@
 	</table>
 	</form>
 	<script type="text/javascript">
+
+		<@exists path="/WEB-INF/jsp/${page.moduleName}/${page.name}_details.js">
+			<%@ include file="/WEB-INF/jsp/${page.moduleName}/${page.name}_details.js" %>
+		</@exists>
 	</script>
-	<@exists path="/WEB-INF/jsp/${page.moduleName}/${page.name}_details.js">
-		<jsp:include page="/WEB-INF/jsp/${page.moduleName}/${page.name}_details.js"/>
-	</@exists>
 </body>
 </html>

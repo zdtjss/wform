@@ -70,9 +70,10 @@
 				}
 			});
 		}
+		
+		<@exists path="/WEB-INF/jsp/${page.moduleName}/${page.name}_create.js">
+			<%@ include file="/WEB-INF/jsp/${page.moduleName}/${page.name}_create.js" %>
+		</@exists>
 	</script>
-	<@exists path="/WEB-INF/jsp/${page.moduleName}/${page.name}_create.js">
-		<jsp:include page="/WEB-INF/jsp/${page.moduleName}/${page.name}_create.js"/>
-	</@exists>
 </body>
 </html>

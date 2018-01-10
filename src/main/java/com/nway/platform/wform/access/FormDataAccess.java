@@ -8,11 +8,11 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nway.platform.wform.access.component.MultiValueComponent;
 import com.nway.platform.wform.access.handler.HandlerType;
 import com.nway.platform.wform.access.handler.PageDataHandler;
 import com.nway.platform.wform.access.mybatis.TemporaryStatementRegistry;
 import com.nway.platform.wform.commons.SpringContextUtil;
+import com.nway.platform.wform.design.component.MultiValueComponent;
 import com.nway.platform.wform.design.entity.FormPage;
 import com.nway.platform.wform.design.entity.PageFieldForm;
 
@@ -53,7 +53,7 @@ public class FormDataAccess {
 
 				if (MultiValueComponent.class.isInstance(field.getObjType())) {
 
-					((MultiValueComponent) field.getObjType()).save(formData.get(field.getName()));
+					((MultiValueComponent) field.getObjType()).save(page.getName(), formData.get(field.getName()));
 				}
 			}
 		}
@@ -82,7 +82,7 @@ public class FormDataAccess {
 				// 子表操作
 				if (MultiValueComponent.class.isInstance(field.getObjType())) {
 
-					((MultiValueComponent) field.getObjType()).save(formData.get(field.getName()));
+					((MultiValueComponent) field.getObjType()).save(page.getName(), formData.get(field.getName()));
 				}
 			}
 		}
@@ -116,7 +116,7 @@ public class FormDataAccess {
 			if(MultiValueComponent.class.isInstance(field.getObjType())) {
 				
 				pageData.put(field.getName(), ((MultiValueComponent) field.getObjType())
-						.getAssociatedValue(String.valueOf(pageData.get(field.getName()))));
+						.getAssociatedValue(page.getName(), pageData.get(field.getName())));
 			}
 		}
 		
@@ -152,7 +152,7 @@ public class FormDataAccess {
 				for (Map<String, Object> row : pageData) {
 
 					row.put(field.getName(), ((MultiValueComponent) field.getObjType())
-							.getAssociatedValue(String.valueOf(row.get(field.getName()))));
+							.getAssociatedValue(page.getName(), row.get(field.getName())));
 				}
 			}
 		}
@@ -180,7 +180,7 @@ public class FormDataAccess {
 
 			if (effectCount > 0 && MultiValueComponent.class.isInstance(field.getObjType())) {
 
-				((MultiValueComponent) field.getObjType()).remove(dataId);
+				((MultiValueComponent) field.getObjType()).remove(page.getName(), dataId);
 			}
 			
 		}

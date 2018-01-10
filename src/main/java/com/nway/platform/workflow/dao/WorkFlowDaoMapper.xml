@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.nway.platform.workflow.dao.WorkFlowDao">
+<mapper namespace="com.nway.platform.workflow.dao.WorkFlowDaoMapper">
 
 	<select id="getPdKey" resultType="string">
 		select PD_KEY from T_FORM_FLOW where PAGE_ID = #{pageId}
 	</select>
 	
 	<insert id="createWorkItem">
-		insert into T_WORK_ITEM (PK_ID,TITLE,TASK_ID,FORM_URL,STATUS) values (#{pkId},#{title},#{taskId},#{formUrl},0)
+		insert into T_WORK_ITEM (ITEM_ID,TITLE,TASK_ID,FORM_URL,STATUS) values (#{pkId},#{title},#{taskId},#{formUrl},0)
 	</insert>
 </mapper>

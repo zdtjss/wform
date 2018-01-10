@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.github.pagehelper.PageHelper;
 import com.nway.platform.wform.access.FormDataAccess;
+import com.nway.platform.wform.design.component.Initializable;
 import com.nway.platform.wform.design.entity.FormPage;
 import com.nway.platform.wform.design.entity.PageFieldForm;
 import com.nway.platform.wform.design.entity.PageFieldList;
@@ -76,6 +76,18 @@ public class FormPageController {
 		if(FormPage.PAGE_TYPE_DETAILS.equals(pageType) || FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
 			
 			dataModel = formDataAccess.get(formPage, bizId);
+		}
+		else if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
+			
+			dataModel = new HashMap<String, Object>();
+			
+			for(PageFieldForm field : formPage.getFormFields()) {
+				
+				if(Initializable.class.isInstance(field.getObjType())) {
+					
+					dataModel.put(field.getName(), ((Initializable) field.getObjType()).init(formPage.getName()));
+				}
+			}
 		}
 		
 		view.addObject("dataModel", dataModel);
