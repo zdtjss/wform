@@ -54,15 +54,16 @@ public class TaskCompleteLisntener implements ApplicationListener<TaskCompleteEv
 					
 					workItem.put("pkId", UUID.randomUUID().toString());
 					workItem.put("taskId", task.getId());
-					workItem.put("formUrl", task.getFormKey());
+					workItem.put("taskName", task.getName());
+					workItem.put("formKey", task.getFormKey());
 					/*workItem.put("handlerId", user.getUserId());
 					workItem.put("handlerName", user.getCnName());*/
 					
 					for(PageFieldForm field : fields) {
 						
-						if(field.isShowInWorkItem()) {
+						if(field.getForWorkItem() != null && field.getForWorkItem().length() != 0) {
 							
-							workItem.put(field.getName(), formData.get(field.getName()));
+							workItem.put(field.getForWorkItem(), formData.get(field.getName()));
 						}
 					}
 					

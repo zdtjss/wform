@@ -8,6 +8,6 @@
 	</select>
 	
 	<insert id="createWorkItem">
-		insert into T_WORK_ITEM (ITEM_ID,TITLE,TASK_ID,FORM_URL,STATUS) values (#{pkId},#{title},#{taskId},#{formUrl},0)
+		insert into T_WORK_ITEM (ITEM_ID,BIZ_ID,TITLE,TASK_ID,TASK_NAME,FORM_KEY,STATUS) values (#{pkId},#{bizId},#{title},#{taskId},#{taskName},#{formKey},0)
 	</insert>
 </mapper>

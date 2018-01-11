@@ -51,6 +51,10 @@
 					pageType : "update"
 				};
 				
+			pageData["workflow"] = {
+					taskId : "${workflow.taskId}"
+				};
+				
 			pageData["pageData"] = $("#${page.name }").serializeObject();
 			
 			$.ajax({

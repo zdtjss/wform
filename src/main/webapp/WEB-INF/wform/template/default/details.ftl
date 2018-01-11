@@ -37,6 +37,11 @@
 		<tr>
 	</table>
 	</form>
+	<div>
+		<c:if test="${r'${not empty workflow.taskId}'}">
+			办理
+		</c:if>
+	</div>
 	<script type="text/javascript">
 
 		<@exists path="/WEB-INF/jsp/${page.moduleName}/${page.name}_details.js">

@@ -45,7 +45,7 @@
 			  A.COLUMN_NUM,
 			  A.COLUMN_SPAN,
 			  A.EDITABLE,
-			  A.SHOW_IN_WORKITEM
+			  A.FOR_WORKITEM
 		FROM T_FORM_PAGE_FIELD_FORM A 
         LEFT JOIN
 	    T_FORM_FIELD B ON A.FIELD_ID = B.FIELD_ID
@@ -61,7 +61,7 @@
 		<result column="COLUMN_NUM" property="colNum"/>
 		<result column="COLUMN_SPAN" property="colSpan"/>
 		<result column="EDITABLE" property="editable"/>
-		<result column="SHOW_IN_WORKITEM" property="showInWorkItem"/>
+		<result column="FOR_WORKITEM" property="forWorkItem"/>
 	</resultMap>
 	
 	<select id="queryPageListFields" resultMap="queryPageListFieldsMap">

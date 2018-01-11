@@ -1,5 +1,6 @@
 package com.nway.platform.wform.component.impl;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,12 @@ public class CheckboxComponent implements MultiValueComponent, Initializable {
 	@Override
 	public Object getValue(String value) {
 		
-		return value == null || value.length() == 0 ? value.substring(2, value.length() - 2).split("\",\"") : value;
+		if(!(value == null || value.length() == 0) && value.charAt(0) == '[') {
+			
+			return value.substring(2, value.length() - 2).split("\",\"");
+		}
+		
+		return Arrays.asList(value);
 	}
 
 	@Override

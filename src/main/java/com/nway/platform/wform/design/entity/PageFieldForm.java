@@ -19,7 +19,7 @@ public class PageFieldForm extends Field {
 	
 	private boolean editable;
 	
-	private boolean showInWorkItem;
+	private String forWorkItem;
 
 	// VO
 	private String updateFieldNames;
@@ -84,12 +84,12 @@ public class PageFieldForm extends Field {
 		this.editable = editable;
 	}
 
-	public boolean isShowInWorkItem() {
-		return showInWorkItem;
+	public String getForWorkItem() {
+		return forWorkItem;
 	}
 
-	public void setShowInWorkItem(boolean showInWorkItem) {
-		this.showInWorkItem = showInWorkItem;
+	public void setForWorkItem(String forWorkItem) {
+		this.forWorkItem = forWorkItem;
 	}
 
 	public boolean isMultiValue() {

@@ -64,6 +64,7 @@ public class FormPageController {
 		String bizId = request.getParameter("pkId");
 		String pageId = request.getParameter("pageId");
 		String pageType = request.getParameter("pageType");
+		String taskId = request.getParameter("taskId");
 		
 		FormPage formPage = formPageAccess.getFormPage(pageId);
 		
@@ -87,7 +88,8 @@ public class FormPageController {
 		}
 		
 		view.addObject("dataModel", dataModel);
-		view.addObject("fieldAttr", fieldAttr);
+		view.addObject("fieldAttr", fieldAttr); 
+		view.addObject("workflow", Collections.singletonMap("taskId", taskId)); 
 		view.setViewName(formPage.getModuleName() + "/" + formPage.getName() + "_" + pageType);
 		
 		return view;
@@ -120,7 +122,11 @@ public class FormPageController {
 		}
 		else if(FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
 			
-			formDataAccess.update(formPage, formData);
+			formPageService.saveAndHandle(formPage, handleInfo, formData);
+		}
+		else {
+			
+			formPageService.handle(formPage, handleInfo, formData);
 		}
 		
 		return Collections.<String, Object>singletonMap("status", 1);

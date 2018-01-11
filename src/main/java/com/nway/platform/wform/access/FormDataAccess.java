@@ -83,7 +83,7 @@ public class FormDataAccess {
 				// 子表操作
 				if (field.isMultiValue()) {
 
-					((MultiValueComponent) field.getObjType()).save(page.getName(),
+					((MultiValueComponent) field.getObjType()).update(page.getName(),
 							formData.get(page.getKeyName()).toString(), formData.get(field.getName()));
 				}
 			}

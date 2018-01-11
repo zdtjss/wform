@@ -35,14 +35,20 @@ public class FormPageService {
 		formDataAccess.create(page, formData);
 	}
 	
-	public void saveAndHandle(FormPage page, Handle handleInfo, Map<String, Object> formData) {
+	public void handle(FormPage page, Handle handleInfo, Map<String, Object> formData) {
 		
-		if (handleInfo.getProcessKey() != null) {
+		if (handleInfo.getTaskId() != null) {
 			
 			workFlowService.handleTask(handleInfo);
 			
 			SpringContextUtil.publishEvent(new TaskCompleteEvent(handleInfo, page, formData));
 		}
+		
+	}
+	
+	public void saveAndHandle(FormPage page, Handle handleInfo, Map<String, Object> formData) {
+		
+		handle(page, handleInfo, formData);
 		
 		if(FormPage.PAGE_TYPE_EDIT.equals(page.getType())) {
 			

@@ -63,6 +63,9 @@
 			<tx:method name="modify*" read-only="false" />
 			<tx:method name="del*" read-only="false" />
 			<tx:method name="remove*" read-only="false" />
+			<tx:method name="startProcess" read-only="false" />
+			<tx:method name="handle" read-only="false" />
+			<tx:method name="saveAndHandle" read-only="false" />
 		</tx:attributes>
 	</tx:advice>
 
@@ -107,7 +110,7 @@
 		<constructor-arg ref="sqlSessionFactory" />
 	</bean>
 	
-	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
+	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration" lazy-init="false">
 		<property name="dataSource" ref="dataSource" />
 		<property name="transactionManager" ref="transactionManager" />
 		<property name="databaseSchemaUpdate" value="true" />
