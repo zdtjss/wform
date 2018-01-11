@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nway.platform.wform.component.impl.dao.CheckboxMapper">
+	<select id="getValues">
+		select value from T_CHECKBOX_${pageName} where biz_id = #{bizId}
+	</select>
+	<insert id="save">
+		insert into T_CHECKBOX_${pageName} (BIZ_ID, VALUE) value(#{bizId},#{value})
+	</insert>
+	<delete id="clear">
+		delete from T_CHECKBOX_${pageName} where biz_id = #{bizId}
+	</delete>
+</mapper>

@@ -12,7 +12,7 @@ import com.nway.platform.wform.access.handler.HandlerType;
 import com.nway.platform.wform.access.handler.PageDataHandler;
 import com.nway.platform.wform.access.mybatis.TemporaryStatementRegistry;
 import com.nway.platform.wform.commons.SpringContextUtil;
-import com.nway.platform.wform.design.component.MultiValueComponent;
+import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.design.entity.FormPage;
 import com.nway.platform.wform.design.entity.PageFieldForm;
 
@@ -51,9 +51,10 @@ public class FormDataAccess {
 			
 			for (PageFieldForm field : page.getFormFields()) {
 
-				if (MultiValueComponent.class.isInstance(field.getObjType())) {
+				if (field.isMultiValue()) {
 
-					((MultiValueComponent) field.getObjType()).save(page.getName(), formData.get(field.getName()));
+					((MultiValueComponent) field.getObjType()).save(page.getName(),
+							formData.get(page.getKeyName()).toString(), formData.get(field.getName()));
 				}
 			}
 		}
@@ -80,9 +81,10 @@ public class FormDataAccess {
 			for (PageFieldForm field : page.getFormFields()) {
 
 				// 子表操作
-				if (MultiValueComponent.class.isInstance(field.getObjType())) {
+				if (field.isMultiValue()) {
 
-					((MultiValueComponent) field.getObjType()).save(page.getName(), formData.get(field.getName()));
+					((MultiValueComponent) field.getObjType()).save(page.getName(),
+							formData.get(page.getKeyName()).toString(), formData.get(field.getName()));
 				}
 			}
 		}
@@ -113,10 +115,10 @@ public class FormDataAccess {
 		for(PageFieldForm field : page.getFormFields()) {
 			
 			// 子表操作
-			if(MultiValueComponent.class.isInstance(field.getObjType())) {
+			if(field.isMultiValue()) {
 				
 				pageData.put(field.getName(), ((MultiValueComponent) field.getObjType())
-						.getAssociatedValue(page.getName(), pageData.get(field.getName())));
+						.getAssociatedValue(page.getName(), pageData.get(page.getKeyName()).toString()));
 			}
 		}
 		
@@ -147,12 +149,12 @@ public class FormDataAccess {
 
 		for (PageFieldForm field : page.getFormFields()) {
 			
-			if (MultiValueComponent.class.isInstance(field.getObjType())) {
+			if (field.isMultiValue()) {
 
 				for (Map<String, Object> row : pageData) {
 
 					row.put(field.getName(), ((MultiValueComponent) field.getObjType())
-							.getAssociatedValue(page.getName(), row.get(field.getName())));
+							.getAssociatedValue(page.getName(), row.get(page.getKeyName()).toString()));
 				}
 			}
 		}
@@ -208,5 +210,4 @@ public class FormDataAccess {
 
 		return SpringContextUtil.getBean(pageName + "DataHandler", PageDataHandler.class, defaultFormPageDataHandler);
 	}
-
 }

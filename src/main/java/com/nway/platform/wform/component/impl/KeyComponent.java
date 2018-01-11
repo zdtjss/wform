@@ -1,8 +1,10 @@
-package com.nway.platform.wform.design.component;
+package com.nway.platform.wform.component.impl;
 
 import java.util.UUID;
 
 import org.springframework.stereotype.Component;
+
+import com.nway.platform.wform.component.BaseComponent;
 
 @Component("key")
 public class KeyComponent implements BaseComponent {

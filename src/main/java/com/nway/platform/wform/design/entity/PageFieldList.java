@@ -18,6 +18,8 @@ public class PageFieldList extends Field {
 	
 	private boolean isCondition;
 	
+	private boolean isMultiValue;
+	
 	public String getId() {
 		return id;
 	}
@@ -80,6 +82,14 @@ public class PageFieldList extends Field {
 
 	public void setCondition(boolean isCondition) {
 		this.isCondition = isCondition;
+	}
+
+	public boolean isMultiValue() {
+		return isMultiValue;
+	}
+
+	public void setMultiValue(boolean isMultiValue) {
+		this.isMultiValue = isMultiValue;
 	}
 	
 }

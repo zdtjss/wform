@@ -18,7 +18,7 @@ public class TemporaryStatementRegistry {
 		
 		String temporaryStatement = STATEMENT_NAMES.get(originMapperName);
 
-		return temporaryStatement == null ? originMapperName : temporaryStatement;
+		return "com.nway.platform.wform.auto." + (temporaryStatement == null ? originMapperName : temporaryStatement);
 	}
 	
 	private static String generatorStatementName(String mapperName) {

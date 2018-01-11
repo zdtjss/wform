@@ -9,13 +9,7 @@
 		<Root level="info">
 			<AppenderRef ref="console" />
 		</Root>
-		<Logger name="com.nway.platform" level="info" additivity="false">
-			<AppenderRef ref="console" />
-		</Logger>
-		<Logger name="com.nway.platform.wform.page.dao" level="debug" additivity="false">
-			<AppenderRef ref="console" />
-		</Logger>
-		<Logger name="com.nway.platform.wform.access.dao" level="debug" additivity="false">
+		<Logger name="com.nway.platform" level="debug" additivity="false">
 			<AppenderRef ref="console" />
 		</Logger>
 	</Loggers>

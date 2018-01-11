@@ -46,6 +46,8 @@ public class FormPage {
 	private List<PageFieldForm> formFields;
 	
 	private List<PageFieldList> listFields;
+	
+	private String keyName;
 
 	public String getId() {
 		return id;
@@ -165,6 +167,14 @@ public class FormPage {
 
 	public void setListFields(List<PageFieldList> listFields) {
 		this.listFields = listFields;
+	}
+
+	public String getKeyName() {
+		return keyName;
+	}
+
+	public void setKeyName(String keyName) {
+		this.keyName = keyName;
 	}
 
 }

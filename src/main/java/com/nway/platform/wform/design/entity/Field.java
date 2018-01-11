@@ -1,6 +1,6 @@
 package com.nway.platform.wform.design.entity;
 
-import com.nway.platform.wform.design.component.BaseComponent;
+import com.nway.platform.wform.component.BaseComponent;
 
 public class Field {
 	

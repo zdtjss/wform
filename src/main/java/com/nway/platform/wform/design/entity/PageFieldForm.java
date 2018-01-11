@@ -26,6 +26,8 @@ public class PageFieldForm extends Field {
 
 	private String viewFieldNames;
 	
+	private boolean isMultiValue;
+	
 	public String getId() {
 		return id;
 	}
@@ -88,6 +90,14 @@ public class PageFieldForm extends Field {
 
 	public void setShowInWorkItem(boolean showInWorkItem) {
 		this.showInWorkItem = showInWorkItem;
+	}
+
+	public boolean isMultiValue() {
+		return isMultiValue;
+	}
+
+	public void setMultiValue(boolean isMultiValue) {
+		this.isMultiValue = isMultiValue;
 	}
 
 	public String getUpdateFieldNames() {

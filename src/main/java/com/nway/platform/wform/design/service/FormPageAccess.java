@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nway.platform.wform.access.dao.FormPageMapper;
-import com.nway.platform.wform.design.component.ComponentRegister;
+import com.nway.platform.wform.component.ComponentRegister;
+import com.nway.platform.wform.component.MultiValueComponent;
+import com.nway.platform.wform.component.impl.KeyComponent;
 import com.nway.platform.wform.design.entity.FormPage;
 import com.nway.platform.wform.design.entity.PageFieldForm;
 import com.nway.platform.wform.design.entity.PageFieldList;
@@ -29,12 +31,28 @@ public class FormPageAccess {
  		for (PageFieldForm field : page.getFormFields()) {
 
 			field.setObjType(componentRegister.getComponent(field.getType()));
+			
+			if(KeyComponent.class.isInstance(field.getObjType())) {
+				
+				page.setKeyName(field.getName());
+			}
+			
+			if(MultiValueComponent.class.isInstance(field.getObjType())) {
+				
+				field.setMultiValue(true);
+			}
 		}
  		
  		for (PageFieldList field : page.getListFields()) {
  			
  			field.setObjType(componentRegister.getComponent(field.getType()));
+ 			
+ 			if(MultiValueComponent.class.isInstance(field.getObjType())) {
+				
+				field.setMultiValue(true);
+			}
  		}
+ 		
 		
 		return page;
 	}

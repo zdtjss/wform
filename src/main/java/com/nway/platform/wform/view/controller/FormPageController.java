@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.github.pagehelper.PageHelper;
 import com.nway.platform.wform.access.FormDataAccess;
-import com.nway.platform.wform.design.component.Initializable;
+import com.nway.platform.wform.component.Initializable;
 import com.nway.platform.wform.design.entity.FormPage;
 import com.nway.platform.wform.design.entity.PageFieldForm;
 import com.nway.platform.wform.design.entity.PageFieldList;
@@ -57,7 +57,7 @@ public class FormPageController {
 		
 		Map<String, Object> viewModel = new HashMap<String, Object>();
 		
-		Map<String, Object> dataModel = Collections.emptyMap();
+		Map<String, Object> dataModel = new HashMap<String, Object>();
 		
 		String basePath = request.getSession().getServletContext().getRealPath("/");
 		
@@ -77,22 +77,18 @@ public class FormPageController {
 			
 			dataModel = formDataAccess.get(formPage, bizId);
 		}
-		else if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
 			
-			dataModel = new HashMap<String, Object>();
+		for(PageFieldForm field : formPage.getFormFields()) {
 			
-			for(PageFieldForm field : formPage.getFormFields()) {
+			if(Initializable.class.isInstance(field.getObjType())) {
 				
-				if(Initializable.class.isInstance(field.getObjType())) {
-					
-					dataModel.put(field.getName(), ((Initializable) field.getObjType()).init(formPage.getName()));
-				}
+				dataModel.put(field.getName() + "_init", ((Initializable) field.getObjType()).init(formPage.getName()));
 			}
 		}
 		
 		view.addObject("dataModel", dataModel);
 		view.addObject("fieldAttr", fieldAttr);
-		view.setViewName(formPage.getName() + "_" + pageType);
+		view.setViewName(formPage.getModuleName() + "/" + formPage.getName() + "_" + pageType);
 		
 		return view;
 	}
@@ -158,26 +154,27 @@ public class FormPageController {
 
 		Template template = null;
 		
-		if("create".equals(type)) {
+		if(FormPage.PAGE_TYPE_CREATE.equals(type)) {
 			
 			template = freemarker.getTemplate("/default/create.ftl");
 		}
-		else if("details".equals(type)) {
+		else if(FormPage.PAGE_TYPE_DETAILS.equals(type)) {
 			
 			template = freemarker.getTemplate("/default/details.ftl");
 		}
-		else if("update".equals(type)) {
+		else if(FormPage.PAGE_TYPE_EDIT.equals(type)) {
 			
 			template = freemarker.getTemplate("/default/edit.ftl");
 		}
-		else if("list".equals(type)) {
+		else if(FormPage.PAGE_TYPE_LIST.equals(type)) {
 			
 			template = freemarker.getTemplate("/default/list.ftl");
 		}
 		
 		StringBuilder jsp = new StringBuilder();
 
-		jsp.append(basePath).append(File.separator).append("WEB-INF/jsp/").append(pageName).append("_").append(type).append(".jsp");
+		jsp.append(basePath).append(File.separator).append("WEB-INF/jsp/").append(moduleName).append("/")
+				.append(pageName).append("_").append(type).append(".jsp");
 
 		File jspFile = new File(jsp.toString());
 		
