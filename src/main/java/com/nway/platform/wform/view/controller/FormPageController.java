@@ -107,20 +107,25 @@ public class FormPageController {
 		
 		FormPage formPage = formPageAccess.getFormPage(pageParam.get("pageId"));
 		
-		for(PageFieldForm field : formPage.getFormFields()) {
-			
-			formData.put(field.getName(), field.getObjType().getValue(pageData.get(field.getName())));
-		}
-		
 		String pageType = pageParam.get("pageType");
 		
 		Handle handleInfo = getHandleInfo(jsonObj);
 		
 		if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
 			
+			for(PageFieldForm field : formPage.getFormFields()) {
+				
+				formData.put(field.getName(), field.getObjType().getValue(pageData.get(field.getName())));
+			}
+			
 			formPageService.createAndStartProcess(formPage, handleInfo, formData);
 		}
 		else if(FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
+			
+			for(PageFieldForm field : formPage.getFormFields()) {
+				
+				formData.put(field.getName(), field.getObjType().getValue(pageData.get(field.getName())));
+			}
 			
 			formPageService.saveAndHandle(formPage, handleInfo, formData);
 		}

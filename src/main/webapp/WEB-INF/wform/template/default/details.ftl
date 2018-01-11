@@ -39,11 +39,38 @@
 	</form>
 	<div>
 		<c:if test="${r'${not empty workflow.taskId}'}">
-			办理
+			<a href="javascript:void(0)" onclick="submit()">办理</a>
 		</c:if>
 	</div>
 	<script type="text/javascript">
 
+		function submit() {
+		
+			var pageData = {}; 
+			
+			pageData["formPage"] = {
+					pageId : $("#pageId").val(),
+					pageType : "details"
+				};
+				
+			pageData["workflow"] = {
+					taskId : "${r'${workflow.taskId}'}"
+				};
+				
+			$.ajax({
+				type : "post",
+				dataType : "json",
+				contentType:"application/json",
+				data : JSON.stringify(pageData),
+				url : contextPath + "/form/save",
+				success : function(resp) {
+					
+				},
+				error : function() {
+						
+				}
+			});
+		}
 		<@exists path="/WEB-INF/jsp/${page.moduleName}/${page.name}_details.js">
 			<%@ include file="/WEB-INF/jsp/${page.moduleName}/${page.name}_details.js" %>
 		</@exists>
