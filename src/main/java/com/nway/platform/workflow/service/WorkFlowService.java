@@ -4,8 +4,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
@@ -70,18 +72,27 @@ public class WorkFlowService {
 			handleInfo.getVariables().put("outcome", "back");
 		}
 		
-		task.setAssignee(handleInfo.getCurrentUser().getCnName());
+		// task.setAssignee(handleInfo.getCurrentUser().getCnName());
 		
 		taskService.complete(task.getId(), handleInfo.getVariables());
 	}
 	
-	public List<PvmTransition> findOutComeListByTaskId(String taskId) {
+	public Set<String> findOutComeListByTaskId(String taskId) {
     	
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 		
 		ActivityImpl activityImpl = getActivityImplByTask(task);
 		
-		return nextOutcome(activityImpl);
+		List<PvmTransition> pvmTransitionList = nextOutcome(activityImpl);
+		
+		Set<String> transitionNames = new HashSet<String>(pvmTransitionList.size());
+		
+		for (PvmTransition transition : pvmTransitionList) {
+			
+			transitionNames.add((String) transition.getProperty("name"));
+		}
+		
+		return transitionNames;
     }
 	
 	public void goBack(String taskId) {
@@ -241,6 +252,19 @@ public class WorkFlowService {
 		return position;
 	}
 
+	private void getNextTask(String taskId, String outcome, Map<String,Object> var) {
+		
+		ActivityImpl currentActivityImpl = getActivityImplByTask(getTask(taskId));
+		
+		for(PvmTransition trans : currentActivityImpl.getOutgoingTransitions()) {
+			
+			if(outcome != null && outcome.equals(trans.getProperty("name"))) {
+				
+				trans.getDestination().getProperty("name");
+			}
+		}
+	}
+	
 	private List<PvmTransition> nextOutcome(ActivityImpl activityImpl) {
 
 		List<PvmTransition> outcome = Collections.emptyList();

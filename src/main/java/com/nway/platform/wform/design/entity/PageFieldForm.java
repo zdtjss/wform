@@ -20,6 +20,8 @@ public class PageFieldForm extends Field {
 	private boolean editable;
 	
 	private String forWorkItem;
+	
+	private String forWorkflow;
 
 	// VO
 	private String updateFieldNames;
@@ -90,6 +92,14 @@ public class PageFieldForm extends Field {
 
 	public void setForWorkItem(String forWorkItem) {
 		this.forWorkItem = forWorkItem;
+	}
+
+	public String getForWorkflow() {
+		return forWorkflow;
+	}
+
+	public void setForWorkflow(String forWorkflow) {
+		this.forWorkflow = forWorkflow;
 	}
 
 	public boolean isMultiValue() {
