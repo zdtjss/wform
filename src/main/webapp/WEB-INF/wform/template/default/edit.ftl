@@ -3,13 +3,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
-<jsp:include page="/WEB-INF/jsp/include.jsp"/>
+<%@ include file="/WEB-INF/jsp/include.jsp" %>
 <title>${page.title!"" }</title>
 </head>
 <body>
 	<input id="pageId" name="pageId" type="hidden" value="${page.id}">
 	<form id="${page.name }" class="page">
-		<input name="pkId" type="hidden" value="${r'${ dataModel["pk_id"]  }'}">
 		<table>
 			<#assign rowNum = 1>
 			<tr>
@@ -39,6 +38,11 @@
 		</table>
 		</form>
 		<div id="processbar">
+			<select id="outcome" class="easyui-combobox" style="width:200px;">
+				<c:forEach var="outcome" items="${r'${outcomes }'}">
+			    	<option value="${r'${outcome}'}">${r'${outcome}'}</option>
+			    </c:forEach>
+			</select>
 			<a href="javascript:void(0)" onclick="submit()">保存</a>
 		</div>
 	<script type="text/javascript">
@@ -52,7 +56,7 @@
 				};
 				
 			pageData["workflow"] = {
-					taskId : "${workflow.taskId}"
+					taskId : "${r'${workflow.taskId}'}"
 				};
 				
 			pageData["pageData"] = $("#${page.name }").serializeObject();

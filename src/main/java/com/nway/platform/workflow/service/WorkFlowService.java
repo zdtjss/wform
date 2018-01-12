@@ -22,6 +22,7 @@ import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
 import org.activiti.engine.impl.pvm.process.TransitionImpl;
+import org.activiti.engine.impl.task.TaskDefinition;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -77,22 +78,13 @@ public class WorkFlowService {
 		taskService.complete(task.getId(), handleInfo.getVariables());
 	}
 	
-	public Set<String> findOutComeListByTaskId(String taskId) {
+	public List<PvmTransition> findOutcomeByTaskId(String taskId) {
     	
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 		
 		ActivityImpl activityImpl = getActivityImplByTask(task);
 		
-		List<PvmTransition> pvmTransitionList = nextOutcome(activityImpl);
-		
-		Set<String> transitionNames = new HashSet<String>(pvmTransitionList.size());
-		
-		for (PvmTransition transition : pvmTransitionList) {
-			
-			transitionNames.add((String) transition.getProperty("name"));
-		}
-		
-		return transitionNames;
+		return nextOutcome(activityImpl);
     }
 	
 	public void goBack(String taskId) {
@@ -190,11 +182,6 @@ public class WorkFlowService {
 		return taskService.createTaskQuery().processInstanceId(pid).list();
 	}
 	
-	public String getTaskAssignee(String taskId) {
-		
-		return getTask(taskId).getAssignee();
-	}
-	
 	public InputStream getDiagram(String taskId) {
 		
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
@@ -252,7 +239,7 @@ public class WorkFlowService {
 		return position;
 	}
 
-	private void getNextTask(String taskId, String outcome, Map<String,Object> var) {
+	public String getNextTaskAssignee(String taskId, String outcome) {
 		
 		ActivityImpl currentActivityImpl = getActivityImplByTask(getTask(taskId));
 		
@@ -260,9 +247,11 @@ public class WorkFlowService {
 			
 			if(outcome != null && outcome.equals(trans.getProperty("name"))) {
 				
-				trans.getDestination().getProperty("name");
+				return ((TaskDefinition)trans.getDestination().getProperty("taskDefinition")).getAssigneeExpression().getExpressionText();
 			}
 		}
+		
+		return "";
 	}
 	
 	private List<PvmTransition> nextOutcome(ActivityImpl activityImpl) {

@@ -18,11 +18,11 @@ public class WorkflowController {
 	@Autowired
 	private WorkFlowService workFlowService;
 	
-	@RequestMapping("getTaskAssignee")
+	@RequestMapping("getNextTaskAssignee")
 	@ResponseBody
-	public Object getTaskAssignee(String taskId) {
+	public Object getNextTaskAssignee(String taskId, String outcome) {
 		
-		String assignee = workFlowService.getTaskAssignee(taskId);
+		String assignee = workFlowService.getNextTaskAssignee(taskId, outcome);
 		
 		return SpringContextUtil.getBean(AssigneeParser.class).parser(assignee);
 	}

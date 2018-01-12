@@ -65,7 +65,7 @@
 			<tx:method name="remove*" read-only="false" />
 			<tx:method name="startProcess" read-only="false" />
 			<tx:method name="handle" read-only="false" />
-			<tx:method name="saveAndHandle" read-only="false" />
+			<tx:method name="*" read-only="false" />
 		</tx:attributes>
 	</tx:advice>
 

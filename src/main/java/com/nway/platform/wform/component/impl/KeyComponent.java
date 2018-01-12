@@ -10,9 +10,9 @@ import com.nway.platform.wform.component.BaseComponent;
 public class KeyComponent implements BaseComponent {
 
 	@Override
-	public Object getValue(String value) {
+	public Object getValue(Object value) {
 		
-		return value == null || value.length() == 0 ? UUID.randomUUID().toString() : value;
+		return value == null || value.toString().length() == 0 ? UUID.randomUUID().toString() : value;
 	}
 
 }

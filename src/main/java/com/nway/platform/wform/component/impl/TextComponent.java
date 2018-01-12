@@ -8,7 +8,7 @@ import com.nway.platform.wform.component.BaseComponent;
 public class TextComponent implements BaseComponent {
 
 	@Override
-	public Object getValue(String value) {
+	public Object getValue(Object value) {
 		
 		return value;
 	}

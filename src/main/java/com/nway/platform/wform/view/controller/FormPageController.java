@@ -9,11 +9,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.BasicDynaClass;
+import org.apache.commons.beanutils.ConvertUtilsBean2;
+import org.apache.commons.beanutils.DynaBean;
+import org.apache.commons.beanutils.DynaProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.nway.platform.wform.access.FormDataAccess;
 import com.nway.platform.wform.component.Initializable;
@@ -78,6 +83,13 @@ public class FormPageController {
 			
 			dataModel = formDataAccess.get(formPage, bizId);
 		}
+		
+		if(taskId != null && taskId.length() != 0) {
+			
+			Set<String> outcomes = formPageService.findOutcomeNameListByTaskId(taskId);
+			
+			view.addObject("outcomes", outcomes);
+		}
 			
 		for(PageFieldForm field : formPage.getFormFields()) {
 			
@@ -97,17 +109,17 @@ public class FormPageController {
 	
 	@RequestMapping("save")
 	@ResponseBody
-	public Map<String, Object> save(@RequestBody Map<String, Map<String, String>> jsonObj) {
+	public Map<String, Object> save(@RequestBody Map<String, Map<String, Object>> jsonObj) {
 		
-		Map<String, String> pageParam = jsonObj.get("formPage");
+		Map<String, Object> pageParam = jsonObj.get("formPage");
 		
-		Map<String, String> pageData = jsonObj.get("pageData");
+		Map<String, Object> pageData = jsonObj.get("pageData");
 		
 		Map<String, Object> formData = new HashMap<String, Object>();
 		
-		FormPage formPage = formPageAccess.getFormPage(pageParam.get("pageId"));
+		FormPage formPage = formPageAccess.getFormPage((String )pageParam.get("pageId"));
 		
-		String pageType = pageParam.get("pageType");
+		String pageType = pageParam.get("pageType").toString();
 		
 		Handle handleInfo = getHandleInfo(jsonObj);
 		
@@ -131,6 +143,15 @@ public class FormPageController {
 		}
 		else {
 			
+			for(PageFieldForm field : formPage.getFormFields()) {
+				
+				if("key".equals(field.getType()) || null != field.getForWorkItem()) {
+					
+					formData.put(field.getName(), field.getObjType().getValue(pageData.get(field.getName())));
+				}
+			}
+			
+
 			formPageService.handle(formPage, handleInfo, formData);
 		}
 		
@@ -236,24 +257,23 @@ public class FormPageController {
 		}
 	}
 	
-	private Handle getHandleInfo(Map<String, Map<String, String>> jsonObj) {		
+	private Handle getHandleInfo(Map<String, Map<String, Object>> jsonObj) {		
 		
 		Handle handleInfo = new Handle();
 		
-		SimpleUser user1 = new SimpleUser();
+		Map<String, Object> workflow = jsonObj.get("workflow");
 		
-		user1.setUserId("12312");
-		user1.setCnName("品牌");
-
-		try {
+		handleInfo.setProcessKey((String) workflow.get("processKey"));
+		
+		handleInfo.setTaskId((String) workflow.get("taskId"));
+		
+		handleInfo.setVariables((Map) workflow.get("variables"));
+		
+		JSONObject currentUser = (JSONObject) workflow.get("currentUser");
+		
+		if(currentUser != null) {
 			
-			BeanUtils.populate(handleInfo, jsonObj.get("workflow"));
-		} 
-		catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} 
-		catch (InvocationTargetException e) {
-			e.printStackTrace();
+			handleInfo.setCurrentUser(currentUser.toJavaObject(SimpleUser.class));
 		}
 		
 		return handleInfo;

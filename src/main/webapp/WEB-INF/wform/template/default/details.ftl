@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
-<jsp:include page="/WEB-INF/jsp/include.jsp"/>
+<%@ include file="/WEB-INF/jsp/include.jsp" %>
 <title>${page.title!"" }</title>
 </head>
 <body>
@@ -13,7 +13,7 @@
 		<#assign rowNum = 1>
 		<tr>
 		<#list page.formFields as field>
-			<#if field.type == 'key'>
+			<#if field.type == 'key' || field.forWorkItem?? || field.forWorkflow??>
 				<input name="${field.name }" type="hidden" value="${r'${dataModel["'}${field.name }${r'"]}' }">
 			</#if>
 			<#if field.type != 'key'>
@@ -39,6 +39,11 @@
 	</form>
 	<div>
 		<c:if test="${r'${not empty workflow.taskId}'}">
+			<select id="outcome" class="easyui-combobox" style="width:200px;">
+				<c:forEach var="outcome" items="${r'${outcomes }'}">
+			    	<option value="${r'${outcome}'}">${r'${outcome}'}</option>
+			    </c:forEach>
+			</select>
 			<a href="javascript:void(0)" onclick="submit()">办理</a>
 		</c:if>
 	</div>
@@ -54,8 +59,17 @@
 				};
 				
 			pageData["workflow"] = {
-					taskId : "${r'${workflow.taskId}'}"
+					taskId : "${r'${workflow.taskId}'}",
+					variables : {
+						outcome : $("#outcome :selected").val()
+					},
+					currentUser : {
+						userId : "test",
+						cnName : "测试"
+					}
 				};
+				
+			pageData["pageData"] = $("#${page.name }").serializeObject();
 				
 			$.ajax({
 				type : "post",

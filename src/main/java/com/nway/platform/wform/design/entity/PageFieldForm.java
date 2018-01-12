@@ -19,8 +19,10 @@ public class PageFieldForm extends Field {
 	
 	private boolean editable;
 	
+	// 需要在待办表现实，值为待办表中使用的名字
 	private String forWorkItem;
 	
+	// 可作为流程变量，值为流程变量中使用的名字
 	private String forWorkflow;
 
 	// VO

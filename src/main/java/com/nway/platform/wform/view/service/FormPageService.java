@@ -1,7 +1,12 @@
 package com.nway.platform.wform.view.service;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.activiti.engine.impl.pvm.PvmTransition;
+import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +44,11 @@ public class FormPageService {
 		
 		if (handleInfo.getTaskId() != null) {
 			
+			String pid = workFlowService.getTask(handleInfo.getTaskId()).getProcessInstanceId();
+			
 			workFlowService.handleTask(handleInfo);
+			
+			formData.put("processInstanceId", pid);
 			
 			SpringContextUtil.publishEvent(new TaskCompleteEvent(handleInfo, page, formData));
 		}
@@ -54,5 +63,19 @@ public class FormPageService {
 			
 			formDataAccess.update(page, formData);
 		}
+	}
+
+	public Set<String> findOutcomeNameListByTaskId(String taskId) {
+		
+		List<PvmTransition> pvmTransitionList = workFlowService.findOutcomeByTaskId(taskId);
+		
+		Set<String> transitionNames = new HashSet<String>(pvmTransitionList.size());
+		
+		for (PvmTransition transition : pvmTransitionList) {
+			
+			transitionNames.add((String) transition.getProperty("name"));
+		}
+		
+		return transitionNames;
 	}
 }
