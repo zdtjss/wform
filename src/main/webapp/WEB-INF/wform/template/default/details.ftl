@@ -39,17 +39,22 @@
 	</form>
 	<div>
 		<c:if test="${r'${not empty workflow.taskId}'}">
+			<div id="processDiagram" style="display:none;">
+				<img src="${r'${contextPath}'}/workflow/getDiagram?taskId=${r'${workflow.taskId}'}">
+			</div>
 			<select id="outcome" class="easyui-combobox" style="width:200px;">
 				<c:forEach var="outcome" items="${r'${outcomes }'}">
 			    	<option value="${r'${outcome}'}">${r'${outcome}'}</option>
 			    </c:forEach>
 			</select>
+			<a href="javascript:void(0)" onclick="showProcessDiagram()">流程图</a>
 			<a href="javascript:void(0)" onclick="submit()">办理</a>
+			<a href="javascript:void(0)" onclick="submit('back')">退回</a>
 		</c:if>
 	</div>
 	<script type="text/javascript">
 
-		function submit() {
+		function submit(type) {
 		
 			var pageData = {}; 
 			
@@ -60,6 +65,8 @@
 				
 			pageData["workflow"] = {
 					taskId : "${r'${workflow.taskId}'}",
+					action : type || 'forward',
+					workItemId : "${r'${workItemId}'}",
 					variables : {
 						outcome : $("#outcome :selected").val()
 					},
@@ -77,6 +84,28 @@
 				contentType:"application/json",
 				data : JSON.stringify(pageData),
 				url : contextPath + "/form/save",
+				success : function(resp) {
+					
+				},
+				error : function() {
+						
+				}
+			});
+		}
+		
+		function showProcessDiagram() {
+			
+			/** $('#processDiagram').window({
+				title:"流程图",
+			    width:800,
+			    height:600,
+			    modal:true
+			}); **/
+				
+			$.ajax({
+				dataType : "json",
+				data : {taskId:"${r'${workflow.taskId}'}"},
+				url : contextPath + "/workflow/historicHandle",
 				success : function(resp) {
 					
 				},

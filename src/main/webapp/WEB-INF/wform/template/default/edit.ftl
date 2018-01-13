@@ -44,9 +44,10 @@
 			    </c:forEach>
 			</select>
 			<a href="javascript:void(0)" onclick="submit()">保存</a>
+			<a href="javascript:void(0)" onclick="submit('back')">退回</a>
 		</div>
 	<script type="text/javascript">
-		function submit() {
+		function submit(type) {
 		
 			var pageData = {}; 
 			
@@ -56,7 +57,16 @@
 				};
 				
 			pageData["workflow"] = {
-					taskId : "${r'${workflow.taskId}'}"
+					taskId : "${r'${workflow.taskId}'}",
+					action : type || 'forward',
+					workItemId : "${r'${workItemId}'}",
+					variables : {
+						outcome : $("#outcome :selected").val()
+					},
+					currentUser : {
+						userId : "test",
+						cnName : "测试"
+					}
 				};
 				
 			pageData["pageData"] = $("#${page.name }").serializeObject();

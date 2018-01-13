@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -14,10 +13,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.beanutils.BasicDynaClass;
-import org.apache.commons.beanutils.ConvertUtilsBean2;
-import org.apache.commons.beanutils.DynaBean;
-import org.apache.commons.beanutils.DynaProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +31,7 @@ import com.nway.platform.wform.design.entity.PageFieldList;
 import com.nway.platform.wform.design.service.FormPageAccess;
 import com.nway.platform.wform.view.service.FormPageService;
 import com.nway.platform.workflow.entity.Handle;
+import com.nway.platform.workflow.entity.Handle.Action;
 import com.nway.platform.workflow.entity.Handle.SimpleUser;
 
 import freemarker.template.Configuration;
@@ -66,10 +62,11 @@ public class FormPageController {
 		
 		String basePath = request.getSession().getServletContext().getRealPath("/");
 		
-		String bizId = request.getParameter("pkId");
+		String bizId = request.getParameter("bizId");
 		String pageId = request.getParameter("pageId");
 		String pageType = request.getParameter("pageType");
 		String taskId = request.getParameter("taskId");
+		String workItemId = request.getParameter("workItemId");
 		
 		FormPage formPage = formPageAccess.getFormPage(pageId);
 		
@@ -89,6 +86,7 @@ public class FormPageController {
 			Set<String> outcomes = formPageService.findOutcomeNameListByTaskId(taskId);
 			
 			view.addObject("outcomes", outcomes);
+			view.addObject("workItemId", workItemId);
 		}
 			
 		for(PageFieldForm field : formPage.getFormFields()) {
@@ -267,7 +265,16 @@ public class FormPageController {
 		
 		handleInfo.setTaskId((String) workflow.get("taskId"));
 		
+		handleInfo.setWorkItemId((String) workflow.get("workItemId"));
+		
 		handleInfo.setVariables((Map) workflow.get("variables"));
+		
+		String action = (String) workflow.get("action");
+		
+		if(action != null) {
+			
+			handleInfo.setAction(Action.valueOf(action.toUpperCase()));
+		}
 		
 		JSONObject currentUser = (JSONObject) workflow.get("currentUser");
 		

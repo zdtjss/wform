@@ -12,6 +12,8 @@ public class Handle {
 	
 	private Action action;
 	
+	private String workItemId;
+	
 	private SimpleUser currentUser;
 	
 	private Map<String, Object> variables;
@@ -41,6 +43,14 @@ public class Handle {
 
 	public void setAction(Action action) {
 		this.action = action;
+	}
+
+	public String getWorkItemId() {
+		return workItemId;
+	}
+
+	public void setWorkItemId(String workItemId) {
+		this.workItemId = workItemId;
 	}
 
 	public SimpleUser getCurrentUser() {

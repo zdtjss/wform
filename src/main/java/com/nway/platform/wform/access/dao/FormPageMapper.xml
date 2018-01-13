@@ -73,8 +73,8 @@
 			  A.ROW_NUM ,
 			  A.COLUMN_NUM,
 			  A.COLUMN_SPAN,
-			  A.IS_LINK,
-			  A.IS_CONDITION
+			  A.IS_CONDITION,
+			  A.FORMATTER
 		FROM T_FORM_PAGE_FIELD_LIST A 
         LEFT JOIN
 	    T_FORM_FIELD B ON A.FIELD_ID = B.FIELD_ID
@@ -89,7 +89,7 @@
 		<result column="ROW_NUM" property="rowNum"/>
 		<result column="COLUMN_NUM" property="colNum"/>
 		<result column="COLUMN_SPAN" property="colSpan"/>
-		<result column="IS_LINK" property="isLink"/>
+		<result column="FORMATTER" property="formatter"/>
 		<result column="IS_CONDITION" property="isCondition"/>
 	</resultMap>
 	

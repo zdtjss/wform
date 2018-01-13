@@ -1,7 +1,12 @@
 package com.nway.platform.workflow.controller;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +33,15 @@ public class WorkflowController {
 	}
 	
 	@RequestMapping("getDiagram")
-	public InputStream getDiagram(String taskId) {
+	public void getDiagram(String taskId, HttpServletResponse response) throws IOException {
 		
-		return workFlowService.getDiagram(taskId);
+		IOUtils.copy(workFlowService.getDiagram(taskId), response.getOutputStream()) ;
+	}
+	
+	@RequestMapping("historicHandle")
+	@ResponseBody
+	public Map<String, Map<String, Object>> historicHandle(String taskId) {
+
+		return workFlowService.historicHandle(taskId);
 	}
 }

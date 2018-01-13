@@ -5,7 +5,7 @@
 
 <c:forEach var="map" items="${dataModel[fieldName] }">
 	<c:forEach var="stored" items="${dataModel[param.fieldName] }">
-		<c:if test="${map.key eq stored.value}">
+		<c:if test="${map.key eq stored}">
 			<span>${map.value}</span>
 		</c:if>
 	</c:forEach>

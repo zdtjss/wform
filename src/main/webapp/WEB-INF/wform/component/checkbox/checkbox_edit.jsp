@@ -10,7 +10,7 @@
 <script type="text/javascript">
 	var values = [];
 	<c:forEach var="stored" items="${dataModel[param.fieldName] }" varStatus="status">
-		values["${status.index}"] = "${stored.value}";
+		values["${status.index}"] = "${stored}";
 	</c:forEach>
 	$.each(values, function() {
 	    

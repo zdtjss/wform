@@ -14,11 +14,11 @@ public class PageFieldList extends Field {
 
 	private int colSpan;
 	
-	private boolean isLink;
-	
 	private boolean isCondition;
 	
 	private boolean isMultiValue;
+	
+	private String formatter;
 	
 	public String getId() {
 		return id;
@@ -68,14 +68,6 @@ public class PageFieldList extends Field {
 		this.colSpan = colSpan;
 	}
 
-	public boolean isLink() {
-		return isLink;
-	}
-
-	public void setLink(boolean isLink) {
-		this.isLink = isLink;
-	}
-
 	public boolean isCondition() {
 		return isCondition;
 	}
@@ -90,6 +82,14 @@ public class PageFieldList extends Field {
 
 	public void setMultiValue(boolean isMultiValue) {
 		this.isMultiValue = isMultiValue;
+	}
+
+	public String getFormatter() {
+		return formatter;
+	}
+
+	public void setFormatter(String formatter) {
+		this.formatter = formatter;
 	}
 	
 }

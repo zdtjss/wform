@@ -4,10 +4,10 @@
 <mapper namespace="com.nway.platform.workflow.dao.WorkFlowDaoMapper">
 
 	<select id="getPdKey" resultType="string">
-		select PD_KEY from T_FORM_FLOW where PAGE_ID = #{pageId}
+		select PD_KEY from T_FORM_FLOW where PAGE_ID = #{pageId} 
 	</select>
 	
 	<insert id="createWorkItem">
-		insert into T_WORK_ITEM (ITEM_ID,BIZ_ID,TITLE,TASK_ID,TASK_NAME,FORM_KEY,STATUS) values (#{pkId},#{bizId},#{title},#{taskId},#{taskName},#{formKey},0)
+		insert into T_WORK_ITEM (ITEM_ID,BIZ_ID,TITLE,TASK_ID,TASK_NAME,FORM_KEY,CREATE_TIME,STATUS) values (#{pkId},#{bizId},#{title},#{taskId},#{taskName},#{formKey},now(), 0)
 	</insert>
 </mapper>

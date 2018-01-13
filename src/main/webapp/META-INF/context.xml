@@ -8,8 +8,8 @@
 		maxActive="5"
 		maxIdle="1000"
 		maxWait="50000"
-		username="root"
-		password="Zdt123456#"
-		driverClassName="com.mysql.jdbc.Driver"
-		url="jdbc:mysql://192.168.137.5:3306/wform?useUnicode=true&amp;characterEncoding=utf8" />
+		username="SA"
+		password=""
+		driverClassName="org.hsqldb.jdbc.JDBCDriver"
+		url="jdbc:hsqldb:mem:.;sql.syntax_mys=true;"/>
 </Context>

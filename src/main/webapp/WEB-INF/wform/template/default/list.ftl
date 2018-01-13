@@ -56,7 +56,7 @@
 				        	{field:'${field.name }',hidden:true}${field?has_next?then(',','')}
 				        </#if>
 				        <#if field.type != 'key' >
-				        	{field:'${field.name }',title:'${field.display }',width:100${field.link ?string(",formatter:showLink", "")}}${field?has_next?then(',','')}
+				        	{field:'${field.name }',title:'${field.display }',width:100<#if field.formatter??>,formatter:${field.formatter}</#if>}${field?has_next?then(',','')}
 				        </#if>
 				    </#list>
 			    ]]

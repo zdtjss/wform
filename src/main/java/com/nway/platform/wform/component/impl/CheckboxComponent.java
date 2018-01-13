@@ -1,8 +1,9 @@
 package com.nway.platform.wform.component.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,16 @@ public class CheckboxComponent implements MultiValueComponent, Initializable {
 	@Override
 	public Object getAssociatedValue(String pageName, String bizId) {
 		
-		return checkboxMapper.getValues(pageName, bizId);
+		List<String> retVal = new ArrayList<String>();
+		
+		List<Map<String, String>> values = checkboxMapper.getValues(pageName, bizId);
+		
+		for(Map<String, String> value : values) {
+			
+			retVal.addAll(value.values());
+		}
+		
+		return retVal;
 	}
 
 	@Override

@@ -59,10 +59,7 @@ public class FormPageService {
 		
 		handle(page, handleInfo, formData);
 		
-		if(FormPage.PAGE_TYPE_EDIT.equals(page.getType())) {
-			
-			formDataAccess.update(page, formData);
-		}
+		formDataAccess.update(page, formData);
 	}
 
 	public Set<String> findOutcomeNameListByTaskId(String taskId) {
