@@ -1,5 +1,6 @@
 package com.nway.platform.wform.view.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.nway.platform.wform.access.FormDataAccess;
 import com.nway.platform.wform.commons.SpringContextUtil;
 import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.workflow.dao.WorkFlowDaoMapper;
 import com.nway.platform.workflow.entity.Handle;
 import com.nway.platform.workflow.event.TaskCompleteEvent;
 import com.nway.platform.workflow.service.WorkFlowService;
@@ -26,21 +28,24 @@ public class FormPageService {
 	@Autowired
 	private WorkFlowService workFlowService;
 	
-	public void createAndStartProcess(FormPage page, Handle handleInfo, Map<String, Object> formData) {
+	@Autowired
+	private WorkFlowDaoMapper workFlowDaoMapper;
+	
+	public String startProcess(String pageId) {
 		
-		if (handleInfo.getProcessKey() != null) {
+		String pid = "";
+		
+		String pdKey = workFlowDaoMapper.getPdKey(pageId);
+		
+		if (pdKey != null) {
 			
-			String pid = workFlowService.startProcess(handleInfo);
-			
-			formData.put("processInstanceId", pid);
-			
-			SpringContextUtil.publishEvent(new TaskCompleteEvent(handleInfo, page, formData));
+			pid = workFlowService.startProcess(pdKey);
 		}
 		
-		formDataAccess.create(page, formData);
+		return pid;
 	}
 	
-	public void handle(FormPage page, Handle handleInfo, Map<String, Object> formData) {
+	public void saveAndHandle(FormPage page, String pageType, Handle handleInfo, Map<String, Object> formData) {
 		
 		if (handleInfo.getTaskId() != null) {
 			
@@ -53,18 +58,32 @@ public class FormPageService {
 			SpringContextUtil.publishEvent(new TaskCompleteEvent(handleInfo, page, formData));
 		}
 		
-	}
-	
-	public void saveAndHandle(FormPage page, Handle handleInfo, Map<String, Object> formData) {
+		if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
+			
+			formDataAccess.create(page, formData);
+		}
+		else if(FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
+			
+			formDataAccess.update(page, formData);
+		}
 		
-		handle(page, handleInfo, formData);
-		
-		formDataAccess.update(page, formData);
 	}
 
-	public Set<String> findOutcomeNameListByTaskId(String taskId) {
+	public List<String> getTaskIdByPid(String pid) {
+
+		List<String> names = new ArrayList<String>();
 		
-		List<PvmTransition> pvmTransitionList = workFlowService.findOutcomeByTaskId(taskId);
+		for(Task task : workFlowService.getTaskByPid(pid)) {
+			
+			names.add(task.getId());
+		}
+
+		return names;
+	}
+	
+	public Set<String> findOutcomeNameListByTaskId(String taskId, Map<String, Object> param) {
+		
+		List<PvmTransition> pvmTransitionList = workFlowService.findOutcomeByTaskId(taskId, param);
 		
 		Set<String> transitionNames = new HashSet<String>(pvmTransitionList.size());
 		

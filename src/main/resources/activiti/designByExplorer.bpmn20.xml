@@ -7,13 +7,13 @@
         <activiti:formProperty id="pageType" name="pageType" type="string" expression="create" writable="false" required="true"></activiti:formProperty>
       </extensionElements>
     </userTask>
-    <userTask id="approve" name="审批" activiti:formKey="1001">
+    <userTask id="approve" name="审批" activiti:assignee="sjld" activiti:formKey="1001">
       <extensionElements>
         <activiti:formProperty id="pageType" name="pageType" type="string" expression="details" writable="false" required="true"></activiti:formProperty>
       </extensionElements>
     </userTask>
     <exclusiveGateway id="sid-34C44C05-73D1-40AC-AC35-7578649DFDCC"></exclusiveGateway>
-    <userTask id="check" name="核查" activiti:formKey="1001">
+    <userTask id="check" name="核查" activiti:assignee="sgy" activiti:formKey="1001">
       <extensionElements>
         <activiti:formProperty id="pageType" name="pageType" type="string" expression="details"></activiti:formProperty>
       </extensionElements>
@@ -21,12 +21,12 @@
     <userTask id="handle" name="处理"></userTask>
     <parallelGateway id="sid-57151FBC-3517-4F37-B61C-CB15BBA21967"></parallelGateway>
     <userTask id="process2" name="办理2"></userTask>
-    <userTask id="process1" name="办理1"></userTask>
+    <userTask id="process1" name="办理1" activiti:assignee="blr1"></userTask>
     <parallelGateway id="sid-AB5D14C5-C686-4B9D-9CC3-3E83CED528D9"></parallelGateway>
     <userTask id="archive" name="归档"></userTask>
-    <userTask id="sid-30C4D7D9-725F-45EC-B349-A2DA084ACDCD" name="收阅"></userTask>
+    <userTask id="sid-30C4D7D9-725F-45EC-B349-A2DA084ACDCD" name="收阅" activiti:assignee="syr"></userTask>
     <inclusiveGateway id="sid-80B009E9-2DF0-467E-98F5-882AAB68D99E"></inclusiveGateway>
-    <userTask id="sid-81D98C38-B919-4FC6-A746-2BF53D98308C" name="审查"></userTask>
+    <userTask id="sid-81D98C38-B919-4FC6-A746-2BF53D98308C" name="审查" activiti:assignee="testtt"></userTask>
     <inclusiveGateway id="sid-F8279C7E-1B2D-48A7-A383-D797D5C03D83"></inclusiveGateway>
     <endEvent id="sid-F59766C0-CC7B-49B3-A501-82F718187B95" name="结束"></endEvent>
     <userTask id="sid-49B0DDCD-8632-4ABE-80DA-35486EC9B981" name="核实"></userTask>
@@ -39,35 +39,32 @@
     <sequenceFlow id="sid-0EB27305-7E2A-495B-A6C4-79986FFC9A2B" name="办完" sourceRef="archive" targetRef="sid-F59766C0-CC7B-49B3-A501-82F718187B95"></sequenceFlow>
     <sequenceFlow id="sid-925F1E06-BD3D-4CBA-92C8-8228CD029EBA" name="一起办完成" sourceRef="sid-AB5D14C5-C686-4B9D-9CC3-3E83CED528D9" targetRef="archive"></sequenceFlow>
     <sequenceFlow id="sid-393DA87B-9D5D-4328-8704-91C31504ED9B" name="去草稿" sourceRef="sid-CA098386-0ECC-42DC-8CC1-783BECE7BDAD" targetRef="draft"></sequenceFlow>
+    <sequenceFlow id="sid-277C6A35-510B-423B-90E8-15688D53E54C" name="办理2结束" sourceRef="process2" targetRef="sid-AB5D14C5-C686-4B9D-9CC3-3E83CED528D9"></sequenceFlow>
+    <sequenceFlow id="sid-75C463FE-89BF-47B8-85A6-724A47832443" name="办理1结束" sourceRef="process1" targetRef="sid-AB5D14C5-C686-4B9D-9CC3-3E83CED528D9"></sequenceFlow>
+    <sequenceFlow id="sid-A9F7F15A-E2DF-4B3E-B68E-1E3249701834" name="核查结束" sourceRef="check" targetRef="handle"></sequenceFlow>
+    <sequenceFlow id="sid-501DB444-E414-4DD7-8EA9-89F616A731FF" name="一起办" sourceRef="draft" targetRef="sid-57151FBC-3517-4F37-B61C-CB15BBA21967">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='yq'}]]></conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="sid-00311E52-A3BC-4205-8D24-425D7CCA8F74" name="外部" activiti:class="com.nway.wform.TestService"></serviceTask>
+    <sequenceFlow id="sid-11F5F37F-F598-4C4B-86F7-9FBD35F70D58" name="外部完成" sourceRef="sid-00311E52-A3BC-4205-8D24-425D7CCA8F74" targetRef="sid-AB5D14C5-C686-4B9D-9CC3-3E83CED528D9"></sequenceFlow>
+    <userTask id="sid-6E9770DF-6F41-401C-B339-0CA05629B722" name="办理3"></userTask>
+    <sequenceFlow id="sid-319BFEFB-9574-452E-AA08-49F1785F2C81" name="办理3完成" sourceRef="sid-6E9770DF-6F41-401C-B339-0CA05629B722" targetRef="sid-AB5D14C5-C686-4B9D-9CC3-3E83CED528D9"></sequenceFlow>
+    <sequenceFlow id="sid-756FBC78-1F57-411F-A12A-48106283A3E4" name="多选一" sourceRef="draft" targetRef="sid-34C44C05-73D1-40AC-AC35-7578649DFDCC">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='dy'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-26493BCF-5A57-481A-B9AD-5BAD894D6CF1" name="去核查" sourceRef="sid-34C44C05-73D1-40AC-AC35-7578649DFDCC" targetRef="check">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${title=='check'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-E6C34089-3CBA-45CF-AC37-24E9AD923D57" name="去调Java" sourceRef="sid-57151FBC-3517-4F37-B61C-CB15BBA21967" targetRef="sid-00311E52-A3BC-4205-8D24-425D7CCA8F74"></sequenceFlow>
+    <sequenceFlow id="sid-3CEC663B-60DF-4FFA-BB5A-72880176CFA8" name="去办理3" sourceRef="sid-57151FBC-3517-4F37-B61C-CB15BBA21967" targetRef="sid-6E9770DF-6F41-401C-B339-0CA05629B722"></sequenceFlow>
     <sequenceFlow id="sid-E312E868-4694-4DCD-8526-994FF102B410" name="去办理1" sourceRef="sid-57151FBC-3517-4F37-B61C-CB15BBA21967" targetRef="process1">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='bl1'}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="sid-1D491AB2-45BE-4E41-85F6-A2B7058B5FF7" name="去办理2" sourceRef="sid-57151FBC-3517-4F37-B61C-CB15BBA21967" targetRef="process2">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='bl2'}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="sid-277C6A35-510B-423B-90E8-15688D53E54C" name="办理2结束" sourceRef="process2" targetRef="sid-AB5D14C5-C686-4B9D-9CC3-3E83CED528D9"></sequenceFlow>
-    <sequenceFlow id="sid-75C463FE-89BF-47B8-85A6-724A47832443" name="办理1结束" sourceRef="process1" targetRef="sid-AB5D14C5-C686-4B9D-9CC3-3E83CED528D9"></sequenceFlow>
     <sequenceFlow id="sid-C6F81813-B14F-4CCB-BA69-C017C4EE59E0" name="去审批" sourceRef="sid-34C44C05-73D1-40AC-AC35-7578649DFDCC" targetRef="approve">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${title=='approve'}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="sid-26493BCF-5A57-481A-B9AD-5BAD894D6CF1" name="去核查" sourceRef="sid-34C44C05-73D1-40AC-AC35-7578649DFDCC" targetRef="check">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${title=='check'}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="sid-A9F7F15A-E2DF-4B3E-B68E-1E3249701834" name="核查结束" sourceRef="check" targetRef="handle"></sequenceFlow>
-    <sequenceFlow id="sid-501DB444-E414-4DD7-8EA9-89F616A731FF" name="一起办" sourceRef="draft" targetRef="sid-57151FBC-3517-4F37-B61C-CB15BBA21967">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='yq'}]]></conditionExpression>
-    </sequenceFlow>
-    <serviceTask id="sid-00311E52-A3BC-4205-8D24-425D7CCA8F74" name="外部" activiti:class="com.nway.wform.TestService"></serviceTask>
-    <sequenceFlow id="sid-E6C34089-3CBA-45CF-AC37-24E9AD923D57" name="去调Java" sourceRef="sid-57151FBC-3517-4F37-B61C-CB15BBA21967" targetRef="sid-00311E52-A3BC-4205-8D24-425D7CCA8F74"></sequenceFlow>
-    <sequenceFlow id="sid-11F5F37F-F598-4C4B-86F7-9FBD35F70D58" name="外部完成" sourceRef="sid-00311E52-A3BC-4205-8D24-425D7CCA8F74" targetRef="sid-AB5D14C5-C686-4B9D-9CC3-3E83CED528D9"></sequenceFlow>
-    <userTask id="sid-6E9770DF-6F41-401C-B339-0CA05629B722" name="办理3"></userTask>
-    <sequenceFlow id="sid-3CEC663B-60DF-4FFA-BB5A-72880176CFA8" name="去办理3" sourceRef="sid-57151FBC-3517-4F37-B61C-CB15BBA21967" targetRef="sid-6E9770DF-6F41-401C-B339-0CA05629B722"></sequenceFlow>
-    <sequenceFlow id="sid-319BFEFB-9574-452E-AA08-49F1785F2C81" name="办理3完成" sourceRef="sid-6E9770DF-6F41-401C-B339-0CA05629B722" targetRef="sid-AB5D14C5-C686-4B9D-9CC3-3E83CED528D9"></sequenceFlow>
-    <sequenceFlow id="sid-756FBC78-1F57-411F-A12A-48106283A3E4" name="多选一" sourceRef="draft" targetRef="sid-34C44C05-73D1-40AC-AC35-7578649DFDCC">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='dy'}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="sid-65941B65-BD1C-4B3E-BAF4-67A331A5E7FB" name="去收阅" sourceRef="sid-F8279C7E-1B2D-48A7-A383-D797D5C03D83" targetRef="sid-30C4D7D9-725F-45EC-B349-A2DA084ACDCD">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='shy'}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="sid-CC638D49-00D0-4CF9-8878-3B1469BBBC8F" name="可多可少" sourceRef="draft" targetRef="sid-F8279C7E-1B2D-48A7-A383-D797D5C03D83">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='kd'}]]></conditionExpression>
@@ -75,6 +72,7 @@
     <sequenceFlow id="sid-5FB28C9D-7A9E-49E9-990A-7D6AC7A75268" name="去审查" sourceRef="sid-F8279C7E-1B2D-48A7-A383-D797D5C03D83" targetRef="sid-81D98C38-B919-4FC6-A746-2BF53D98308C">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='chy'}]]></conditionExpression>
     </sequenceFlow>
+    <sequenceFlow id="sid-65941B65-BD1C-4B3E-BAF4-67A331A5E7FB" name="去收阅" sourceRef="sid-F8279C7E-1B2D-48A7-A383-D797D5C03D83" targetRef="sid-30C4D7D9-725F-45EC-B349-A2DA084ACDCD"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_designByExplorer">
     <bpmndi:BPMNPlane bpmnElement="designByExplorer" id="BPMNPlane_designByExplorer">
@@ -183,13 +181,13 @@
         <omgdi:waypoint x="942.5" y="565.0"></omgdi:waypoint>
         <omgdi:waypoint x="942.5" y="411.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="sid-1D491AB2-45BE-4E41-85F6-A2B7058B5FF7" id="BPMNEdge_sid-1D491AB2-45BE-4E41-85F6-A2B7058B5FF7">
-        <omgdi:waypoint x="363.93939393939394" y="378.93939393939394"></omgdi:waypoint>
-        <omgdi:waypoint x="512.5" y="314.3478260869565"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-277C6A35-510B-423B-90E8-15688D53E54C" id="BPMNEdge_sid-277C6A35-510B-423B-90E8-15688D53E54C">
         <omgdi:waypoint x="578.5" y="313.88613861386136"></omgdi:waypoint>
         <omgdi:waypoint x="733.4233449477352" y="379.0766550522648"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-1D491AB2-45BE-4E41-85F6-A2B7058B5FF7" id="BPMNEdge_sid-1D491AB2-45BE-4E41-85F6-A2B7058B5FF7">
+        <omgdi:waypoint x="363.93939393939394" y="378.93939393939394"></omgdi:waypoint>
+        <omgdi:waypoint x="512.5" y="314.3478260869565"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-D5457CD4-D5F6-4565-AFD0-07AF31F2E549" id="BPMNEdge_sid-D5457CD4-D5F6-4565-AFD0-07AF31F2E549">
         <omgdi:waypoint x="582.0" y="141.87747524752476"></omgdi:waypoint>

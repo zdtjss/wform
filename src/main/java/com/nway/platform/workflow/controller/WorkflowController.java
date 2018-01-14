@@ -1,7 +1,6 @@
 package com.nway.platform.workflow.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.nway.platform.wform.commons.SpringContextUtil;
@@ -25,9 +25,10 @@ public class WorkflowController {
 	
 	@RequestMapping("getNextTaskAssignee")
 	@ResponseBody
-	public Object getNextTaskAssignee(String taskId, String outcome) {
+	public Object getNextTaskAssignee(@RequestParam("taskId") String taskId, @RequestParam("outcome") String outcome,
+			@RequestParam("param") Map<String, Object> param) {
 		
-		String assignee = workFlowService.getNextTaskAssignee(taskId, outcome);
+		Map<String,String> assignee = workFlowService.nextAssignee(taskId, outcome, param);
 		
 		return SpringContextUtil.getBean(AssigneeParser.class).parser(assignee);
 	}

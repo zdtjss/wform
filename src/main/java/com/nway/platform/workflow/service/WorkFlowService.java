@@ -2,10 +2,10 @@ package com.nway.platform.workflow.service;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.HistoryService;
@@ -14,11 +14,17 @@ import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.context.Context;
+import org.activiti.engine.impl.javax.el.ExpressionFactory;
+import org.activiti.engine.impl.javax.el.ValueExpression;
+import org.activiti.engine.impl.juel.ExpressionFactoryImpl;
+import org.activiti.engine.impl.juel.SimpleContext;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
@@ -52,15 +58,9 @@ public class WorkFlowService {
 	@Autowired
 	private HistoryService historyService;
 	
-	public String startProcess(Handle handleInfo) {
+	public String startProcess(String pdKey) {
 		
-		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(handleInfo.getProcessKey(), handleInfo.getVariables());
-		
-		Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
-		
-		taskService.complete(task.getId());
-		
-		return processInstance.getId();
+		return runtimeService.startProcessInstanceByKey(pdKey).getId();
 	}
 	
 	public void handleTask(Handle handleInfo) {
@@ -85,13 +85,25 @@ public class WorkFlowService {
 		
 	}
 	
-	public List<PvmTransition> findOutcomeByTaskId(String taskId) {
-    	
+	public List<PvmTransition> findOutcomeByTaskId(String taskId, Map<String, Object> param) {
+		
+		List<PvmTransition> retVal = new ArrayList<PvmTransition>();
+		
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 		
 		ActivityImpl activityImpl = getActivityImplByTask(task);
 		
-		return nextOutcome(activityImpl);
+		for (PvmTransition pvmTransition : activityImpl.getOutgoingTransitions()) {
+
+			String conditionText = (String) pvmTransition.getProperty("conditionText");
+
+			if (param.isEmpty() || conditionText == null || isCondition(conditionText, param)) {
+
+				retVal.add(pvmTransition);
+			}
+		}
+		
+		return retVal;
     }
 	
 	public void goBack(String taskId) {
@@ -182,6 +194,11 @@ public class WorkFlowService {
 	public Task getTask(String taskId) {
 		
 		return taskService.createTaskQuery().taskId(taskId).singleResult();
+	}
+	
+	public List<Task> getTaskByPid(String processInstanceId) {
+		
+		return taskService.createTaskQuery().processInstanceId(processInstanceId).list();
 	}
 	
 	public List<Task> getCurentTasks(String pid) {
@@ -281,56 +298,120 @@ public class WorkFlowService {
 		return position;
 	}
 
-	public String getNextTaskAssignee(String taskId, String outcome) {
+	public Map<String, String> nextAssignee(String taskId, String outcome, Map<String, Object> var) {
 		
-		ActivityImpl currentActivityImpl = getActivityImplByTask(getTask(taskId));
+		Map<String, String> retVal = new HashMap<String, String>();
 		
-		for(PvmTransition trans : currentActivityImpl.getOutgoingTransitions()) {
+		Task task = getTask(taskId);
+		
+		String processDefinitionId = task.getProcessDefinitionId();
+		
+		ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) repositoryService.getProcessDefinition(processDefinitionId);
+
+		String activityId = runtimeService.createExecutionQuery().executionId(task.getExecutionId()).singleResult().getActivityId();
+		
+		ActivityImpl activityImpl = processDefinitionEntity.findActivity(activityId);
+		
+		List<PvmTransition> pvmTransitions = activityImpl.getOutgoingTransitions();
+		
+		for(PvmTransition pvmTransition : pvmTransitions) {
 			
-			if(outcome != null && outcome.equals(trans.getProperty("name"))) {
+			if(!outcome.equals(pvmTransition.getProperty("name"))) {
 				
-				return ((TaskDefinition)trans.getDestination().getProperty("taskDefinition")).getAssigneeExpression().getExpressionText();
+				continue;
 			}
-		}
-		
-		return "";
-	}
-	
-	private List<PvmTransition> nextOutcome(ActivityImpl activityImpl) {
-
-		List<PvmTransition> outcome = Collections.emptyList();
-
-		if ("userTask".equals(activityImpl.getProperty("type"))) {
-
-			outcome = activityImpl.getOutgoingTransitions();
-		}
-		else {
 			
-			List<PvmTransition> outTransitions = activityImpl.getOutgoingTransitions();
+			PvmActivity pvmActivity = pvmTransition.getDestination();
 			
-			for (PvmTransition tr : outTransitions) {
+			if("userTask".equals(pvmActivity.getProperty("type"))) {
 				
-				PvmActivity ac = tr.getDestination();
+				getTaskAssignee(pvmActivity, retVal);
 				
-				if ("exclusiveGateway".equals(ac.getProperty("type"))) {
+				return retVal;
+			}
+			else if ("exclusiveGateway".equals(pvmActivity.getProperty("type"))) {
+			
+				for(PvmTransition exclusivePvmTransition : pvmActivity.getOutgoingTransitions()) {
 					
-					for (PvmTransition tr1 : ac.getOutgoingTransitions()) {
+					pvmActivity = exclusivePvmTransition.getDestination();
+					
+					String conditionText = exclusivePvmTransition.getProperty("conditionText").toString();
+					
+					if (isCondition(conditionText, var) && "userTask".equals(pvmActivity.getProperty("type"))) {
+
+						getTaskAssignee(pvmActivity, retVal);
 						
-						outcome = nextOutcome((ActivityImpl) tr1.getDestination());
+						return retVal;
 					}
 				}
-				else if ("userTask".equals(ac.getProperty("type"))) {
+			}
+			else if("parallelGateway".equals(pvmActivity.getProperty("type"))) {
+				
+				for (PvmTransition exclusivePvmTransition : pvmActivity.getOutgoingTransitions()) {
+
+					pvmActivity = exclusivePvmTransition.getDestination();
 					
-					outcome = ac.getOutgoingTransitions();
+					if("userTask".equals(pvmActivity.getProperty("type"))) {
+						
+						getTaskAssignee(pvmActivity, retVal);
+					}
 				}
-				else {
+				
+				return retVal;
+			}
+			else if ("inclusiveGateway".equals(pvmActivity.getProperty("type"))) {
+				
+				for(PvmTransition exclusivePvmTransition : pvmActivity.getOutgoingTransitions()) {
 					
-					System.out.println(ac.getProperty("type"));
+					pvmActivity = exclusivePvmTransition.getDestination();
+					
+					String conditionText = (String) exclusivePvmTransition.getProperty("conditionText");
+
+					if (conditionText != null) {
+						
+						if (isCondition(conditionText, var) && "userTask".equals(pvmActivity.getProperty("type"))) {
+
+							getTaskAssignee(pvmActivity, retVal);
+						}
+					}
+					else if("userTask".equals(pvmActivity.getProperty("type"))) {
+						
+						getTaskAssignee(pvmActivity, retVal);
+					}
 				}
+				
+				return retVal;
 			}
 		}
+		
+		return retVal;
+	}
 
-		return outcome;
+	private boolean isCondition(String el, Map<String, Object> var) {
+		
+		ExpressionFactory factory = new ExpressionFactoryImpl();
+		
+		SimpleContext context = new SimpleContext();
+		
+		for (Entry<String, Object> entry : var.entrySet()) {
+			
+			context.setVariable(entry.getKey(), factory.createValueExpression(entry.getValue(), String.class));
+		}
+		
+		ValueExpression e = factory.createValueExpression(context, el, boolean.class);
+		
+		return (Boolean) e.getValue(context);
+	}
+	
+	private void getTaskAssignee(PvmActivity pvmActivity, Map<String, String> taskAssignee) {
+		
+		TaskDefinition taskDefinition = ((UserTaskActivityBehavior) ((ActivityImpl) pvmActivity).getActivityBehavior()).getTaskDefinition();
+		
+		Expression nameExpression = taskDefinition.getNameExpression();
+		
+		Expression assigneeExpression = taskDefinition.getAssigneeExpression();
+		
+		taskAssignee.put(nameExpression != null ? nameExpression.getExpressionText() : "", assigneeExpression != null ? assigneeExpression.getExpressionText() : "");
 	}
 	
 	/**

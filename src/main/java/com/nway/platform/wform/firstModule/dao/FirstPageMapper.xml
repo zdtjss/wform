@@ -8,16 +8,16 @@
 	<select id="details" resultMap="detailsMap">
 		select pk_id,title,note,content from t_first_group where pk_Id = #{pk_id}
 	</select>
+	<update id="update">
+		update t_first_group set title = #{title}, note = #{note}, content=#{content} where pk_Id = #{pk_id}
+	</update>
+	<select id="list" resultMap="detailsMap">
+		select pk_id,title,note from t_first_group
+	</select>
 	<resultMap type="map" id="detailsMap">
 		<result column="pk_id" property="pk_id"/>
 		<result column="title" property="title"/>
 		<result column="note" property="note"/>
 		<result column="content" property="content"/>
 	</resultMap>
-	<update id="update">
-		update t_first_group set title = #{title}, note = #{note}, content=#{content} where pk_Id = #{pk_id}
-	</update>
-	<select id="list" resultType="map">
-		select pk_id 'pk_id',title 'title',note 'note',content 'content' from t_first_group
-	</select>
 </mapper>

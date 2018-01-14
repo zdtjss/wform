@@ -16,25 +16,33 @@
 		<property name="basePackagePath" value="/freemarker" />
 	</bean>
 
-	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
-		<constructor-arg>
-			<bean id="poolProperties" class="org.apache.tomcat.jdbc.pool.PoolProperties">
-
-				<property name="username" value="root" />
-				<property name="password" value="Zdt123456#" />
-
-				<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-				<property name="url" value="jdbc:mysql://10.40.32.47:3306/activiti" />
-
-				<property name="initialSize" value="1" />
-				<property name="maxActive" value="3" />
-			</bean>
-		</constructor-arg>
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="username" value="SA" />
+		<property name="password" value="" />
+		<property name="url" value="jdbc:hsqldb:mem:.;sql.syntax_mys=true;" />
+		<property name="driverClassName" value="org.hsqldb.jdbc.JDBCDriver" />
 	</bean>
 
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="search*" read-only="true" />
+			<tx:method name="query*" read-only="true" />
+			<tx:method name="select*" read-only="true" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="*" read-only="false" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="operation"
+			expression="execution(* com.nway..*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="operation" />
+	</aop:config>
 
 	<bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
 		<property name="dataSource" ref="dataSource" />

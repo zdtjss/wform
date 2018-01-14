@@ -3,7 +3,6 @@
 	<Resource auth="Container"
 		name="jdbc/wform"
 		type="javax.sql.DataSource"
-		factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
 		initialSize="3"
 		maxActive="5"
 		maxIdle="1000"

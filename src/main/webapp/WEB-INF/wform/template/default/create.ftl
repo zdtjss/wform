@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
-<jsp:include page="/WEB-INF/jsp/include.jsp"/>
+<%@ include file="/WEB-INF/jsp/include.jsp" %>
 <title>${page.title!"" }</title>
 </head>
 <body>
@@ -38,10 +38,18 @@
 		</table>
 		</form>
 		<div id="processbar">
+			<div id="processDiagram" style="display:none;">
+				<img src="${r'${contextPath}'}/workflow/getDiagram?taskId=${r'${workflow.taskId}'}">
+			</div>
+			<select id="outcome" class="easyui-combobox" style="width:200px;">
+				<c:forEach var="outcome" items="${r'${outcomes }'}">
+			    	<option value="${r'${outcome}'}">${r'${outcome}'}</option>
+			    </c:forEach>
+			</select>
 			<a href="javascript:void(0)" onclick="submit()">保存</a>
 		</div>
 	<script type="text/javascript">
-		function submit() {
+		function submit(type) {
 		
 			var pageData = {}; 
 			
@@ -51,7 +59,16 @@
 				};
 				
 			pageData["workflow"] = {
-					processKey : "<@pdKey pageId="${page.id}"/>"
+					taskId : "${r'${workflow.taskId}'}",
+					action : type || 'forward',
+					workItemId : "${r'${workflow.workItemId}'}",
+					variables : {
+						outcome : $("#outcome :selected").val()
+					},
+					currentUser : {
+						userId : "test",
+						cnName : "测试"
+					}
 				};
 				
 			pageData["pageData"] = $("#${page.name }").serializeObject();

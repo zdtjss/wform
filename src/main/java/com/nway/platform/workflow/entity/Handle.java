@@ -4,9 +4,6 @@ import java.util.Map;
 
 public class Handle {
 
-	// 当前办理流程定义key或者流程实例id
-	private String processKey;
-	
 	// 当前办理的任务id
 	private String taskId;
 	
@@ -20,14 +17,6 @@ public class Handle {
 	
 	// <下一步任务名：对应的办理人>
 	private Map<String, SimpleUser[]> handlerTaskMap;
-
-	public String getProcessKey() {
-		return processKey;
-	}
-
-	public void setProcessKey(String processKey) {
-		this.processKey = processKey;
-	}
 
 	public String getTaskId() {
 		return taskId;

@@ -56,11 +56,9 @@ public class FormPageController {
 		
 		ModelAndView view = new ModelAndView();
 		
-		Map<String, Object> viewModel = new HashMap<String, Object>();
-		
 		Map<String, Object> dataModel = new HashMap<String, Object>();
 		
-		String basePath = request.getSession().getServletContext().getRealPath("/");
+		Map<String, Object> viewModel = new HashMap<String, Object>();
 		
 		String bizId = request.getParameter("bizId");
 		String pageId = request.getParameter("pageId");
@@ -68,38 +66,67 @@ public class FormPageController {
 		String taskId = request.getParameter("taskId");
 		String workItemId = request.getParameter("workItemId");
 		
+		String basePath = request.getSession().getServletContext().getRealPath("/");
+		
 		FormPage formPage = formPageAccess.getFormPage(pageId);
 		
+		Map<String, Map<String, String>> fieldAttr = formPageAccess.listFieldAttr(pageId);
+		
+		// 模板模型  formPage对象
 		viewModel.put("page", formPage);
+		// 模板模型 formPage对象中字段属性
+		viewModel.put("fieldAttr", fieldAttr);
 		
 		makeJsp(pageType, viewModel, formPage.getModuleName(), formPage.getName(), basePath);
-			
-		Map<String, Map<String, String>> fieldAttr = formPageAccess.listFieldAttr(pageId);
 		
 		if(FormPage.PAGE_TYPE_DETAILS.equals(pageType) || FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
 			
 			dataModel = formDataAccess.get(formPage, bizId);
 		}
 		
-		if(taskId != null && taskId.length() != 0) {
-			
-			Set<String> outcomes = formPageService.findOutcomeNameListByTaskId(taskId);
-			
-			view.addObject("outcomes", outcomes);
-			view.addObject("workItemId", workItemId);
-		}
-			
+		Map<String, Object> workflowParam = new HashMap<String, Object>();
+		
 		for(PageFieldForm field : formPage.getFormFields()) {
 			
 			if(Initializable.class.isInstance(field.getObjType())) {
 				
 				dataModel.put(field.getName() + "_init", ((Initializable) field.getObjType()).init(formPage.getName()));
 			}
+			else if(field.getForWorkflow() != null) {
+				
+				workflowParam.put(field.getForWorkflow(), field.getObjType().getValue(dataModel.get(field.getName())));
+			}
 		}
 		
+		Map<String,Object> workflow = new HashMap<String, Object>();
+		
+		if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
+			
+			String pid = formPageService.startProcess(formPage.getId());
+			
+			if(pid != null) {
+				
+				workflow.put("pid", pid);
+				
+				taskId = formPageService.getTaskIdByPid(pid).get(0);
+			}
+		}
+		
+		if(taskId != null && taskId.length() != 0) {
+			
+			Set<String> outcomes = formPageService.findOutcomeNameListByTaskId(taskId, workflowParam);
+			
+			workflow.put("taskId", taskId);
+			
+			view.addObject("outcomes", outcomes);
+		}
+		
+		workflow.put("workItemId", workItemId);
+		
 		view.addObject("dataModel", dataModel);
-		view.addObject("fieldAttr", fieldAttr); 
-		view.addObject("workflow", Collections.singletonMap("taskId", taskId)); 
+		view.addObject("fieldAttr", fieldAttr);
+		view.addObject("workflow", workflow);
+		
 		view.setViewName(formPage.getModuleName() + "/" + formPage.getName() + "_" + pageType);
 		
 		return view;
@@ -121,23 +148,12 @@ public class FormPageController {
 		
 		Handle handleInfo = getHandleInfo(jsonObj);
 		
-		if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
+		if(FormPage.PAGE_TYPE_CREATE.equals(pageType) || FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
 			
 			for(PageFieldForm field : formPage.getFormFields()) {
 				
 				formData.put(field.getName(), field.getObjType().getValue(pageData.get(field.getName())));
 			}
-			
-			formPageService.createAndStartProcess(formPage, handleInfo, formData);
-		}
-		else if(FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
-			
-			for(PageFieldForm field : formPage.getFormFields()) {
-				
-				formData.put(field.getName(), field.getObjType().getValue(pageData.get(field.getName())));
-			}
-			
-			formPageService.saveAndHandle(formPage, handleInfo, formData);
 		}
 		else {
 			
@@ -148,10 +164,9 @@ public class FormPageController {
 					formData.put(field.getName(), field.getObjType().getValue(pageData.get(field.getName())));
 				}
 			}
-			
-
-			formPageService.handle(formPage, handleInfo, formData);
 		}
+		
+		formPageService.saveAndHandle(formPage, pageType, handleInfo, formData);
 		
 		return Collections.<String, Object>singletonMap("status", 1);
 	}
@@ -260,8 +275,6 @@ public class FormPageController {
 		Handle handleInfo = new Handle();
 		
 		Map<String, Object> workflow = jsonObj.get("workflow");
-		
-		handleInfo.setProcessKey((String) workflow.get("processKey"));
 		
 		handleInfo.setTaskId((String) workflow.get("taskId"));
 		

@@ -38,6 +38,9 @@
 		</table>
 		</form>
 		<div id="processbar">
+			<div id="processDiagram" style="display:none;">
+				<img src="${r'${contextPath}'}/workflow/getDiagram?taskId=${r'${workflow.taskId}'}">
+			</div>
 			<select id="outcome" class="easyui-combobox" style="width:200px;">
 				<c:forEach var="outcome" items="${r'${outcomes }'}">
 			    	<option value="${r'${outcome}'}">${r'${outcome}'}</option>
@@ -59,7 +62,7 @@
 			pageData["workflow"] = {
 					taskId : "${r'${workflow.taskId}'}",
 					action : type || 'forward',
-					workItemId : "${r'${workItemId}'}",
+					workItemId : "${r'${workflow.workItemId}'}",
 					variables : {
 						outcome : $("#outcome :selected").val()
 					},
