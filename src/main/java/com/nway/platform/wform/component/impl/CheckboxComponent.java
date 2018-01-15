@@ -35,7 +35,10 @@ public class CheckboxComponent implements MultiValueComponent, Initializable {
 
 		checkboxMapper.clear(pageName, bizId);
 		
-		checkboxMapper.save(pageName, bizId, compValue);
+		if(compValue != null) {
+			
+			checkboxMapper.save(pageName, bizId, compValue);
+		}
 	}
 
 	@Override
