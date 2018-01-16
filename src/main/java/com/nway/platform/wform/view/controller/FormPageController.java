@@ -53,7 +53,7 @@ public class FormPageController {
 	
 	@RequestMapping("toUI")
 	public ModelAndView toUI(HttpServletRequest request, HttpServletResponse reaponse) throws Exception {
-		
+
 		ModelAndView view = new ModelAndView();
 		
 		Map<String, Object> dataModel = new HashMap<String, Object>();
@@ -90,7 +90,7 @@ public class FormPageController {
 			
 			if(Initializable.class.isInstance(field.getObjType())) {
 				
-				dataModel.put(field.getName() + "_init", ((Initializable) field.getObjType()).init(formPage.getName()));
+				dataModel.put(field.getName() + "_init", ((Initializable) field.getObjType()).init(formPage.getName(), field.getName()));
 			}
 			else if(field.getForWorkflow() != null) {
 				
@@ -104,7 +104,7 @@ public class FormPageController {
 			
 			String pid = formPageService.startProcess(formPage.getId());
 			
-			if(pid != null) {
+			if(pid.length() != 0) {
 				
 				workflow.put("pid", pid);
 				

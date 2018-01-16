@@ -28,7 +28,6 @@
 				</#if>
 				<td id="${field.name }_view" colspan="${field.colSpan!1 }">
 					<jsp:include page="/WEB-INF/wform/component/${field.type }/${field.type }_edit.jsp">
-						<jsp:param name="pageId" value="${page.id}"/>
 						<jsp:param name="fieldName" value="${field.name}"/>
 					</jsp:include>
 				</td>

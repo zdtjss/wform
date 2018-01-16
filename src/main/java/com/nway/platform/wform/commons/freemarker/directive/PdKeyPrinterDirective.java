@@ -23,7 +23,12 @@ public class PdKeyPrinterDirective implements TemplateDirectiveModel {
 		
 		WorkFlowDaoMapper workFlowDao = SpringContextUtil.getBean(WorkFlowDaoMapper.class);
 		
-		env.getOut().write(workFlowDao.getPdKey(pageId.getAsString()));
+		String pdKey = workFlowDao.getPdKey(pageId.getAsString());
+		
+		if(pdKey != null) {
+			
+			env.getOut().write(pdKey);
+		}
 	}
 
 }

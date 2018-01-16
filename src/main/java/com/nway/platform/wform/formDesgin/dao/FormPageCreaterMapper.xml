@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nway.platform.wform.auto.formPageCreater">
+	<insert id="save">
+		INSERT INTO T_FORM_PAGE (PAGE_ID,PAGE_NAME,PAGE_TITLE,PAGE_TYPE,IS_MANUAL,TABLE_NAME,SUMMARY,MODULE_ID,LAST_UPDATE_DATE,CREATE_TIME,STATUS) 
+			VALUES (#{PAGE_ID},#{PAGE_NAME},#{PAGE_TITLE},#{PAGE_TYPE},#{IS_MANUAL},#{TABLE_NAME},#{SUMMARY},#{MODULE_ID}, NULL, now(), 1)
+	</insert>
+	<select id="details" resultMap="detailsMap">
+		select PAGE_ID,PAGE_NAME,PAGE_TITLE,PAGE_TYPE,IS_MANUAL,TABLE_NAME,SUMMARY,MODULE_ID,LAST_UPDATE_DATE,CREATE_TIME from T_FORM_PAGE where PAGE_ID = #{PAGE_ID}
+	</select>
+	<update id="update">
+		update t_first_group set title = #{title}, note = #{note}, content=#{content} where pk_Id = #{pk_id}
+	</update>
+	<select id="list" resultMap="detailsMap">
+		select PAGE_ID,PAGE_NAME,PAGE_TITLE,PAGE_TYPE,IS_MANUAL,TABLE_NAME,SUMMARY,MODULE_ID,LAST_UPDATE_DATE,CREATE_TIME from T_FORM_PAGE
+	</select>
+	<resultMap type="map" id="detailsMap">
+		<result column="PAGE_ID" property="PAGE_ID"/>
+		<result column="PAGE_NAME" property="PAGE_NAME"/>
+		<result column="PAGE_TITLE" property="PAGE_TITLE"/>
+		<result column="PAGE_TYPE" property="PAGE_TYPE"/>
+		<result column="IS_MANUAL" property="IS_MANUAL"/>
+		<result column="SUMMARY" property="SUMMARY"/>
+		<result column="MODULE_ID" property="MODULE_ID"/>
+		<result column="LAST_UPDATE_DATE" property="LAST_UPDATE_DATE"/>
+		<result column="CREATE_TIME" property="CREATE_TIME"/>
+	</resultMap>
+</mapper>

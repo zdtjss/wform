@@ -29,6 +29,9 @@ public class DatabaseInitListener implements ApplicationListener<ContextRefreshe
 		
 		try {
 			connection = event.getApplicationContext().getBean(DataSource.class).getConnection();
+			
+			connection.setAutoCommit(false);
+			
 			String ddlStatements = IOUtils.toString(
 					DatabaseInitListener.class.getResourceAsStream("/sql/wform-hsqldb.sql"), "UTF8");
 
@@ -72,8 +75,9 @@ public class DatabaseInitListener implements ApplicationListener<ContextRefreshe
 		finally {
 
 			if (connection != null) {
-
+				
 				try {
+					connection.commit();
 					connection.close();
 				} catch (SQLException e) {
 					log.warn("关于连接失败");

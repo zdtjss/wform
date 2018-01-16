@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 
 import com.nway.platform.wform.component.Initializable;
 import com.nway.platform.wform.component.MultiValueComponent;
-import com.nway.platform.wform.component.impl.dao.CheckboxMapper;
+import com.nway.platform.wform.component.impl.dao.MultiSelectMapper;
 
-@Component("checkbox")
-public class CheckboxComponent implements MultiValueComponent, Initializable {
+@Component("multiSelect")
+public class MultiSelectComponent implements MultiValueComponent, Initializable {
 
 	@Autowired
-	private CheckboxMapper checkboxMapper;
+	private MultiSelectMapper multiSelectMapper;
 	
 	@Override
 	public Object getValue(Object value) {
@@ -33,11 +33,11 @@ public class CheckboxComponent implements MultiValueComponent, Initializable {
 	@Override
 	public void save(String pageName, String bizId, Object compValue) {
 
-		checkboxMapper.clear(pageName, bizId);
+		multiSelectMapper.clear(pageName, bizId);
 		
 		if(compValue != null) {
 			
-			checkboxMapper.save(pageName, bizId, compValue);
+			multiSelectMapper.save(pageName, bizId, compValue);
 		}
 	}
 
@@ -50,7 +50,7 @@ public class CheckboxComponent implements MultiValueComponent, Initializable {
 	@Override
 	public void remove(String pageName, String bizId) {
 
-		checkboxMapper.clear(pageName, bizId);
+		multiSelectMapper.clear(pageName, bizId);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class CheckboxComponent implements MultiValueComponent, Initializable {
 		
 		List<String> retVal = new ArrayList<String>();
 		
-		List<Map<String, String>> values = checkboxMapper.getValues(pageName, bizId);
+		List<Map<String, String>> values = multiSelectMapper.getValues(pageName, bizId);
 		
 		for(Map<String, String> value : values) {
 			
@@ -69,7 +69,7 @@ public class CheckboxComponent implements MultiValueComponent, Initializable {
 	}
 
 	@Override
-	public Object init(String key) {
+	public Object init(String pageName, String fieldName) {
 		
 		Map<String, String> map = new HashMap<String, String>();
 		

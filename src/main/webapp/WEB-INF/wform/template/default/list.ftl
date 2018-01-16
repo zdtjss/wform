@@ -55,7 +55,7 @@
 				        	<#assign key=field.name>
 				        	{field:'${field.name }',hidden:true}${field?has_next?then(',','')}
 				        </#if>
-				        <#if field.type != 'key' >
+				        <#if field.type != 'key' && field.condition == false>
 				        	{field:'${field.name }',title:'${field.display }',width:100<#if field.formatter??>,formatter:${field.formatter}</#if>}${field?has_next?then(',','')}
 				        </#if>
 				    </#list>
@@ -64,7 +64,7 @@
 			
 		function showLink(value, row, index) {
 			
-			return "<a href=\"${r'${contextPath}'}/form/toUI?pageType=details&pageId=${page.id}&pkId="+row.${key}+"\">"+value+"</a>";
+			return "<a href=\"${r'${contextPath}'}/form/toUI?pageType=details&pageId=${page.id}&bizId="+row.${key}+"\">"+value+"</a>";
 		}
 		
 		function query() {

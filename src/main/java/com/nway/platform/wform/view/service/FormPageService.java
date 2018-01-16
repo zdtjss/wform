@@ -47,7 +47,7 @@ public class FormPageService {
 	
 	public void saveAndHandle(FormPage page, String pageType, Handle handleInfo, Map<String, Object> formData) {
 		
-		if (handleInfo.getTaskId() != null) {
+		if (handleInfo.getTaskId().length() != 0) {
 			
 			String pid = workFlowService.getTask(handleInfo.getTaskId()).getProcessInstanceId();
 			

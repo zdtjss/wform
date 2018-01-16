@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
-public interface CheckboxMapper {
+public interface MultiSelectMapper {
 
 	List<Map<String, String>> getValues(@Param("pageName") String pageName, @Param("bizId") String bizId);
 
