@@ -28,7 +28,6 @@
 				</#if>
 				<td id="${field.name }_view" colspan="${field.colSpan!1 }">
 					<jsp:include page="/WEB-INF/wform/component/${field.type }/${field.type }_edit.jsp">
-						<jsp:param name="pageId" value="${page.id}"/>
 						<jsp:param name="fieldName" value="${field.name}"/>
 					</jsp:include>
 				</td>
@@ -38,15 +37,17 @@
 		</table>
 		</form>
 		<div id="processbar">
-			<div id="processDiagram" style="display:none;">
-				<img src="${r'${contextPath}'}/workflow/getDiagram?taskId=${r'${workflow.taskId}'}">
-			</div>
-			<select id="outcome" class="easyui-combobox" style="width:200px;">
-				<c:forEach var="outcome" items="${r'${outcomes }'}">
-			    	<option value="${r'${outcome}'}">${r'${outcome}'}</option>
-			    </c:forEach>
-			</select>
-			<a href="javascript:void(0)" onclick="submit()">保存</a>
+			<@pdKey pageId="${page.id}">
+				<div id="processDiagram" style="display:none;">
+					<img src="${r'${contextPath}'}/workflow/getDiagram?taskId=${r'${workflow.taskId}'}">
+				</div>
+				<select id="outcome" class="easyui-combobox" style="width:200px;">
+					<c:forEach var="outcome" items="${r'${outcomes }'}">
+				    	<option value="${r'${outcome}'}">${r'${outcome}'}</option>
+				    </c:forEach>
+				</select>
+			</@pdKey>
+			<a href="javascript:void(0)" onclick="submit()" class="easyui-linkbutton">保存</a>
 		</div>
 	<script type="text/javascript">
 		function submit(type) {
