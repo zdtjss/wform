@@ -16,8 +16,7 @@ public class Field {
 	 */
 	private String display;
 
-	/** 所属模块  **/
-	private String moduleId;
+	private String pageId;
 
 	/**
 	 * 组件类别
@@ -53,12 +52,12 @@ public class Field {
 		this.name = name;
 	}
 
-	public String getModuleId() {
-		return moduleId;
+	public String getPageId() {
+		return pageId;
 	}
 
-	public void setModuleId(String moduleId) {
-		this.moduleId = moduleId;
+	public void setPageId(String pageId) {
+		this.pageId = pageId;
 	}
 
 	public String getType() {

@@ -83,4 +83,9 @@ public class FormPageAccess {
 		
 		return retVal;
 	}
+	
+	public void saveFields(List<Map<String, String>> fields) {
+		
+		
+	}
 }

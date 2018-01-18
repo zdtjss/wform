@@ -127,4 +127,10 @@
 		<result column="module_id" property="modulId"/>
 	</resultMap>
 	
+	<insert id="saveFields">
+		insert into T_FORM_FIELD (FIELD_ID,PAGE_ID,NAME,DISPLAY,TYPE,SIZE,CREATE_TIME,STATUS) values 
+		<foreach item="item" collection="fields" separator=",">
+	        (#{item.fieldId},#{item.pageId},#{item.name},#{item.display},#{item.type}，#{item.size},now(),1)
+	   </foreach>
+	</insert>
 </mapper>

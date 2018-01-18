@@ -1,1 +1,7 @@
-function init_select_file(b,a){console.log(b)}function init_select_js(b,a){console.log(a)}function setValue_label(b,a){};function init_select_file(b,a){console.log("\u9759\u6001\u6570\u636e\u6587\u4ef6");for(var c='<select id="'+a+'" name="'+a+'">',d=0;d<b.length;d++)c+='<option value="'+b[d].value+'">'+b[d].text+"</option>";c+="</select>";$("#l_"+a).html(c)}function init_select_js(b,a){console.log(a)}function setValue_select(b,a){$("#"+a+" option").each(function(){for(var c=0;c<b[a].length;c++)if(this.value==b[a][c]){this.selected="selected";break}})};function init_text_js(b,a){console.log(b[a]+"  \u9875\u9762js");$("#l_"+a).html('<input id="'+a+'" name="'+a+'" type="text">')}function init_text_file(b,a){}function setValue_text(b,a){$("#"+a).val(b[a])};
+components = [
+	{name:"text",desc:"文本"},
+	{name:"textarea",desc:"大文本"},
+	{name:"switch",desc:"开关"},
+	{name:"singleSelect",desc:"单选"},
+	{name:"multiSelect",desc:"多选"}
+];

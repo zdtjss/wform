@@ -10,4 +10,6 @@ public interface FormPageMapper {
 	FormPage getFormPage(String id);
 
 	List<Map<String, String>> listFieldAttr(String pageId);
+	
+	void saveFields(List<Map<String, String>> fields);
 }
