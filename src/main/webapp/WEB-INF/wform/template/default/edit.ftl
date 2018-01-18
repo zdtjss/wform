@@ -5,6 +5,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <title>${page.title!"" }</title>
+<style type="text/css">
+ th {
+    font-weight: normal;
+ }
+</style>
 </head>
 <body>
 	<input id="pageId" name="pageId" type="hidden" value="${page.id}">
@@ -37,16 +42,21 @@
 		</table>
 		</form>
 		<div id="processbar">
-			<div id="processDiagram" style="display:none;">
-				<img src="${r'${contextPath}'}/workflow/getDiagram?taskId=${r'${workflow.taskId}'}">
-			</div>
-			<select id="outcome" class="easyui-combobox" style="width:200px;">
-				<c:forEach var="outcome" items="${r'${outcomes }'}">
-			    	<option value="${r'${outcome}'}">${r'${outcome}'}</option>
-			    </c:forEach>
-			</select>
-			<a href="javascript:void(0)" onclick="submit()">保存</a>
-			<a href="javascript:void(0)" onclick="submit('back')">退回</a>
+			<c:if test="${r'${not empty workflow.taskId}'}">
+				<div id="processDiagram" style="display:none;">
+					<img src="${r'${contextPath}'}/workflow/getDiagram?taskId=${r'${workflow.taskId}'}">
+				</div>
+				<select id="outcome" class="easyui-combobox" style="width:200px;">
+					<c:forEach var="outcome" items="${r'${outcomes }'}">
+				    	<option value="${r'${outcome}'}">${r'${outcome}'}</option>
+				    </c:forEach>
+				</select>
+				<a href="javascript:void(0)" onclick="submit()" class="easyui-linkbutton">办理</a>
+				<a href="javascript:void(0)" onclick="submit('back')" class="easyui-linkbutton">退回</a>
+			</c:if>
+			<c:if test="${r'${empty workflow.taskId}'}">
+				<a href="javascript:void(0)" onclick="submit()" class="easyui-linkbutton">保存</a>
+			</c:if>
 		</div>
 	<script type="text/javascript">
 		function submit(type) {

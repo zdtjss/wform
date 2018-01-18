@@ -5,6 +5,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <title>${page.title!"" }</title>
+<style type="text/css">
+ th {
+    font-weight: normal;
+ }
+</style>
 </head>
 <body>
 	<input id="pageId" name="pageId" type="hidden" value="${page.id}">
@@ -38,6 +43,7 @@
 		</form>
 		<div id="processbar">
 			<@pdKey pageId="${page.id}">
+				<#assign hasProcess=true>
 				<div id="processDiagram" style="display:none;">
 					<img src="${r'${contextPath}'}/workflow/getDiagram?taskId=${r'${workflow.taskId}'}">
 				</div>
@@ -47,7 +53,9 @@
 				    </c:forEach>
 				</select>
 			</@pdKey>
-			<a href="javascript:void(0)" onclick="submit()" class="easyui-linkbutton">保存</a>
+			<#if hasProcess!false == false> 
+				<a href="javascript:void(0)" onclick="submit()" class="easyui-linkbutton">保存</a>
+			</#if>
 		</div>
 	<script type="text/javascript">
 		function submit(type) {

@@ -45,7 +45,7 @@ public class FormDataAccess {
 		formPageDataHandler.handleParam(HandlerType.DATA_CREATE, page, formData);
 
 		int effectCount = sqlSessionTemplate.insert(
-				TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_CREATE), formData);
+				TemporaryStatementRegistry.getLastestName(page.getModuleName(), page.getName(), ACCESS_TYPE_CREATE), formData);
 		
 		if (effectCount > 0) {
 			
@@ -74,7 +74,7 @@ public class FormDataAccess {
 
 		pageDataHandler.handleParam(HandlerType.DATA_MODIFY, page, formData);
 		
-		int effectCount = sqlSessionTemplate.update(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_UPDATE), formData);
+		int effectCount = sqlSessionTemplate.update(TemporaryStatementRegistry.getLastestName(page.getModuleName(), page.getName(), ACCESS_TYPE_UPDATE), formData);
 		
 		if (effectCount > 0) {
 			
@@ -110,7 +110,7 @@ public class FormDataAccess {
 		pageDataHandler.handleParam(HandlerType.DATA_QUERY, page, param);
 		
 		pageData = sqlSessionTemplate
-				.selectOne(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_DETAILS), dataId);
+				.selectOne(TemporaryStatementRegistry.getLastestName(page.getModuleName(), page.getName(), ACCESS_TYPE_DETAILS), dataId);
 		
 		for(PageFieldForm field : page.getFormFields()) {
 			
@@ -145,7 +145,7 @@ public class FormDataAccess {
 		pageDataHandler.handleParam(HandlerType.DATA_LIST, page, param);
 
 		pageData = sqlSessionTemplate
-				.selectList(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_LIST), param);
+				.selectList(TemporaryStatementRegistry.getLastestName(page.getModuleName(), page.getName(), ACCESS_TYPE_LIST), param);
 
 		for (PageFieldForm field : page.getFormFields()) {
 			
@@ -176,7 +176,7 @@ public class FormDataAccess {
 		pageDataHandler.handleParam(HandlerType.DATA_REMOVE, page, param);
 		
 		int effectCount = sqlSessionTemplate
-				.delete(TemporaryStatementRegistry.getLastestName(page.getName(), ACCESS_TYPE_REMOVE), dataId);
+				.delete(TemporaryStatementRegistry.getLastestName(page.getModuleName(), page.getName(), ACCESS_TYPE_REMOVE), dataId);
 		
 		for(PageFieldForm field : page.getFormFields()) {
 

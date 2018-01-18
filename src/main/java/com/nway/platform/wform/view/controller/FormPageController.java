@@ -25,6 +25,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.nway.platform.wform.access.FormDataAccess;
 import com.nway.platform.wform.component.Initializable;
+import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.design.entity.FormPage;
 import com.nway.platform.wform.design.entity.PageFieldForm;
 import com.nway.platform.wform.design.entity.PageFieldList;
@@ -90,12 +91,19 @@ public class FormPageController {
 			
 			if(Initializable.class.isInstance(field.getObjType())) {
 				
-				dataModel.put(field.getName() + "_init", ((Initializable) field.getObjType()).init(formPage.getName(), field.getName()));
+				dataModel.put(field.getName() + "_init", ((Initializable) field.getObjType()).init(formPage.getId(), field.getName()));
 			}
-			else if(field.getForWorkflow() != null) {
+			
+			if(field.isMultiValue()) {
+				
+				dataModel.put(field.getName(), ((MultiValueComponent) field.getObjType()).getAssociatedValue(formPage.getName(), bizId));
+			}
+			
+			if(field.getForWorkflow() != null) {
 				
 				workflowParam.put(field.getForWorkflow(), field.getObjType().getValue(dataModel.get(field.getName())));
 			}
+			
 		}
 		
 		Map<String,Object> workflow = new HashMap<String, Object>();

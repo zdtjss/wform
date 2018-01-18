@@ -8,8 +8,6 @@ public class Module
     
     private String title;
     
-    private String tableName;
-    
     private String summary;
     
     public String getId()
@@ -40,16 +38,6 @@ public class Module
     public void setTitle(String title)
     {
         this.title = title;
-    }
-    
-    public String getTableName()
-    {
-        return tableName;
-    }
-    
-    public void setTableName(String tableName)
-    {
-        this.tableName = tableName;
     }
 
 	public String getSummary() {

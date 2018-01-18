@@ -3,4 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nway.platform.wform.access.dao.ModuleMapper">
 
+	<select id="list" resultType="com.nway.platform.wform.design.entity.Module">
+		select * from T_FORM_MODULE
+	</select>
 </mapper>

@@ -5,6 +5,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
 <jsp:include page="/WEB-INF/jsp/include.jsp"/>
 <title>${page.title!"" }</title>
+<style type="text/css">
+ th {
+    font-weight: normal;
+ }
+</style>
 </head>
 <body>
 	<form id="${page.name }_condition" class="page_group">

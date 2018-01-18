@@ -5,6 +5,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <title>${page.title!"" }</title>
+<style type="text/css">
+ th {
+    font-weight: normal;
+ }
+</style>
 </head>
 <body>
 	<input id="pageId" name="pageId" type="hidden" value="${page.id}">
@@ -46,9 +51,9 @@
 			    	<option value="${r'${outcome}'}">${r'${outcome}'}</option>
 			    </c:forEach>
 			</select>
-			<a href="javascript:void(0)" onclick="showProcessDiagram()">流程图</a>
-			<a href="javascript:void(0)" onclick="submit()">办理</a>
-			<a href="javascript:void(0)" onclick="submit('back')">退回</a>
+			<a href="javascript:void(0)" onclick="showProcessDiagram()" class="easyui-linkbutton">流程图</a>
+			<a href="javascript:void(0)" onclick="submit()" class="easyui-linkbutton">办理</a>
+			<a href="javascript:void(0)" onclick="submit('back')" class="easyui-linkbutton">退回</a>
 		</c:if>
 	</div>
 	<script type="text/javascript">

@@ -5,17 +5,11 @@
 
 <select id="${param.fieldName }" name="${param.fieldName }" class="easyui-combobox">
 	<c:forEach var="map" items="${dataModel[fieldName] }">
-		<option value="${map.key }">${map.value }</option>
+		<option value="${map.value }">${map.key }</option>
 	</c:forEach>
-<select id="${param.fieldName }" name="${param.fieldName }">
+</select>
 
 <script type="text/javascript">
-	var values = [];
-	<c:forEach var="stored" items="${dataModel[param.fieldName] }" varStatus="status">
-		values["${status.index}"] = "${stored}";
-	</c:forEach>
-	$.each(values, function() {
 	    
-	    $("#${param.fieldName } [value='"+this+"']").attr("selected", true);
-	});
+    $("#${param.fieldName } [value='${dataModel[param.fieldName] }']").attr("selected", true);
 </script>

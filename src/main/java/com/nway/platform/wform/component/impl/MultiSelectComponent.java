@@ -69,7 +69,7 @@ public class MultiSelectComponent implements MultiValueComponent, Initializable 
 	}
 
 	@Override
-	public Object init(String pageName, String fieldName) {
+	public Object init(String pageId, String fieldName) {
 		
 		Map<String, String> map = new HashMap<String, String>();
 		
