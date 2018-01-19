@@ -6,9 +6,21 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <title>${page.title!"" }</title>
 <style type="text/css">
+ table {
+	border-collapse: collapse;
+ }
+
+ table, td, th {
+	border: 1px solid black;
+ }
+ 
  th {
     font-weight: normal;
  }
+ .easyui-linkbutton {
+	padding: 3px 10px;
+	margin-top: 5px;
+}
 </style>
 </head>
 <body>

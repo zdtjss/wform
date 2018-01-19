@@ -16,6 +16,11 @@ th {
 	height: 22px;
 	line-height: 22px;
 }
+
+.easyui-linkbutton {
+	padding: 3px 10px;
+	margin-top: 5px;
+}
 </style>
 <script type="text/javascript" src="${contextPath }/js/components.js"></script>
 </head>
@@ -134,7 +139,7 @@ th {
 			</tr>
 			<tr>
 				<td colspan="8" align="right">
-					<a href="javascript:void(0)" onclick="submit()" class="easyui-linkbutton" style="padding: 3px 10px;margin-top: 5px;">保存</a>
+					<a href="javascript:void(0)" onclick="submit()" class="easyui-linkbutton">保存</a>
 				</td>
 			</tr>
 		</table>
@@ -144,7 +149,7 @@ th {
 	$.when($.ready).then(function() {
 		
 		$("[name='type']").each(function(index) {
-			if(index > 0) {
+			if(this.type != 'hidden') {
 				$(this).combobox({
 				    data:components,
 				    valueField:'name',
@@ -160,17 +165,14 @@ th {
 		
 		$("#fields tr").each(function(index) {
 			
-			var field = {};
-
-			$(this).find(".fieldAttr").each(function() {
-				
-				if(this.name) {
-					
-					field[this.name] = this.value;
-				}
-			});
+			var field = {
+		        name : $(this).find("[name='name']").val(),
+		        display : $(this).find("[name='display']").val(),
+		        type : $(this).find("[name='type']").val(),
+		        size : $(this).find("[name='size']").val()
+			};
 			
-			if(JSON.stringify(field) != "{}") {
+			if(field.name && field.display && field.type) {
 				
 				field['pageId'] = "${pageId}";
 				

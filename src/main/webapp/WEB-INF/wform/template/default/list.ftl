@@ -9,6 +9,10 @@
  th {
     font-weight: normal;
  }
+ .easyui-linkbutton {
+	padding: 3px 10px;
+	margin-top: 5px;
+}
 </style>
 </head>
 <body>

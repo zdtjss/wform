@@ -6,13 +6,27 @@
 <%@ include file="/WEB-INF/jsp/include.jsp" %>
 <title>${page.title!"" }</title>
 <style type="text/css">
+ table {
+	border-collapse: collapse;
+ }
+
+ table, td, th {
+	border: 1px solid black;
+ }
+ 
  th {
     font-weight: normal;
  }
+ 
+ .easyui-linkbutton {
+	padding: 3px 10px;
+	margin-top: 5px;
+}
 </style>
 </head>
 <body>
 	<input id="pageId" name="pageId" type="hidden" value="${page.id}">
+	<div>
 	<form id="${page.name }" class="page">
 		<table>
 			<#assign rowNum = 1>
@@ -57,6 +71,7 @@
 				<a href="javascript:void(0)" onclick="submit()" class="easyui-linkbutton">保存</a>
 			</#if>
 		</div>
+	<div>
 	<script type="text/javascript">
 		function submit(type) {
 		

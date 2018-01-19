@@ -4,6 +4,7 @@
 	request.setAttribute("contextPath", request.getContextPath());
 %>
 <link rel="stylesheet" type="text/css" href="${contextPath }/js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="${contextPath }/js/easyui/themes/icon.css">
 <script src="${contextPath }/js/easyui/jquery.min.js"></script>
 <script src="${contextPath }/js/easyui/jquery.easyui.min.js"></script>
 <script src="${contextPath }/js/easyui/locale/easyui-lang-zh_CN.js"></script>

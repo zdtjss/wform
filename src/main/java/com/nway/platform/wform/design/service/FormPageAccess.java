@@ -3,6 +3,7 @@ package com.nway.platform.wform.design.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import com.nway.platform.wform.access.dao.FormPageMapper;
 import com.nway.platform.wform.component.ComponentRegister;
 import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.component.impl.KeyComponent;
+import com.nway.platform.wform.design.entity.Field;
 import com.nway.platform.wform.design.entity.FormPage;
 import com.nway.platform.wform.design.entity.PageFieldForm;
 import com.nway.platform.wform.design.entity.PageFieldList;
@@ -85,7 +87,17 @@ public class FormPageAccess {
 	}
 	
 	public void saveFields(List<Map<String, String>> fields) {
+
+		for (Map<String, String> field : fields) {
+
+			field.put("fieldId", UUID.randomUUID().toString());
+			
+			formPageMapper.saveField(field);
+		}
+	}
+	
+	public List<Field> listFields(String pageId) {
 		
-		
+		return formPageMapper.listFields(pageId);
 	}
 }

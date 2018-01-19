@@ -127,10 +127,21 @@
 		<result column="module_id" property="modulId"/>
 	</resultMap>
 	
-	<insert id="saveFields">
-		insert into T_FORM_FIELD (FIELD_ID,PAGE_ID,NAME,DISPLAY,TYPE,SIZE,CREATE_TIME,STATUS) values 
-		<foreach item="item" collection="fields" separator=",">
-	        (#{item.fieldId},#{item.pageId},#{item.name},#{item.display},#{item.type}，#{item.size},now(),1)
-	   </foreach>
+	<insert id="saveField">
+		insert into T_FORM_FIELD (FIELD_ID,PAGE_ID,NAME,DISPLAY,TYPE,SIZE,STATUS) values
+	        (#{fieldId},#{pageId},#{name},#{display},#{type},#{size},1)
 	</insert>
+	
+	<select id="listFields" resultMap="listFieldsMap">
+		select FIELD_ID,PAGE_ID,NAME,DISPLAY,TYPE,SIZE from T_FORM_FIELD where page_id = #{pageId}
+	</select>
+	
+	<resultMap type="com.nway.platform.wform.design.entity.Field" id="listFieldsMap">
+		<result column="FIELD_ID" property="id"/>
+		<result column="PAGE_ID" property="pageId"/>
+		<result column="NAME" property="name"/>
+		<result column="DISPLAY" property="display"/>
+		<result column="TYPE" property="type"/>
+		<result column="SIZE" property="size"/>
+	</resultMap>
 </mapper>
