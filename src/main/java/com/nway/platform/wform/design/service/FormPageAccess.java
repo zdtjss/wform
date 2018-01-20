@@ -86,13 +86,21 @@ public class FormPageAccess {
 		return retVal;
 	}
 	
-	public void saveFields(List<Map<String, String>> fields) {
+	public void saveFields(List<Map<String, Map<String, String>>> fields) {
 
-		for (Map<String, String> field : fields) {
+		for (Map<String, Map<String, String>> field : fields) {
 
-			field.put("fieldId", UUID.randomUUID().toString());
+			Map<String, String> base = field.get("baseAttr");
+			Map<String, String> ext = field.get("extAttr");
+			Map<String, String> custom = field.get("customAttr");
 			
-			formPageMapper.saveField(field);
+			base.put("fieldId", UUID.randomUUID().toString());
+			ext.put("fieldId", UUID.randomUUID().toString());
+			custom.put("fieldId", UUID.randomUUID().toString());
+			
+			formPageMapper.saveFieldBase(base);
+			formPageMapper.saveFieldExt(ext);
+			formPageMapper.saveFieldCustom(custom);
 		}
 	}
 	

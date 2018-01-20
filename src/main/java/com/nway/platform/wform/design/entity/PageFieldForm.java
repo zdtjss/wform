@@ -2,12 +2,6 @@ package com.nway.platform.wform.design.entity;
 
 public class PageFieldForm extends Field {
 	
-	private String id;
-	
-	private String fieldId;
-	
-	private String pageId;
-
 	/** 行号 **/
 	private int rowNum;
 
@@ -24,6 +18,8 @@ public class PageFieldForm extends Field {
 	
 	// 可作为流程变量，值为流程变量中使用的名字
 	private String forWorkflow;
+	
+	private int size;
 
 	// VO
 	private String updateFieldNames;
@@ -32,30 +28,6 @@ public class PageFieldForm extends Field {
 	
 	private boolean isMultiValue;
 	
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getFieldId() {
-		return fieldId;
-	}
-
-	public void setFieldId(String fieldId) {
-		this.fieldId = fieldId;
-	}
-
-	public String getPageId() {
-		return pageId;
-	}
-
-	public void setPageId(String pageId) {
-		this.pageId = pageId;
-	}
-
 	public int getRowNum() {
 		return rowNum;
 	}
@@ -126,6 +98,14 @@ public class PageFieldForm extends Field {
 
 	public void setViewFieldNames(String viewFieldNames) {
 		this.viewFieldNames = viewFieldNames;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 	
 }

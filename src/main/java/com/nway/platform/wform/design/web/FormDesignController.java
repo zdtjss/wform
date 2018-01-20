@@ -30,7 +30,7 @@ public class FormDesignController {
 	}
 
 	@RequestMapping("saveFields")
-	public void saveFields(@RequestBody List<Map<String, String>> fields) {
+	public void saveFields(@RequestBody List<Map<String, Map<String, String>>> fields) {
 
 		System.out.println(fields);
 		

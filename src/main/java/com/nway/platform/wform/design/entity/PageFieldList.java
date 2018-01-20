@@ -2,12 +2,6 @@ package com.nway.platform.wform.design.entity;
 
 public class PageFieldList extends Field {
 	
-	private String id;
-	
-	private String fieldId;
-	
-	private String pageId;
-
 	private int rowNum;
 
 	private int colNum;
@@ -20,30 +14,6 @@ public class PageFieldList extends Field {
 	
 	private String formatter;
 	
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getFieldId() {
-		return fieldId;
-	}
-
-	public void setFieldId(String fieldId) {
-		this.fieldId = fieldId;
-	}
-
-	public String getPageId() {
-		return pageId;
-	}
-
-	public void setPageId(String pageId) {
-		this.pageId = pageId;
-	}
-
 	public int getRowNum() {
 		return rowNum;
 	}

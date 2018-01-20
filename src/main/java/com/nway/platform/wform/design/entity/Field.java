@@ -23,8 +23,6 @@ public class Field {
 	 */
 	private String type;
 	
-	private int size;
-	
 	// VO
 	private BaseComponent objType;
 
@@ -66,14 +64,6 @@ public class Field {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-	public void setSize(int size) {
-		this.size = size;
 	}
 
 	public BaseComponent getObjType() {

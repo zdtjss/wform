@@ -12,7 +12,11 @@ public interface FormPageMapper {
 
 	List<Map<String, String>> listFieldAttr(String pageId);
 	
-	void saveField(Map<String, String> field);
+	void saveFieldBase(Map<String, String> field);
+	
+	void saveFieldExt(Map<String, String> field);
+	
+	void saveFieldCustom(Map<String, String> field);
 	
 	List<Field> listFields(String pageId);
 }

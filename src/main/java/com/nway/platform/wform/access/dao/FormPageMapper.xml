@@ -36,11 +36,11 @@
 	
 	<select id="queryPageFormFields" resultMap="queryPageFormFieldsMap">
 		select 
-			  A.FIELD_ID,
+			  B.ID,
 			  B.NAME,
 			  B.DISPLAY,
 			  B.TYPE,
-			  B.SIZE,
+			  A.SIZE,
 			  A.ROW_NUM,
 			  A.COLUMN_NUM,
 			  A.COLUMN_SPAN,
@@ -54,7 +54,7 @@
 	</select>
 	
 	<resultMap type="com.nway.platform.wform.design.entity.PageFieldForm" id="queryPageFormFieldsMap">
-		<result column="FIELD_ID" property="fieldId"/>
+		<result column="ID" property="id"/>
 		<result column="NAME" property="name"/>
 		<result column="DISPLAY" property="display"/>
 		<result column="TYPE" property="type"/>
@@ -67,7 +67,7 @@
 	
 	<select id="queryPageListFields" resultMap="queryPageListFieldsMap">
 		select 
-			  A.FIELD_ID,
+			  B.ID,
 			  B.NAME,
 			  B.DISPLAY,
 			  B.TYPE,
@@ -84,7 +84,7 @@
 	</select>
 	
 	<resultMap type="com.nway.platform.wform.design.entity.PageFieldList" id="queryPageListFieldsMap">
-		<result column="FIELD_ID" property="fieldId"/>
+		<result column="ID" property="id"/>
 		<result column="NAME" property="name"/>
 		<result column="DISPLAY" property="display"/>
 		<result column="TYPE" property="type"/>
@@ -133,7 +133,7 @@
 	</insert>
 	
 	<select id="listFields" resultMap="listFieldsMap">
-		select FIELD_ID,PAGE_ID,NAME,DISPLAY,TYPE,SIZE from T_FORM_FIELD where page_id = #{pageId}
+		select FIELD_ID,PAGE_ID,NAME,DISPLAY,TYPE from T_FORM_FIELD where page_id = #{pageId}
 	</select>
 	
 	<resultMap type="com.nway.platform.wform.design.entity.Field" id="listFieldsMap">
@@ -142,6 +142,5 @@
 		<result column="NAME" property="name"/>
 		<result column="DISPLAY" property="display"/>
 		<result column="TYPE" property="type"/>
-		<result column="SIZE" property="size"/>
 	</resultMap>
 </mapper>
