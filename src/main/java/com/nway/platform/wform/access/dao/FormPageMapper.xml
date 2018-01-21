@@ -36,7 +36,7 @@
 	
 	<select id="queryPageFormFields" resultMap="queryPageFormFieldsMap">
 		select 
-			  B.ID,
+			  A.FIELD_ID,
 			  B.NAME,
 			  B.DISPLAY,
 			  B.TYPE,
@@ -44,7 +44,7 @@
 			  A.ROW_NUM,
 			  A.COLUMN_NUM,
 			  A.COLUMN_SPAN,
-			  A.EDITABLE,
+			  A.IS_READONLY,
 			  A.FOR_WORKITEM
 		FROM T_FORM_PAGE_FIELD_FORM A 
         LEFT JOIN
@@ -61,13 +61,13 @@
 		<result column="ROW_NUM" property="rowNum"/>
 		<result column="COLUMN_NUM" property="colNum"/>
 		<result column="COLUMN_SPAN" property="colSpan"/>
-		<result column="EDITABLE" property="editable"/>
+		<result column="IS_READONLY" property="isReadonly"/>
 		<result column="FOR_WORKITEM" property="forWorkItem"/>
 	</resultMap>
 	
 	<select id="queryPageListFields" resultMap="queryPageListFieldsMap">
 		select 
-			  B.ID,
+			  B.FIELD_ID,
 			  B.NAME,
 			  B.DISPLAY,
 			  B.TYPE,
@@ -127,9 +127,17 @@
 		<result column="module_id" property="modulId"/>
 	</resultMap>
 	
-	<insert id="saveField">
-		insert into T_FORM_FIELD (FIELD_ID,PAGE_ID,NAME,DISPLAY,TYPE,SIZE,STATUS) values
-	        (#{fieldId},#{pageId},#{name},#{display},#{type},#{size},1)
+	<insert id="saveFieldBase">
+		insert into T_FORM_FIELD (FIELD_ID,PAGE_ID,NAME,DISPLAY,TYPE) values
+	        (#{fieldId},#{pageId},#{name},#{display},#{type})
+	</insert>
+	<insert id="saveFieldExt">
+		insert into T_FORM_PAGE_FIELD_FORM (FIELD_ID,PAGE_ID,ROW_NUM,COLUMN_NUM,COLUMN_SPAN,IS_HIDDEN) values
+	        (#{fieldId},#{pageId},#{rowNum},#{colNum},#{colSpan},<if test="isHidden == null">0</if><if test="isHidden != null">#{isHidden}</if>)
+	</insert>
+	<insert id="saveFieldCustom">
+		insert into T_FORM_FIELD_ATTRIBUTE (PAGE_ID,FIELD_NAME,ATTR_NAME,ATTR_VALUE) values
+	        (#{pageId},#{fieldName},#{attrName},#{attrValue})
 	</insert>
 	
 	<select id="listFields" resultMap="listFieldsMap">

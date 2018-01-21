@@ -3,6 +3,7 @@ package com.nway.platform.wform.design.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,13 +95,33 @@ public class FormPageAccess {
 			Map<String, String> ext = field.get("extAttr");
 			Map<String, String> custom = field.get("customAttr");
 			
-			base.put("fieldId", UUID.randomUUID().toString());
-			ext.put("fieldId", UUID.randomUUID().toString());
-			custom.put("fieldId", UUID.randomUUID().toString());
+			String fieldId = UUID.randomUUID().toString();
+			
+			base.put("fieldId", fieldId);
+			ext.put("fieldId", fieldId);
 			
 			formPageMapper.saveFieldBase(base);
-			formPageMapper.saveFieldExt(ext);
-			formPageMapper.saveFieldCustom(custom);
+			
+			if (ext.size() > 0) {
+				
+				formPageMapper.saveFieldExt(ext);
+			}
+			
+			if (custom.size() > 0) {
+				
+				Map<String,String> customAttrs = new HashMap<String, String>();
+				
+				for(Entry<String, String> entry : custom.entrySet()) {
+					
+					customAttrs.put("attrName", entry.getKey());
+					customAttrs.put("attrValue", entry.getValue());
+				}
+				
+				customAttrs.put("pageId", base.get("pageId"));
+				customAttrs.put("fieldName", base.get("name"));
+				
+				formPageMapper.saveFieldCustom(customAttrs);
+			}
 		}
 	}
 	

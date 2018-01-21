@@ -11,7 +11,9 @@ public class PageFieldForm extends Field {
 	/** 跨列数 **/
 	private int colSpan;
 	
-	private boolean editable;
+	private boolean isReadonly;
+	
+	private boolean isHidden;
 	
 	// 需要在待办表现实，值为待办表中使用的名字
 	private String forWorkItem;
@@ -52,12 +54,20 @@ public class PageFieldForm extends Field {
 		this.colSpan = colSpan;
 	}
 
-	public boolean isEditable() {
-		return editable;
+	public boolean isReadonly() {
+		return isReadonly;
 	}
 
-	public void setEditable(boolean editable) {
-		this.editable = editable;
+	public void setReadonly(boolean isReadonly) {
+		this.isReadonly = isReadonly;
+	}
+
+	public boolean isHidden() {
+		return isHidden;
+	}
+
+	public void setHidden(boolean isHidden) {
+		this.isHidden = isHidden;
 	}
 
 	public String getForWorkItem() {

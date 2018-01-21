@@ -32,10 +32,10 @@
 			<#assign rowNum = 1>
 			<tr>
 			<#list page.formFields as field>
-				<#if field.type == 'key'>
+				<#if field.hidden >
 					<input name="${field.name }" type="hidden" value="${r'${dataModel["'}${field.name }${r'"]}' }">
 				</#if>
-				<#if field.type != 'key'>
+				<#if field.hidden == false>
 				<#if rowNum != field.rowNum> 
 				</tr>
 				<tr>
