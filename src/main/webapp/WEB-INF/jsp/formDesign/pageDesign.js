@@ -150,6 +150,7 @@
 		$("#canvas .row_selected").removeClass("row_selected");
 		$("#canvas .column_selected").removeClass("column_selected");
 		refreshRowIndex(findRowNum(source[0]));
+		$("#canvas").find("th,td").off("mousedown").on("mousedown", selectCell);
 	}
 	function insertRowBefore() {
 		
@@ -161,6 +162,7 @@
 		$("#canvas .row_selected").removeClass("row_selected");
 		$("#canvas .column_selected").removeClass("column_selected");
 		refreshRowIndex(findRowNum(source[0]));
+		$("#canvas").find("th,td").off("mousedown").on("mousedown", selectCell);
 	}
 	function insertColumnBefore() {
 		var source = $("<th></th><td></td>");
@@ -169,6 +171,7 @@
 		$("#canvas .column_selected").removeClass("column_selected");
 		resetWidth($("#canvas"));
 		refreshColumnIndex(findPosition(source[1]).column);
+		$("#canvas").find("th,td").off("mousedown").on("mousedown", selectCell);
 	}
 	function insertColumnAfter() {
 		
@@ -176,6 +179,7 @@
 		$("#canvas .row_selected").removeClass("row_selected");
 		$("#canvas .column_selected").removeClass("column_selected");
 		resetWidth($("#canvas"));
+		$("#canvas").find("th,td").off("mousedown").on("mousedown", selectCell);
 	}
 	
 	function findPosition(srcElement) {
@@ -370,7 +374,20 @@
 	}
 	function resetWidth(table) {
 		
-		var cellCount = table.find("tr").eq(0).find("th,td").length;
+		var cellCount = 0;
+		
+		$.each(table.find("tr").eq(0).find("th,td"), function() {
+		    
+		    if($(this).attr("colspan") == undefined || $(this).attr("colspan") == "1") {
+		        
+		        cellCount = ++cellCount;
+		    }
+		    else {
+		        
+		        cellCount = cellCount + new Number($(this).attr("colspan"));
+		    }
+		});
+		
 		table.find("th, td").attr("width",(100 / cellCount) +"%")
 	}
 	

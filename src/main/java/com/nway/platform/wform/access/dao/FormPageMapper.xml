@@ -45,6 +45,7 @@
 			  A.COLUMN_NUM,
 			  A.COLUMN_SPAN,
 			  A.IS_READONLY,
+			  A.IS_HIDDEN,
 			  A.FOR_WORKITEM
 		FROM T_FORM_PAGE_FIELD_FORM A 
         LEFT JOIN
@@ -62,6 +63,7 @@
 		<result column="COLUMN_NUM" property="colNum"/>
 		<result column="COLUMN_SPAN" property="colSpan"/>
 		<result column="IS_READONLY" property="isReadonly"/>
+		<result column="IS_HIDDEN" property="isHidden"/>
 		<result column="FOR_WORKITEM" property="forWorkItem"/>
 	</resultMap>
 	
