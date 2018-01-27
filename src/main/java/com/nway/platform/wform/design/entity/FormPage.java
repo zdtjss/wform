@@ -43,9 +43,11 @@ public class FormPage {
 	
 	private int status;
 
-	private List<PageFieldForm> formFields;
+	private List<PageForm> formFields;
 	
-	private List<PageFieldList> listFields;
+	private List<PageList> listFields;
+	
+	private List<PageListCondition> listCondition;
 	
 	private String keyName;
 
@@ -153,19 +155,19 @@ public class FormPage {
 		this.formId = formId;
 	}
 
-	public List<PageFieldForm> getFormFields() {
+	public List<PageForm> getFormFields() {
 		return formFields;
 	}
 
-	public void setFormFields(List<PageFieldForm> formFields) {
+	public void setFormFields(List<PageForm> formFields) {
 		this.formFields = formFields;
 	}
 
-	public List<PageFieldList> getListFields() {
+	public List<PageList> getListFields() {
 		return listFields;
 	}
 
-	public void setListFields(List<PageFieldList> listFields) {
+	public void setListFields(List<PageList> listFields) {
 		this.listFields = listFields;
 	}
 
@@ -175,6 +177,14 @@ public class FormPage {
 
 	public void setKeyName(String keyName) {
 		this.keyName = keyName;
+	}
+
+	public List<PageListCondition> getListCondition() {
+		return listCondition;
+	}
+
+	public void setListCondition(List<PageListCondition> listCondition) {
+		this.listCondition = listCondition;
 	}
 
 }

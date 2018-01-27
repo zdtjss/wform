@@ -30,8 +30,9 @@
 		<result column="MODULE_ID" property="moduleId"/>
 		<result column="MODULE_NAME" property="moduleName"/>
 		<result column="SUMMARY" property="summary"/>
-		<collection property="formFields" column="page_id" ofType="com.nway.platform.wform.design.entity.PageFieldForm" select="queryPageFormFields"/>
-		<collection property="listFields" column="page_id" ofType="com.nway.platform.wform.design.entity.PageFieldList" select="queryPageListFields"/>
+		<collection property="formFields" column="page_id" ofType="com.nway.platform.wform.design.entity.PageForm" select="queryPageFormFields"/>
+		<collection property="listFields" column="page_id" ofType="com.nway.platform.wform.design.entity.PageList" select="queryPageListFields"/>
+		<collection property="listCondition" column="page_id" ofType="com.nway.platform.wform.design.entity.PageListCondition" select="queryPageListCondition"/>
 	</resultMap>
 	
 	<select id="queryPageFormFields" resultMap="queryPageFormFieldsMap">
@@ -47,14 +48,14 @@
 			  A.IS_READONLY,
 			  A.IS_HIDDEN,
 			  A.FOR_WORKITEM
-		FROM T_FORM_PAGE_FIELD_FORM A 
+		FROM T_FORM_PAGE_FORM A 
         LEFT JOIN
 	    T_FORM_FIELD B ON A.FIELD_ID = B.FIELD_ID
 	    where page_id = #{id}
 	    order by A.ROW_NUM,A.COLUMN_NUM
 	</select>
 	
-	<resultMap type="com.nway.platform.wform.design.entity.PageFieldForm" id="queryPageFormFieldsMap">
+	<resultMap type="com.nway.platform.wform.design.entity.PageForm" id="queryPageFormFieldsMap">
 		<result column="ID" property="id"/>
 		<result column="NAME" property="name"/>
 		<result column="DISPLAY" property="display"/>
@@ -73,19 +74,41 @@
 			  B.NAME,
 			  B.DISPLAY,
 			  B.TYPE,
-			  A.ROW_NUM ,
-			  A.COLUMN_NUM,
-			  A.COLUMN_SPAN,
-			  A.IS_CONDITION,
+			  A.FIELD_INDEX,
 			  A.FORMATTER
-		FROM T_FORM_PAGE_FIELD_LIST A 
+		FROM T_FORM_PAGE_LIST A 
         LEFT JOIN
 	    T_FORM_FIELD B ON A.FIELD_ID = B.FIELD_ID
 	    where page_id = #{id}
-	    order by B.TYPE,A.ROW_NUM,A.COLUMN_NUM
+	    order by A.FIELD_INDEX
 	</select>
 	
-	<resultMap type="com.nway.platform.wform.design.entity.PageFieldList" id="queryPageListFieldsMap">
+	<resultMap type="com.nway.platform.wform.design.entity.PageList" id="queryPageListFieldsMap">
+		<result column="ID" property="id"/>
+		<result column="NAME" property="name"/>
+		<result column="DISPLAY" property="display"/>
+		<result column="TYPE" property="type"/>
+		<result column="FIELD_INDEX" property="index"/>
+		<result column="FORMATTER" property="formatter"/>
+	</resultMap>
+	
+	<select id="queryPageListCondition" resultMap="queryPageListConditionMap">
+		select 
+			  B.FIELD_ID,
+			  B.NAME,
+			  B.DISPLAY,
+			  B.TYPE,
+			  A.ROW_NUM ,
+			  A.COLUMN_NUM,
+			  A.COLUMN_SPAN
+		FROM T_FORM_PAGE_LIST_CONDITION A 
+        LEFT JOIN
+	    T_FORM_FIELD B ON A.FIELD_ID = B.FIELD_ID
+	    where page_id = #{id}
+	    order by A.ROW_NUM,A.COLUMN_NUM
+	</select>
+	
+	<resultMap type="com.nway.platform.wform.design.entity.PageListCondition" id="queryPageListConditionMap">
 		<result column="ID" property="id"/>
 		<result column="NAME" property="name"/>
 		<result column="DISPLAY" property="display"/>
@@ -93,8 +116,6 @@
 		<result column="ROW_NUM" property="rowNum"/>
 		<result column="COLUMN_NUM" property="colNum"/>
 		<result column="COLUMN_SPAN" property="colSpan"/>
-		<result column="FORMATTER" property="formatter"/>
-		<result column="IS_CONDITION" property="isCondition"/>
 	</resultMap>
 	
 	<select id="listFieldAttr" resultMap="fieldAttrMap">
@@ -134,7 +155,7 @@
 	        (#{fieldId},#{pageId},#{name},#{display},#{type})
 	</insert>
 	<insert id="saveFieldExt">
-		insert into T_FORM_PAGE_FIELD_FORM (FIELD_ID,PAGE_ID,ROW_NUM,COLUMN_NUM,COLUMN_SPAN,IS_HIDDEN) values
+		insert into T_FORM_PAGE_FORM (FIELD_ID,PAGE_ID,ROW_NUM,COLUMN_NUM,COLUMN_SPAN,IS_HIDDEN) values
 	        (#{fieldId},#{pageId},#{rowNum},#{colNum},#{colSpan},<if test="isHidden == null">0</if><if test="isHidden != null">#{isHidden}</if>)
 	</insert>
 	<insert id="saveFieldCustom">

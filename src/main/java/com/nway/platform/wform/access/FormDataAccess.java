@@ -14,7 +14,7 @@ import com.nway.platform.wform.access.mybatis.TemporaryStatementRegistry;
 import com.nway.platform.wform.commons.SpringContextUtil;
 import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.design.entity.FormPage;
-import com.nway.platform.wform.design.entity.PageFieldForm;
+import com.nway.platform.wform.design.entity.PageForm;
 
 @Component
 public class FormDataAccess {
@@ -49,7 +49,7 @@ public class FormDataAccess {
 		
 		if (effectCount > 0) {
 			
-			for (PageFieldForm field : page.getFormFields()) {
+			for (PageForm field : page.getFormFields()) {
 
 				if (field.isMultiValue()) {
 
@@ -78,7 +78,7 @@ public class FormDataAccess {
 		
 		if (effectCount > 0) {
 			
-			for (PageFieldForm field : page.getFormFields()) {
+			for (PageForm field : page.getFormFields()) {
 
 				// 子表操作
 				if (field.isMultiValue()) {
@@ -112,7 +112,7 @@ public class FormDataAccess {
 		pageData = sqlSessionTemplate
 				.selectOne(TemporaryStatementRegistry.getLastestName(page.getModuleName(), page.getName(), ACCESS_TYPE_DETAILS), dataId);
 		
-		for(PageFieldForm field : page.getFormFields()) {
+		for(PageForm field : page.getFormFields()) {
 			
 			// 子表操作
 			if(field.isMultiValue()) {
@@ -147,7 +147,7 @@ public class FormDataAccess {
 		pageData = sqlSessionTemplate
 				.selectList(TemporaryStatementRegistry.getLastestName(page.getModuleName(), page.getName(), ACCESS_TYPE_LIST), param);
 
-		for (PageFieldForm field : page.getFormFields()) {
+		for (PageForm field : page.getFormFields()) {
 			
 			if (field.isMultiValue()) {
 
@@ -178,7 +178,7 @@ public class FormDataAccess {
 		int effectCount = sqlSessionTemplate
 				.delete(TemporaryStatementRegistry.getLastestName(page.getModuleName(), page.getName(), ACCESS_TYPE_REMOVE), dataId);
 		
-		for(PageFieldForm field : page.getFormFields()) {
+		for(PageForm field : page.getFormFields()) {
 
 			if (effectCount > 0 && MultiValueComponent.class.isInstance(field.getObjType())) {
 

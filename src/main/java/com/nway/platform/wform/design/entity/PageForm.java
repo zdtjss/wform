@@ -1,6 +1,6 @@
 package com.nway.platform.wform.design.entity;
 
-public class PageFieldForm extends Field {
+public class PageForm extends Field {
 	
 	/** 行号 **/
 	private int rowNum;

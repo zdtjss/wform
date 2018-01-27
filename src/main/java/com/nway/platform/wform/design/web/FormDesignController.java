@@ -40,6 +40,12 @@ public class FormDesignController {
 		formPageAccess.saveFields(fields);
 	}
 	
+	@RequestMapping("publishPage")
+	public void publishPage(String pageId) throws Exception {
+		
+		formPageAccess.publishPage(pageId);
+	}
+	
 	@RequestMapping("toDesignUI")
 	public ModelAndView toDesignUI(String pageId) {
 

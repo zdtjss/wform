@@ -1,6 +1,6 @@
 package com.nway.platform.wform.design.entity;
 
-public class PageFieldList extends Field {
+public class PageListCondition extends Field {
 	
 	private int rowNum;
 
@@ -8,11 +8,7 @@ public class PageFieldList extends Field {
 
 	private int colSpan;
 	
-	private boolean isCondition;
-	
 	private boolean isMultiValue;
-	
-	private String formatter;
 	
 	public int getRowNum() {
 		return rowNum;
@@ -38,13 +34,6 @@ public class PageFieldList extends Field {
 		this.colSpan = colSpan;
 	}
 
-	public boolean isCondition() {
-		return isCondition;
-	}
-
-	public void setCondition(boolean isCondition) {
-		this.isCondition = isCondition;
-	}
 
 	public boolean isMultiValue() {
 		return isMultiValue;
@@ -52,14 +41,6 @@ public class PageFieldList extends Field {
 
 	public void setMultiValue(boolean isMultiValue) {
 		this.isMultiValue = isMultiValue;
-	}
-
-	public String getFormatter() {
-		return formatter;
-	}
-
-	public void setFormatter(String formatter) {
-		this.formatter = formatter;
 	}
 	
 }

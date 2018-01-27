@@ -10,13 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nway.platform.wform.access.dao.FormPageMapper;
+import com.nway.platform.wform.access.mybatis.MybatisMapper;
 import com.nway.platform.wform.component.ComponentRegister;
 import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.component.impl.KeyComponent;
 import com.nway.platform.wform.design.entity.Field;
 import com.nway.platform.wform.design.entity.FormPage;
-import com.nway.platform.wform.design.entity.PageFieldForm;
-import com.nway.platform.wform.design.entity.PageFieldList;
+import com.nway.platform.wform.design.entity.PageForm;
+import com.nway.platform.wform.design.entity.PageList;
+import com.nway.platform.wform.design.entity.PageListCondition;
 
 @Component
 public class FormPageAccess {
@@ -27,11 +29,14 @@ public class FormPageAccess {
 	@Autowired
 	private ComponentRegister componentRegister;
 	
+	@Autowired
+	private MybatisMapper mybatisMapper;
+	
 	public FormPage getFormPage(String id) {
 		
 		FormPage page = formPageMapper.getFormPage(id);
 		
- 		for (PageFieldForm field : page.getFormFields()) {
+ 		for (PageForm field : page.getFormFields()) {
 
 			field.setObjType(componentRegister.getComponent(field.getType()));
 			
@@ -46,7 +51,7 @@ public class FormPageAccess {
 			}
 		}
  		
- 		for (PageFieldList field : page.getListFields()) {
+ 		for (PageList field : page.getListFields()) {
  			
  			field.setObjType(componentRegister.getComponent(field.getType()));
  			
@@ -56,6 +61,15 @@ public class FormPageAccess {
 			}
  		}
  		
+ 		for (PageListCondition field : page.getListCondition()) {
+ 			
+ 			field.setObjType(componentRegister.getComponent(field.getType()));
+ 			
+ 			if(MultiValueComponent.class.isInstance(field.getObjType())) {
+ 				
+ 				field.setMultiValue(true);
+ 			}
+ 		}
 		
 		return page;
 	}
@@ -123,6 +137,11 @@ public class FormPageAccess {
 				formPageMapper.saveFieldCustom(customAttrs);
 			}
 		}
+	}
+	
+	public void publishPage(String pageId) throws Exception {
+		
+		mybatisMapper.createMapper(formPageMapper.getFormPage(pageId));
 	}
 	
 	public List<Field> listFields(String pageId) {

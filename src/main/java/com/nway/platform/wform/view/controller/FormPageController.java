@@ -27,8 +27,8 @@ import com.nway.platform.wform.access.FormDataAccess;
 import com.nway.platform.wform.component.Initializable;
 import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.design.entity.FormPage;
-import com.nway.platform.wform.design.entity.PageFieldForm;
-import com.nway.platform.wform.design.entity.PageFieldList;
+import com.nway.platform.wform.design.entity.PageForm;
+import com.nway.platform.wform.design.entity.PageListCondition;
 import com.nway.platform.wform.design.service.FormPageAccess;
 import com.nway.platform.wform.view.service.FormPageService;
 import com.nway.platform.workflow.entity.Handle;
@@ -87,7 +87,7 @@ public class FormPageController {
 		
 		Map<String, Object> workflowParam = new HashMap<String, Object>();
 		
-		for(PageFieldForm field : formPage.getFormFields()) {
+		for(PageForm field : formPage.getFormFields()) {
 			
 			if(Initializable.class.isInstance(field.getObjType())) {
 				
@@ -158,14 +158,14 @@ public class FormPageController {
 		
 		if(FormPage.PAGE_TYPE_CREATE.equals(pageType) || FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
 			
-			for(PageFieldForm field : formPage.getFormFields()) {
+			for(PageForm field : formPage.getFormFields()) {
 				
 				formData.put(field.getName(), field.getObjType().getValue(pageData.get(field.getName())));
 			}
 		}
 		else {
 			
-			for(PageFieldForm field : formPage.getFormFields()) {
+			for(PageForm field : formPage.getFormFields()) {
 				
 				if("key".equals(field.getType()) || null != field.getForWorkItem()) {
 					
@@ -189,12 +189,9 @@ public class FormPageController {
 		
 		Map<String,Object> queryParam = new HashMap<String, Object>();
 		
-		for (PageFieldList field : formPage.getListFields()) {
+		for (PageListCondition field : formPage.getListCondition()) {
 
-			if (field.isCondition()) {
-
-				queryParam.put(field.getName(), field.getObjType().getValue(pageParam.get(field.getName())));
-			}
+			queryParam.put(field.getName(), field.getObjType().getValue(pageParam.get(field.getName())));
 		}
 		
 		PageHelper.startPage(request);
@@ -274,7 +271,6 @@ public class FormPageController {
 					fos.close();
 				}
 			}
-
 		}
 	}
 	
