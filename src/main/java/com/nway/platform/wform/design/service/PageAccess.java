@@ -9,22 +9,22 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nway.platform.wform.access.dao.FormPageMapper;
+import com.nway.platform.wform.access.dao.PageMapper;
 import com.nway.platform.wform.access.mybatis.MybatisMapper;
 import com.nway.platform.wform.component.ComponentRegister;
 import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.component.impl.KeyComponent;
 import com.nway.platform.wform.design.entity.Field;
-import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.wform.design.entity.Page;
 import com.nway.platform.wform.design.entity.PageForm;
 import com.nway.platform.wform.design.entity.PageList;
 import com.nway.platform.wform.design.entity.PageListCondition;
 
 @Component
-public class FormPageAccess {
+public class PageAccess {
 
 	@Autowired
-	private FormPageMapper formPageMapper;
+	private PageMapper formPageMapper;
 	
 	@Autowired
 	private ComponentRegister componentRegister;
@@ -32,9 +32,9 @@ public class FormPageAccess {
 	@Autowired
 	private MybatisMapper mybatisMapper;
 	
-	public FormPage getFormPage(String id) {
+	public Page getFormPage(String id) {
 		
-		FormPage page = formPageMapper.getFormPage(id);
+		Page page = formPageMapper.getFormPage(id);
 		
  		for (PageForm field : page.getFormFields()) {
 

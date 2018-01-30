@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.nway.platform.wform.design.entity.Field;
-import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.wform.design.entity.Page;
 
-public interface FormPageMapper {
+public interface PageMapper {
 
-	FormPage getFormPage(String id);
+	Page getFormPage(String id);
 
 	List<Map<String, String>> listFieldAttr(String pageId);
 	

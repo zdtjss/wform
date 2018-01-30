@@ -13,7 +13,7 @@ import com.nway.platform.wform.access.handler.PageDataHandler;
 import com.nway.platform.wform.access.mybatis.TemporaryStatementRegistry;
 import com.nway.platform.wform.commons.SpringContextUtil;
 import com.nway.platform.wform.component.MultiValueComponent;
-import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.wform.design.entity.Page;
 import com.nway.platform.wform.design.entity.PageForm;
 
 @Component
@@ -38,7 +38,7 @@ public class FormDataAccess {
 	 * @param page
 	 * @param formData
 	 */
-	public void create(FormPage page, Map<String, Object> formData) {
+	public void create(Page page, Map<String, Object> formData) {
 		
 		PageDataHandler formPageDataHandler = getPageDataHandler(page.getName());
 		
@@ -68,7 +68,7 @@ public class FormDataAccess {
 	 * @param page
 	 * @param formData
 	 */
-	public void update(FormPage page, Map<String, Object> formData) {
+	public void update(Page page, Map<String, Object> formData) {
 		
 		PageDataHandler pageDataHandler = getPageDataHandler(page.getName());
 
@@ -99,7 +99,7 @@ public class FormDataAccess {
 	 * @param param
 	 * @return
 	 */
-	public Map<String, Object> get(FormPage page, String dataId) {
+	public Map<String, Object> get(Page page, String dataId) {
 		
 		Map<String, Object> pageData = Collections.emptyMap();
 		
@@ -136,7 +136,7 @@ public class FormDataAccess {
 	 * @param param
 	 * @return
 	 */
-	public List<Map<String, Object>> list(FormPage page, Map<String, Object> param) {
+	public List<Map<String, Object>> list(Page page, Map<String, Object> param) {
 		
 		List<Map<String, Object>> pageData = Collections.emptyList();
 		
@@ -167,7 +167,7 @@ public class FormDataAccess {
 		return pageData;
 	}
 	
-	public void remove(FormPage page, String dataId) {
+	public void remove(Page page, String dataId) {
 		
 		PageDataHandler pageDataHandler = getPageDataHandler(page.getName());
 		
@@ -195,12 +195,12 @@ public class FormDataAccess {
 	private static final class DefaultPageDataHandler implements PageDataHandler {
 
 		@Override
-		public void handleParam(HandlerType handlerType, FormPage formPage, Map<String, Object> param) {
+		public void handleParam(HandlerType handlerType, Page formPage, Map<String, Object> param) {
 			
 		}
 
 		@Override
-		public void handleResult(HandlerType handlerType, FormPage formPage, Map<String, Object> param) {
+		public void handleResult(HandlerType handlerType, Page formPage, Map<String, Object> param) {
 			
 		}
 

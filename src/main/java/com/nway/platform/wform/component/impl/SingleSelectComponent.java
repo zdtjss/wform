@@ -1,6 +1,5 @@
 package com.nway.platform.wform.component.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,13 +10,13 @@ import org.springframework.stereotype.Component;
 
 import com.nway.platform.wform.component.BaseComponent;
 import com.nway.platform.wform.component.Initializable;
-import com.nway.platform.wform.design.service.FormPageAccess;
+import com.nway.platform.wform.design.service.PageAccess;
 
 @Component("singleSelect")
 public class SingleSelectComponent implements BaseComponent, Initializable {
 
 	@Autowired
-	private FormPageAccess formPageAccess;
+	private PageAccess formPageAccess;
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;

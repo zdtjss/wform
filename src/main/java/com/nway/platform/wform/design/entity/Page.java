@@ -3,7 +3,7 @@ package com.nway.platform.wform.design.entity;
 import java.util.Date;
 import java.util.List;
 
-public class FormPage {
+public class Page {
 
 	public static final String PAGE_TYPE_CREATE = "create";
 	public static final String PAGE_TYPE_EDIT = "update";

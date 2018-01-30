@@ -13,14 +13,14 @@ import org.springframework.stereotype.Service;
 
 import com.nway.platform.wform.access.FormDataAccess;
 import com.nway.platform.wform.commons.SpringContextUtil;
-import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.wform.design.entity.Page;
 import com.nway.platform.workflow.dao.WorkFlowDaoMapper;
 import com.nway.platform.workflow.entity.Handle;
 import com.nway.platform.workflow.event.TaskCompleteEvent;
 import com.nway.platform.workflow.service.WorkFlowService;
 
 @Service
-public class FormPageService {
+public class PageService {
 
 	@Autowired
 	private FormDataAccess formDataAccess;
@@ -45,7 +45,7 @@ public class FormPageService {
 		return pid;
 	}
 	
-	public void saveAndHandle(FormPage page, String pageType, Handle handleInfo, Map<String, Object> formData) {
+	public void saveAndHandle(Page page, String pageType, Handle handleInfo, Map<String, Object> formData) {
 		
 		if (handleInfo.getTaskId().length() != 0) {
 			
@@ -58,11 +58,11 @@ public class FormPageService {
 			SpringContextUtil.publishEvent(new TaskCompleteEvent(handleInfo, page, formData));
 		}
 		
-		if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
+		if(Page.PAGE_TYPE_CREATE.equals(pageType)) {
 			
 			formDataAccess.create(page, formData);
 		}
-		else if(FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
+		else if(Page.PAGE_TYPE_EDIT.equals(pageType)) {
 			
 			formDataAccess.update(page, formData);
 		}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.nway.platform.wform.access.dao.FormPageMapper">
+<mapper namespace="com.nway.platform.wform.access.dao.PageMapper">
 	
 	<select id="getFormPage" parameterType="string" resultMap="getFormPageMap">
 		SELECT 
@@ -20,7 +20,7 @@
 		WHERE A.PAGE_ID = #{pageId}
 	</select>
 	
-	<resultMap type="com.nway.platform.wform.design.entity.FormPage" id="getFormPageMap">
+	<resultMap type="com.nway.platform.wform.design.entity.Page" id="getFormPageMap">
 		<result column="PAGE_ID" property="id"/>
 		<result column="PAGE_NAME" property="name"/>
 		<result column="PAGE_TITLE" property="title"/>

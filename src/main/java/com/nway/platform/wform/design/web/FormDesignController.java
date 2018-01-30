@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.nway.platform.wform.design.service.FormPageAccess;
+import com.nway.platform.wform.design.service.PageAccess;
 
 @Controller
 @RequestMapping("formDesign")
 public class FormDesignController {
 
 	@Autowired
-	private FormPageAccess formPageAccess;
+	private PageAccess formPageAccess;
 	
 	@RequestMapping("toFieldCreateUI")
 	public String toFieldCreateUI(HttpServletRequest request) {

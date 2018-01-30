@@ -4,16 +4,16 @@ import java.util.Map;
 
 import org.springframework.context.ApplicationEvent;
 
-import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.wform.design.entity.Page;
 import com.nway.platform.workflow.entity.Handle;
 
 public class TaskCompleteEvent extends ApplicationEvent {
 	
 	private Handle handleInfo;
-	private FormPage page;
+	private Page page;
 	private Map<String, Object> formData;
 	
-	public TaskCompleteEvent(Handle handleInfo, FormPage page, Map<String, Object> formData) {
+	public TaskCompleteEvent(Handle handleInfo, Page page, Map<String, Object> formData) {
 		super(handleInfo);
 		this.handleInfo = handleInfo;
 		this.page = page;
@@ -28,11 +28,11 @@ public class TaskCompleteEvent extends ApplicationEvent {
 		this.handleInfo = handleInfo;
 	}
 
-	public FormPage getPage() {
+	public Page getPage() {
 		return page;
 	}
 
-	public void setPage(FormPage page) {
+	public void setPage(Page page) {
 		this.page = page;
 	}
 

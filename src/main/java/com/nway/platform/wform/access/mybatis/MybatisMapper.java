@@ -21,13 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NestedIOException;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.wform.design.entity.Page;
 import com.nway.platform.wform.design.entity.PageForm;
 import com.nway.platform.wform.design.entity.PageList;
 import com.nway.platform.wform.design.entity.PageListCondition;
@@ -44,7 +43,7 @@ public class MybatisMapper {
 	@Autowired
     private SqlSessionTemplate sqlSession;
 	
-	public void createMapper(FormPage formPage) throws ParserConfigurationException, TransformerException, IOException {
+	public void createMapper(Page formPage) throws ParserConfigurationException, TransformerException, IOException {
 		
 		File mapperFile = new File(buildMapperFilePath(formPage.getName(), formPage.getModuleName()));
 
@@ -74,7 +73,7 @@ public class MybatisMapper {
 		return CLASS_PATH + BASE_PATH + moduleName + File.separatorChar + "dao" + File.separatorChar + pageName + "Mapper.xml";
 	}
 	
-	private Document createMapper(FormPage formPage, String mapperNamespace) throws ParserConfigurationException, TransformerException, IOException {
+	private Document createMapper(Page formPage, String mapperNamespace) throws ParserConfigurationException, TransformerException, IOException {
 		
 		Document document = createDocument();
 		
@@ -119,7 +118,7 @@ public class MybatisMapper {
 		log.info(mapperFile.getPath());
 	}
 	
-	private Element buildInsertMapper(Document document, FormPage formPage) throws ParserConfigurationException {
+	private Element buildInsertMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
 		Element insert = document.createElement("insert");
 		
@@ -153,7 +152,7 @@ public class MybatisMapper {
 		return insert;
 	}
 	
-	private Element buildSelectMapper(Document document, FormPage formPage) throws ParserConfigurationException {
+	private Element buildSelectMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
 		Element select = document.createElement("select");
 		
@@ -189,7 +188,7 @@ public class MybatisMapper {
 		return select;
 	}
 	
-	private Element buildUpdateMapper(Document document, FormPage formPage) throws ParserConfigurationException {
+	private Element buildUpdateMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
 		Element update = document.createElement("update");
 		
@@ -226,7 +225,7 @@ public class MybatisMapper {
 		return update;
 	}
 	
-	private Element buildDeleteMapper(Document document, FormPage formPage) throws ParserConfigurationException {
+	private Element buildDeleteMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
 		Element delete = document.createElement("delete");
 		
@@ -260,7 +259,7 @@ public class MybatisMapper {
 		return delete;
 	}
 	
-	private Element buildResultMapMapper(Document document, FormPage formPage) throws ParserConfigurationException {
+	private Element buildResultMapMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
 		Element resultMap = document.createElement("resultMap");
 		
@@ -285,7 +284,7 @@ public class MybatisMapper {
 		return resultMap;
 	}
 	
-	private Element buildListMapper(Document document, FormPage formPage) throws ParserConfigurationException {
+	private Element buildListMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
 		Element select = document.createElement("select");
 		

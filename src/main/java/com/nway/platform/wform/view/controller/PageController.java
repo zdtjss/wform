@@ -26,11 +26,11 @@ import com.github.pagehelper.PageHelper;
 import com.nway.platform.wform.access.FormDataAccess;
 import com.nway.platform.wform.component.Initializable;
 import com.nway.platform.wform.component.MultiValueComponent;
-import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.wform.design.entity.Page;
 import com.nway.platform.wform.design.entity.PageForm;
 import com.nway.platform.wform.design.entity.PageListCondition;
-import com.nway.platform.wform.design.service.FormPageAccess;
-import com.nway.platform.wform.view.service.FormPageService;
+import com.nway.platform.wform.design.service.PageAccess;
+import com.nway.platform.wform.view.service.PageService;
 import com.nway.platform.workflow.entity.Handle;
 import com.nway.platform.workflow.entity.Handle.Action;
 import com.nway.platform.workflow.entity.Handle.SimpleUser;
@@ -41,14 +41,14 @@ import freemarker.template.TemplateException;
 
 @Controller
 @RequestMapping("form")
-public class FormPageController {
+public class PageController {
 	
 	@Autowired
-	private FormPageAccess formPageAccess;
+	private PageAccess formPageAccess;
 	@Autowired
 	private FormDataAccess formDataAccess;
 	@Autowired
-	private FormPageService formPageService;
+	private PageService formPageService;
 	@Autowired
 	private Configuration freemarker;
 	
@@ -69,7 +69,7 @@ public class FormPageController {
 		
 		String basePath = request.getSession().getServletContext().getRealPath("/");
 		
-		FormPage formPage = formPageAccess.getFormPage(pageId);
+		Page formPage = formPageAccess.getFormPage(pageId);
 		
 		Map<String, Map<String, String>> fieldAttr = formPageAccess.listFieldAttr(pageId);
 		
@@ -80,7 +80,7 @@ public class FormPageController {
 		
 		makeJsp(pageType, viewModel, formPage.getModuleName(), formPage.getName(), basePath);
 		
-		if(FormPage.PAGE_TYPE_DETAILS.equals(pageType) || FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
+		if(Page.PAGE_TYPE_DETAILS.equals(pageType) || Page.PAGE_TYPE_EDIT.equals(pageType)) {
 			
 			dataModel = formDataAccess.get(formPage, bizId);
 		}
@@ -108,7 +108,7 @@ public class FormPageController {
 		
 		Map<String,Object> workflow = new HashMap<String, Object>();
 		
-		if(FormPage.PAGE_TYPE_CREATE.equals(pageType)) {
+		if(Page.PAGE_TYPE_CREATE.equals(pageType)) {
 			
 			String pid = formPageService.startProcess(formPage.getId());
 			
@@ -150,13 +150,13 @@ public class FormPageController {
 		
 		Map<String, Object> formData = new HashMap<String, Object>();
 		
-		FormPage formPage = formPageAccess.getFormPage((String )pageParam.get("pageId"));
+		Page formPage = formPageAccess.getFormPage((String )pageParam.get("pageId"));
 		
 		String pageType = pageParam.get("pageType").toString();
 		
 		Handle handleInfo = getHandleInfo(jsonObj);
 		
-		if(FormPage.PAGE_TYPE_CREATE.equals(pageType) || FormPage.PAGE_TYPE_EDIT.equals(pageType)) {
+		if(Page.PAGE_TYPE_CREATE.equals(pageType) || Page.PAGE_TYPE_EDIT.equals(pageType)) {
 			
 			for(PageForm field : formPage.getFormFields()) {
 				
@@ -185,7 +185,7 @@ public class FormPageController {
 		
 		String pageId = pageParam.get("pageId");
 		
-		FormPage formPage = formPageAccess.getFormPage(pageId);
+		Page formPage = formPageAccess.getFormPage(pageId);
 		
 		Map<String,Object> queryParam = new HashMap<String, Object>();
 		
@@ -204,19 +204,19 @@ public class FormPageController {
 
 		Template template = null;
 		
-		if(FormPage.PAGE_TYPE_CREATE.equals(type)) {
+		if(Page.PAGE_TYPE_CREATE.equals(type)) {
 			
 			template = freemarker.getTemplate("/default/create.ftl");
 		}
-		else if(FormPage.PAGE_TYPE_DETAILS.equals(type)) {
+		else if(Page.PAGE_TYPE_DETAILS.equals(type)) {
 			
 			template = freemarker.getTemplate("/default/details.ftl");
 		}
-		else if(FormPage.PAGE_TYPE_EDIT.equals(type)) {
+		else if(Page.PAGE_TYPE_EDIT.equals(type)) {
 			
 			template = freemarker.getTemplate("/default/edit.ftl");
 		}
-		else if(FormPage.PAGE_TYPE_LIST.equals(type)) {
+		else if(Page.PAGE_TYPE_LIST.equals(type)) {
 			
 			template = freemarker.getTemplate("/default/list.ftl");
 		}
