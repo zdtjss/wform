@@ -27,7 +27,7 @@
 		
 		initPageFields(key);
 		
-		pageFields[keyId].baseAttr.name = "主键";
+		pageFields[keyId].baseAttr.name = "pk_id";
 		pageFields[keyId].baseAttr.display = "主键";
 		pageFields[keyId].extAttr.isHidden = "1";
 	}
