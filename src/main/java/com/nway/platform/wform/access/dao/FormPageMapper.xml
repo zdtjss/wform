@@ -48,7 +48,7 @@
 			  A.IS_READONLY,
 			  A.IS_HIDDEN,
 			  A.FOR_WORKITEM
-		FROM T_FORM_PAGE_FORM A 
+		FROM T_FORM_PAGE_FIELD A 
         LEFT JOIN
 	    T_FORM_FIELD B ON A.FIELD_ID = B.FIELD_ID
 	    where page_id = #{id}
@@ -119,7 +119,7 @@
 	</resultMap>
 	
 	<select id="listFieldAttr" resultMap="fieldAttrMap">
-		select FIELD_NAME,ATTR_NAME,ATTR_VALUE from T_FORM_FIELD_ATTRIBUTE where PAGE_ID = #{pageId}
+		select FIELD_NAME,ATTR_NAME,ATTR_VALUE from T_FORM_PAGE_FIELD_ATTRS where PAGE_ID = #{pageId}
 	</select>
 	
 	<resultMap type="map" id="fieldAttrMap">
@@ -155,11 +155,11 @@
 	        (#{fieldId},#{pageId},#{name},#{display},#{type})
 	</insert>
 	<insert id="saveFieldExt">
-		insert into T_FORM_PAGE_FORM (FIELD_ID,PAGE_ID,ROW_NUM,COLUMN_NUM,COLUMN_SPAN,IS_HIDDEN) values
+		insert into T_FORM_PAGE_FIELD (FIELD_ID,PAGE_ID,ROW_NUM,COLUMN_NUM,COLUMN_SPAN,IS_HIDDEN) values
 	        (#{fieldId},#{pageId},#{rowNum},#{colNum},#{colSpan},<if test="isHidden == null">0</if><if test="isHidden != null">#{isHidden}</if>)
 	</insert>
 	<insert id="saveFieldCustom">
-		insert into T_FORM_FIELD_ATTRIBUTE (PAGE_ID,FIELD_NAME,ATTR_NAME,ATTR_VALUE) values
+		insert into T_FORM_PAGE_FIELD_ATTRS (PAGE_ID,FIELD_NAME,ATTR_NAME,ATTR_VALUE) values
 	        (#{pageId},#{fieldName},#{attrName},#{attrValue})
 	</insert>
 	
