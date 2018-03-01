@@ -12,10 +12,14 @@ import org.springframework.stereotype.Component;
 import com.nway.platform.wform.component.Initializable;
 import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.component.impl.dao.MultiSelectMapper;
+import com.nway.platform.wform.design.db.datatype.DataType;
 
 @Component("multiSelect")
 public class MultiSelectComponent implements MultiValueComponent, Initializable {
 
+	@Autowired
+	private DataType dataType;
+	
 	@Autowired
 	private MultiSelectMapper multiSelectMapper;
 	
@@ -77,5 +81,21 @@ public class MultiSelectComponent implements MultiValueComponent, Initializable 
 		map.put("1002", "C++");
 		
 		return map;
+	}
+
+	@Override
+	public String getDataType(int capacity) {
+
+		return dataType.getForString(36);
+	}
+
+	@Override
+	public String getDdlSql(String pageName, String refName) {
+		
+		StringBuilder sql = new StringBuilder();
+		
+		sql.append("create table T_CHECKBOX_").append(pageName).append("(BIZ_ID VARCHAR(36),VALUE VARCHAR(32))");
+		
+		return sql.toString();
 	}
 }

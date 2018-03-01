@@ -14,6 +14,7 @@ import com.nway.platform.wform.access.mybatis.MybatisMapper;
 import com.nway.platform.wform.component.ComponentRegister;
 import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.component.impl.KeyComponent;
+import com.nway.platform.wform.design.db.TableGenerator;
 import com.nway.platform.wform.design.entity.Field;
 import com.nway.platform.wform.design.entity.Page;
 import com.nway.platform.wform.design.entity.PageForm;
@@ -31,6 +32,9 @@ public class PageAccess {
 	
 	@Autowired
 	private MybatisMapper mybatisMapper;
+	
+	@Autowired
+	private TableGenerator tableGenerator;
 	
 	public Page getFormPage(String id) {
 		
@@ -141,7 +145,11 @@ public class PageAccess {
 	
 	public void publishPage(String pageId) throws Exception {
 		
-		mybatisMapper.createMapper(formPageMapper.getFormPage(pageId));
+		Page page = formPageMapper.getFormPage(pageId);
+		
+		mybatisMapper.createMapper(page);
+		
+		tableGenerator.createTable(page);
 	}
 	
 	public List<Field> listFields(String pageId) {

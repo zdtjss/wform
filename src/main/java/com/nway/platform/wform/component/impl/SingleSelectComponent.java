@@ -10,11 +10,15 @@ import org.springframework.stereotype.Component;
 
 import com.nway.platform.wform.component.BaseComponent;
 import com.nway.platform.wform.component.Initializable;
+import com.nway.platform.wform.design.db.datatype.DataType;
 import com.nway.platform.wform.design.service.PageAccess;
 
 @Component("singleSelect")
 public class SingleSelectComponent implements BaseComponent, Initializable {
 
+	@Autowired
+	private DataType dataType;
+	
 	@Autowired
 	private PageAccess formPageAccess;
 	
@@ -67,5 +71,11 @@ public class SingleSelectComponent implements BaseComponent, Initializable {
 		}
 		
 		return kvMap;
+	}
+
+	@Override
+	public String getDataType(int capacity) {
+		
+		return dataType.getForString(capacity);
 	}
 }
