@@ -128,7 +128,7 @@
 		<result column="ATTR_VALUE" property="attrValue"/>
 	</resultMap>
 	
-	<select id="listFormPage" parameterType="string" resultType="com.nway.platform.wform.design.entity.FormPage">
+	<select id="listFormPage" parameterType="string" resultType="com.nway.platform.wform.design.entity.PageForm">
 		select 
 			id,
 		    name,
@@ -140,7 +140,7 @@
 		from t_form_page
 	</select>
 	
-	<resultMap id="formPageMap" type="com.nway.platform.wform.design.entity.FormPage">
+	<resultMap id="formPageMap" type="com.nway.platform.wform.design.entity.PageForm">
 		<result column="FORM_ID" property="id"/>
 		<result column="FORM_NAME" property="name"/>
 		<result column="page_type" property="pageType"/>

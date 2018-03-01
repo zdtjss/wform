@@ -1,55 +1,38 @@
 package com.nway.platform.wform.design.db;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Map;
+import java.util.List;
 
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nway.platform.wform.commons.SpringContextUtil;
-import com.nway.platform.wform.design.db.datatype.BaseDataType;
-import com.nway.platform.wform.design.db.datatype.HsqldbDataType;
+import com.nway.platform.wform.component.BaseComponent;
+import com.nway.platform.wform.design.db.datatype.DataType;
+import com.nway.platform.wform.design.entity.PageForm;
 
 @Component
-public class TableGenerator implements InitializingBean {
+public class TableGenerator {
 
-	private BaseDataType dataType;
+	@Autowired
+	private DataType dataType;
 	
-	public String getType(Class<?> javaType, int capacity) {
+	public void createTable(List<PageForm> formFields) {
+		
+		System.out.println(dataType);
+	}
+	
+	private void makeTableCreateSql(List<PageForm> formFields) {
+		
+		for(PageForm field : formFields) {
+			
+			BaseComponent component = field.getObjType();
+			
+			getType(String.class, field.getSize());
+		}
+	}
+	
+	private String getType(Class<?> javaType, int capacity) {
 		
 		return "";
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		
-		DataSource ds = SpringContextUtil.getBean(DataSource.class);
-		
-		Connection conn = DataSourceUtils.getConnection(ds);
-
-		try {
-
-			String databaseProductName = conn.getMetaData().getDatabaseProductName();
-
-			if ("HSQLDB".equalsIgnoreCase(databaseProductName)) {
-
-				dataType = new HsqldbDataType();
-			}
-		}
-		catch (SQLException e) {
-
-			throw e;
-		}
-		finally {
-
-			DataSourceUtils.doCloseConnection(conn, ds);
-		}
-		
-		Map<String, BaseDataType> datatTypes = SpringContextUtil.getBeansOfType(BaseDataType.class);
 	}
 	
 }
