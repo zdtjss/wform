@@ -1,29 +1,46 @@
 package com.nway.platform.wform.design.db.datatype;
 
-public abstract class BaseDataType {
-
-	protected String getForInteger(int capacity) {
+public abstract class BaseDataType implements DataType {
+	
+	@Override
+	public String getForInteger(int capacity) {
 
 		return "INTEGER";
 	}
 	
-	protected String getForString(int capacity) {
-		
+	@Override
+	public String getForString(int capacity) {
+
 		return "VARCHAR(" + capacity + ")";
 	}
 	
-	protected String getForBoolean() {
+	@Override
+	public String getForFloat(int capacity) {
 		
+		return null;
+	}
+
+	@Override
+	public String getForDouble(int capacity) {
+		
+		return null;
+	}
+
+	@Override
+	public String getForBoolean() {
+
 		return "BIT";
 	}
-	
-	protected String getForDate() {
-		
+
+	@Override
+	public String getForDate() {
+
 		return "TIMESTAMP";
 	}
-	
-	protected String getForTimestamp() {
-		
+
+	@Override
+	public String getForTimestamp() {
+
 		return "TIMESTAMP";
 	}
 }

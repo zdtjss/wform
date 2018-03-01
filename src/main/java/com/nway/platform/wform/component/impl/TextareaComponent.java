@@ -6,7 +6,7 @@ import com.nway.platform.wform.component.BaseComponent;
 
 @Component("textarea")
 public class TextareaComponent implements BaseComponent {
-
+	
 	@Override
 	public Object getValue(Object value) {
 		

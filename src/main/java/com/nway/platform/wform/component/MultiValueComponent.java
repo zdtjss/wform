@@ -17,4 +17,6 @@ public interface MultiValueComponent extends BaseComponent {
 	 */
 	Object getAssociatedValue(String pageName, String bizId);
 	
+	// String getDdlSql(String refName);
+	
 }

@@ -26,6 +26,7 @@ import com.github.pagehelper.PageHelper;
 import com.nway.platform.wform.access.FormDataAccess;
 import com.nway.platform.wform.component.Initializable;
 import com.nway.platform.wform.component.MultiValueComponent;
+import com.nway.platform.wform.design.db.TableGenerator;
 import com.nway.platform.wform.design.entity.Page;
 import com.nway.platform.wform.design.entity.PageForm;
 import com.nway.platform.wform.design.entity.PageListCondition;
@@ -51,10 +52,12 @@ public class PageController {
 	private PageService formPageService;
 	@Autowired
 	private Configuration freemarker;
+	@Autowired
+	private TableGenerator tableGenerator;
 	
 	@RequestMapping("toUI")
 	public ModelAndView toUI(HttpServletRequest request, HttpServletResponse reaponse) throws Exception {
-
+		tableGenerator.createTable(null);
 		ModelAndView view = new ModelAndView();
 		
 		Map<String, Object> dataModel = new HashMap<String, Object>();
