@@ -12,6 +12,8 @@
      http://www.springframework.org/schema/context
      http://www.springframework.org/schema/context/spring-context.xsd">
 
+	<context:component-scan base-package="com.nway.platform" />
+
 	<bean id="freemarkerConfiguration" class="com.nway.wform.FreemarkerFactory">
 		<property name="basePackagePath" value="/freemarker" />
 	</bean>
@@ -62,4 +64,36 @@
 	<bean id="historyService" factory-bean="processEngine" factory-method="getHistoryService" />
 	<bean id="managementService" factory-bean="processEngine" factory-method="getManagementService" />
 
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath*:com/nway/platform/**/dao/*Mapper.xml</value>
+			</list>
+		</property>
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageInterceptor">
+					<property name="properties">
+						<value>
+							params=pageNum=page;pageSize=rows;
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.nway.platform.**.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>  
 </beans>

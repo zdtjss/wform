@@ -30,6 +30,7 @@
 		pageFields[keyId].baseAttr.name = "pk_id";
 		pageFields[keyId].baseAttr.display = "主键";
 		pageFields[keyId].extAttr.isHidden = "1";
+		pageFields[keyId].extAttr.size = "36";
 	}
 	function initHiddenDrag() {
 		

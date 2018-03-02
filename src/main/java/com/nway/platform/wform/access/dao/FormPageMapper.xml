@@ -155,8 +155,9 @@
 	        (#{fieldId},#{pageId},#{name},#{display},#{type})
 	</insert>
 	<insert id="saveFieldExt">
-		insert into T_FORM_PAGE_FIELD (FIELD_ID,PAGE_ID,ROW_NUM,COLUMN_NUM,COLUMN_SPAN,IS_HIDDEN) values
-	        (#{fieldId},#{pageId},#{rowNum},#{colNum},#{colSpan},<if test="isHidden == null">0</if><if test="isHidden != null">#{isHidden}</if>)
+		insert into T_FORM_PAGE_FIELD (FIELD_ID,PAGE_ID,ROW_NUM,COLUMN_NUM,COLUMN_SPAN,IS_HIDDEN,IS_READONLY,SIZE,FOR_WORKITEM,FOR_WORKFLOW) values
+	        (#{fieldId},#{pageId},#{rowNum},#{colNum},#{colSpan},<if test="isHidden == null">0</if><if test="isHidden != null">#{isHidden}</if>,
+	        <if test="isReadonly == null">0</if><if test="isReadonly != null">#{isReadonly}</if>,#{size},#{forWorkItem},#{forWorkflow})
 	</insert>
 	<insert id="saveFieldCustom">
 		insert into T_FORM_PAGE_FIELD_ATTRS (PAGE_ID,FIELD_NAME,ATTR_NAME,ATTR_VALUE) values

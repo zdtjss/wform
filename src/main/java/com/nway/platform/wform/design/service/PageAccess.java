@@ -145,7 +145,7 @@ public class PageAccess {
 	
 	public void publishPage(String pageId) throws Exception {
 		
-		Page page = formPageMapper.getFormPage(pageId);
+		Page page = getFormPage(pageId);
 		
 		mybatisMapper.createMapper(page);
 		

@@ -23,7 +23,7 @@ public class KeyComponent implements BaseComponent {
 	@Override
 	public String getDataType(int capacity) {
 
-		return dataType.getForString(capacity);
+		return dataType.getForString(capacity) + " primary key";
 	}
 
 }

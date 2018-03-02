@@ -54,7 +54,7 @@ public class DatabaseInitListener implements ApplicationListener<ContextRefreshe
 						Statement jdbcStatement = connection.createStatement();
 						try {
 							log.debug("SQL: {}", sqlStatement);
-							//jdbcStatement.execute(sqlStatement);
+							jdbcStatement.execute(sqlStatement);
 							jdbcStatement.close();
 						} catch (Exception e) {
 							log.error("自动初始化数据库失败", e);

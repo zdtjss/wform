@@ -39,16 +39,20 @@ public class TableGenerator {
 	
 	private String makeMainTableCreateSql(Page page) {
 		
-		StringBuilder mainTableSql = new StringBuilder();
+		StringBuilder mainTableSql = new StringBuilder("create table ");
 		
-		for(PageForm field : page.getFormFields()) {
+		mainTableSql.append(page.getTableName()).append(" ( ");
+		
+		List<PageForm> form = page.getFormFields();
+		
+		for(PageForm field : form) {
 			
 			BaseComponent component = field.getObjType();
 			
-			mainTableSql.append(component.getDataType(field.getSize())).append(",");
+			mainTableSql.append(field.getName()).append(' ').append(component.getDataType(field.getSize())).append(",");
 		}
 		
-		return mainTableSql.length() > 0 ? mainTableSql.deleteCharAt(mainTableSql.length() - 1).toString() : "";
+		return form.size() > 0 ? mainTableSql.deleteCharAt(mainTableSql.length() - 1).append(')').toString() : "";
 	}
 	
 	private List<String> makeSubTableCreateSql(Page page) {
