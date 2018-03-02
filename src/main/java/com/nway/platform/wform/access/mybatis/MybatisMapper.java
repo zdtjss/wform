@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.design.entity.Page;
 import com.nway.platform.wform.design.entity.PageForm;
 import com.nway.platform.wform.design.entity.PageList;
@@ -81,12 +82,42 @@ public class MybatisMapper {
 		
 		root.setAttribute("namespace", mapperNamespace);
 		
-		root.appendChild(buildResultMapMapper(document, formPage));
-		root.appendChild(buildInsertMapper(document, formPage));
-		root.appendChild(buildSelectMapper(document, formPage));
-		root.appendChild(buildUpdateMapper(document, formPage));
-		root.appendChild(buildListMapper(document, formPage));
-		root.appendChild(buildDeleteMapper(document, formPage));
+		Element insert = buildInsertMapper(document, formPage);
+		Element select = buildSelectMapper(document, formPage);
+		Element update = buildUpdateMapper(document, formPage);
+		Element list = buildListMapper(document, formPage);
+		Element delete = buildDeleteMapper(document, formPage);
+		Element resultMap = buildResultMapMapper(document, formPage);
+		
+		if(insert != null) {
+			
+			root.appendChild(insert);
+		}
+		
+		if(select != null) {
+			
+			root.appendChild(select);
+		}
+		
+		if(update != null) {
+			
+			root.appendChild(update);
+		}
+		
+		if(list != null) {
+			
+			root.appendChild(list);
+		}
+		
+		if(delete != null) {
+			
+			root.appendChild(delete);
+		}
+		
+		if(resultMap != null) {
+			
+			root.appendChild(resultMap);
+		}
 		
 		document.appendChild(root);
 		
@@ -120,6 +151,13 @@ public class MybatisMapper {
 	
 	private Element buildInsertMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
+		List<PageForm> pageFields = formPage.getFormFields();
+		
+		if (pageFields == null || pageFields.size() == 0) {
+			
+			return null;
+		}
+
 		Element insert = document.createElement("insert");
 		
 		insert.setAttribute("id", "save");
@@ -128,24 +166,29 @@ public class MybatisMapper {
 		
 		insertSql.append("\n    insert into ").append(formPage.getTableName()).append("(");
 		
-		List<PageForm> pageFields = formPage.getFormFields();
-		
-		if (pageFields != null && pageFields.size() > 0) {
+		for (PageForm field : pageFields) {
 
-			for (PageForm field : pageFields) {
-
-				insertSql.append(field.getName()).append(',');
-			}
-
-			insertSql.deleteCharAt(insertSql.length() - 1).append(" )  values (");
-			
-			for (PageForm field : pageFields) {
+			if(field.getObjType() instanceof MultiValueComponent) {
 				
-				insertSql.append("#{").append(field.getName()).append("},");
+				continue;
 			}
-			
-			insertSql.deleteCharAt(insertSql.length() - 1).append(" )\n");
+
+			insertSql.append(field.getName()).append(',');
 		}
+
+		insertSql.deleteCharAt(insertSql.length() - 1).append(" )  values (");
+		
+		for (PageForm field : pageFields) {
+			
+			if(field.getObjType() instanceof MultiValueComponent) {
+				
+				continue;
+			}
+
+			insertSql.append("#{").append(field.getName()).append("},");
+		}
+		
+		insertSql.deleteCharAt(insertSql.length() - 1).append(" )\n");
 		
 		insert.setTextContent(insertSql.toString());
 		
@@ -154,6 +197,13 @@ public class MybatisMapper {
 	
 	private Element buildSelectMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
+		List<PageForm> pageFields = formPage.getFormFields();
+		
+		if (pageFields == null || pageFields.size() == 0) {
+			
+			return null;
+		}
+
 		Element select = document.createElement("select");
 		
 		select.setAttribute("id", "details");
@@ -163,25 +213,25 @@ public class MybatisMapper {
 		
 		selectSql.append("\n    select ");
 		
-		List<PageForm> pageFields = formPage.getFormFields();
+		String keyField = "";
 		
-		if (pageFields != null && pageFields.size() > 0) {
+		for (PageForm field : pageFields) {
 			
-			String keyField = "";
-			
-			for (PageForm field : pageFields) {
+			if(field.getObjType() instanceof MultiValueComponent) {
 				
-				selectSql.append(field.getName()).append(',');
-				
-				if("key".equals(field.getType())) {
-					
-					keyField = field.getName();
-				}
+				continue;
 			}
+
+			selectSql.append(field.getName()).append(',');
 			
-			selectSql.deleteCharAt(selectSql.length() - 1).append(formPage.getTableName()).append(" where ")
-					.append(keyField).append(" = #{").append(keyField).append("} \n");
+			if("key".equals(field.getType())) {
+				
+				keyField = field.getName();
+			}
 		}
+		
+		selectSql.deleteCharAt(selectSql.length() - 1).append(" from ").append(formPage.getTableName()).append(" where ")
+				.append(keyField).append(" = #{").append(keyField).append("} \n");
 		
 		select.setTextContent(selectSql.toString());
 		
@@ -190,6 +240,13 @@ public class MybatisMapper {
 	
 	private Element buildUpdateMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
+		List<PageForm> pageFields = formPage.getFormFields();
+		
+		if (pageFields == null || pageFields.size() == 0) {
+			
+			return null;
+		}
+
 		Element update = document.createElement("update");
 		
 		update.setAttribute("id", "update");
@@ -198,27 +255,27 @@ public class MybatisMapper {
 		
 		updateSql.append("\n    update ").append(formPage.getTableName()).append(" set ");
 		
-		List<PageForm> pageFields = formPage.getFormFields();
+		String keyField = "";
 		
-		if (pageFields != null && pageFields.size() > 0) {
+		for (PageForm field : pageFields) {
 			
-			String keyField = "";
-			
-			for (PageForm field : pageFields) {
+			if(field.getObjType() instanceof MultiValueComponent) {
 				
-				if(!"key".equals(field.getType())) {
-					
-					updateSql.append(field.getName()).append(" = #{").append(field.getName()).append("},");
-				}
-				else {
-					
-					keyField = field.getName();
-				}
+				continue;
 			}
 			
-			updateSql.deleteCharAt(updateSql.length() - 1).append(" where ").append(keyField).append(" = #{")
-					.append(keyField).append("} \n");
+			if(!"key".equals(field.getType())) {
+				
+				updateSql.append(field.getName()).append(" = #{").append(field.getName()).append("},");
+			}
+			else {
+				
+				keyField = field.getName();
+			}
 		}
+		
+		updateSql.deleteCharAt(updateSql.length() - 1).append(" where ").append(keyField).append(" = #{")
+				.append(keyField).append("} \n");
 		
 		update.setTextContent(updateSql.toString());
 		
@@ -261,30 +318,44 @@ public class MybatisMapper {
 	
 	private Element buildResultMapMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
+		List<PageForm> pageFields = formPage.getFormFields();
+		
+		if (pageFields == null || pageFields.size() == 0) {
+			
+			return null;
+		}
+
 		Element resultMap = document.createElement("resultMap");
 		
 		resultMap.setAttribute("id", formPage.getName() + "Map");
 		resultMap.setAttribute("type", "map");
-		
-		List<PageForm> pageFields = formPage.getFormFields();
-		
-		if (pageFields != null && pageFields.size() > 0) {
 			
-			for (PageForm field : pageFields) {
+		for (PageForm field : pageFields) {
+			
+			if(field.getObjType() instanceof MultiValueComponent) {
 				
-				Element result = document.createElement("result");
-				
-				result.setAttribute("column", field.getName());
-				result.setAttribute("property", field.getName());
-				
-				resultMap.appendChild(result);
+				continue;
 			}
+			
+			Element result = document.createElement("result");
+			
+			result.setAttribute("column", field.getName());
+			result.setAttribute("property", field.getName());
+			
+			resultMap.appendChild(result);
 		}
 		
 		return resultMap;
 	}
 	
 	private Element buildListMapper(Document document, Page formPage) throws ParserConfigurationException {
+		
+		List<PageList> pageFields = formPage.getListFields();
+		
+		if (pageFields == null || pageFields.size() == 0) {
+			
+			return null;
+		}
 		
 		Element select = document.createElement("select");
 		
@@ -295,17 +366,17 @@ public class MybatisMapper {
 		
 		listSql.append("\n    select ");
 		
-		List<PageList> pageFields = formPage.getListFields();
-		
-		if (pageFields != null && pageFields.size() > 0) {
+		for (PageList field : pageFields) {
 			
-			for (PageList field : pageFields) {
+			if(field.getObjType() instanceof MultiValueComponent) {
 				
-				listSql.append(field.getName()).append(',');
+				continue;
 			}
 			
-			listSql.deleteCharAt(listSql.length() - 1).append(formPage.getTableName()).append(" where 1 = 1 \n");
+			listSql.append(field.getName()).append(',');
 		}
+		
+		listSql.deleteCharAt(listSql.length() - 1).append(formPage.getTableName()).append(" where 1 = 1 \n");
 		
 		select.setTextContent(listSql.toString());
 		

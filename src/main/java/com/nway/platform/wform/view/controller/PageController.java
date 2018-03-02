@@ -57,7 +57,7 @@ public class PageController {
 	
 	@RequestMapping("toUI")
 	public ModelAndView toUI(HttpServletRequest request, HttpServletResponse reaponse) throws Exception {
-		tableGenerator.createTable(null);
+		
 		ModelAndView view = new ModelAndView();
 		
 		Map<String, Object> dataModel = new HashMap<String, Object>();

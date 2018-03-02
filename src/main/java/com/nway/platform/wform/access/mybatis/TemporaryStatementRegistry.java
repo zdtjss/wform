@@ -18,17 +18,15 @@ public class TemporaryStatementRegistry {
 	
 	public static String createNS(String ns) {
 		
-		String lastest = STATEMENT_NAMES.get(ns);
+		String sn = STATEMENT_NAMES.get(ns);
 		
-		if (lastest == null) {
+		if (sn != null) {
 
-			lastest = lastest + "_0";
+			sn = ns + "_" + (Integer.parseInt(sn.substring(sn.lastIndexOf('_') + 1)) + 1);
 		}
 		
-		String newNs = ns + "_" + (Integer.parseInt(lastest.substring(lastest.lastIndexOf('_') + 1)) + 1);
+		STATEMENT_NAMES.put(ns, sn);
 		
-		STATEMENT_NAMES.put(ns, newNs);
-		
-		return newNs;
+		return sn == null ? ns : sn;
 	}
 }
