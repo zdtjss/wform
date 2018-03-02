@@ -12,5 +12,8 @@
 		<Logger name="com.nway.platform" level="debug" additivity="false">
 			<AppenderRef ref="console" />
 		</Logger>
+		<Logger name="org.springframework.jdbc" level="debug" additivity="false">
+			<AppenderRef ref="console" />
+		</Logger>
 	</Loggers>
 </Configuration>
