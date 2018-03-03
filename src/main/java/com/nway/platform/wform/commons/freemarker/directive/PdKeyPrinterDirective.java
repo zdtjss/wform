@@ -25,9 +25,9 @@ public class PdKeyPrinterDirective implements TemplateDirectiveModel {
 		
 		String pdKey = workFlowDao.getPdKey(pageId.getAsString());
 		
-		if(pdKey != null) {
+		if(pdKey != null && body != null) {
 			
-			env.getOut().write(pdKey);
+			body.render(env.getOut());
 		}
 	}
 

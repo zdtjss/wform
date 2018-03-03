@@ -21,24 +21,22 @@
 		<table>
 			<#assign rowNum = 1>
 			<tr>
-			<#list page.listFields as field>
-				<#if field.condition == true && field.type != 'key'>
-					<#if rowNum != field.rowNum> 
-					</tr>
-					<tr>
-					<#assign rowNum = field.rowNum>
-					</#if>
-					<#-- 独占一行的不现实 <th> -->
-					<#if field.colSpan != page.maxColumnNum >
-					<th id="${field.name }_label">${field.display }</th>
-					</#if>
-					<td id="${field.name }_view" colspan="${field.colSpan!1 }">
-						<jsp:include page="/WEB-INF/wform/component/${field.type }/${field.type }_edit.jsp">
-							<jsp:param name="pageId" value="${page.id}"/>
-							<jsp:param name="fieldName" value="${field.name}"/>
-						</jsp:include>
-					</td>
+			<#list page.listCondition as field>
+				<#if rowNum != field.rowNum> 
+				</tr>
+				<tr>
+				<#assign rowNum = field.rowNum>
 				</#if>
+				<#-- 独占一行的不现实 <th> -->
+				<#if field.colSpan != page.maxColumnNum >
+				<th id="${field.name }_label">${field.display }</th>
+				</#if>
+				<td id="${field.name }_view" colspan="${field.colSpan!1 }">
+					<jsp:include page="/WEB-INF/wform/component/${field.type }/${field.type }_edit.jsp">
+						<jsp:param name="pageId" value="${page.id}"/>
+						<jsp:param name="fieldName" value="${field.name}"/>
+					</jsp:include>
+				</td>
 			</#list>
 			<tr>
 		</table>
@@ -64,7 +62,7 @@
 				        	<#assign key=field.name>
 				        	{field:'${field.name }',hidden:true}${field?has_next?then(',','')}
 				        </#if>
-				        <#if field.type != 'key' && field.condition == false>
+				        <#if field.type != 'key'>
 				        	{field:'${field.name }',title:'${field.display }',width:100<#if field.formatter??>,formatter:${field.formatter}</#if>}${field?has_next?then(',','')}
 				        </#if>
 				    </#list>

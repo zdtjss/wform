@@ -1,6 +1,6 @@
 package com.nway.platform.wform.design.entity;
 
-public class PageList extends Field {
+public class ListPage extends FormField {
 
 	private int index;
 

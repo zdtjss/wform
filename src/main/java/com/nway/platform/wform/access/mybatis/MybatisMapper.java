@@ -28,9 +28,9 @@ import org.w3c.dom.Element;
 
 import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.design.entity.Page;
-import com.nway.platform.wform.design.entity.PageForm;
-import com.nway.platform.wform.design.entity.PageList;
-import com.nway.platform.wform.design.entity.PageListCondition;
+import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.wform.design.entity.ListPage;
+import com.nway.platform.wform.design.entity.ListPageCondition;
 
 @Component
 public class MybatisMapper {
@@ -151,7 +151,7 @@ public class MybatisMapper {
 	
 	private Element buildInsertMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
-		List<PageForm> pageFields = formPage.getFormFields();
+		List<FormPage> pageFields = formPage.getSimpleValueFormFields();
 		
 		if (pageFields == null || pageFields.size() == 0) {
 			
@@ -166,25 +166,15 @@ public class MybatisMapper {
 		
 		insertSql.append("\n    insert into ").append(formPage.getTableName()).append("(");
 		
-		for (PageForm field : pageFields) {
-
-			if(field.getObjType() instanceof MultiValueComponent) {
-				
-				continue;
-			}
+		for (FormPage field : pageFields) {
 
 			insertSql.append(field.getName()).append(',');
 		}
 
 		insertSql.deleteCharAt(insertSql.length() - 1).append(" )  values (");
 		
-		for (PageForm field : pageFields) {
+		for (FormPage field : pageFields) {
 			
-			if(field.getObjType() instanceof MultiValueComponent) {
-				
-				continue;
-			}
-
 			insertSql.append("#{").append(field.getName()).append("},");
 		}
 		
@@ -197,7 +187,7 @@ public class MybatisMapper {
 	
 	private Element buildSelectMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
-		List<PageForm> pageFields = formPage.getFormFields();
+		List<FormPage> pageFields = formPage.getSimpleValueFormFields();
 		
 		if (pageFields == null || pageFields.size() == 0) {
 			
@@ -215,13 +205,8 @@ public class MybatisMapper {
 		
 		String keyField = "";
 		
-		for (PageForm field : pageFields) {
+		for (FormPage field : pageFields) {
 			
-			if(field.getObjType() instanceof MultiValueComponent) {
-				
-				continue;
-			}
-
 			selectSql.append(field.getName()).append(',');
 			
 			if("key".equals(field.getType())) {
@@ -240,7 +225,7 @@ public class MybatisMapper {
 	
 	private Element buildUpdateMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
-		List<PageForm> pageFields = formPage.getFormFields();
+		List<FormPage> pageFields = formPage.getSimpleValueFormFields();
 		
 		if (pageFields == null || pageFields.size() == 0) {
 			
@@ -257,12 +242,7 @@ public class MybatisMapper {
 		
 		String keyField = "";
 		
-		for (PageForm field : pageFields) {
-			
-			if(field.getObjType() instanceof MultiValueComponent) {
-				
-				continue;
-			}
+		for (FormPage field : pageFields) {
 			
 			if(!"key".equals(field.getType())) {
 				
@@ -290,7 +270,7 @@ public class MybatisMapper {
 		
 		StringBuilder deleteSql = new StringBuilder();
 		
-		List<PageForm> pageFields = formPage.getFormFields();
+		List<FormPage> pageFields = formPage.getFormFields();
 		
 		if (pageFields != null && pageFields.size() > 0) {
 			
@@ -298,7 +278,7 @@ public class MybatisMapper {
 			
 			String keyField = "";
 			
-			for (PageForm field : pageFields) {
+			for (FormPage field : pageFields) {
 				
 				if("key".equals(field.getType())) {
 					
@@ -318,7 +298,7 @@ public class MybatisMapper {
 	
 	private Element buildResultMapMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
-		List<PageForm> pageFields = formPage.getFormFields();
+		List<FormPage> pageFields = formPage.getSimpleValueFormFields();
 		
 		if (pageFields == null || pageFields.size() == 0) {
 			
@@ -330,12 +310,7 @@ public class MybatisMapper {
 		resultMap.setAttribute("id", formPage.getName() + "Map");
 		resultMap.setAttribute("type", "map");
 			
-		for (PageForm field : pageFields) {
-			
-			if(field.getObjType() instanceof MultiValueComponent) {
-				
-				continue;
-			}
+		for (FormPage field : pageFields) {
 			
 			Element result = document.createElement("result");
 			
@@ -350,7 +325,7 @@ public class MybatisMapper {
 	
 	private Element buildListMapper(Document document, Page formPage) throws ParserConfigurationException {
 		
-		List<PageList> pageFields = formPage.getListFields();
+		List<ListPage> pageFields = formPage.getListFields();
 		
 		if (pageFields == null || pageFields.size() == 0) {
 			
@@ -366,7 +341,7 @@ public class MybatisMapper {
 		
 		listSql.append("\n    select ");
 		
-		for (PageList field : pageFields) {
+		for (ListPage field : pageFields) {
 			
 			if(field.getObjType() instanceof MultiValueComponent) {
 				
@@ -376,15 +351,15 @@ public class MybatisMapper {
 			listSql.append(field.getName()).append(',');
 		}
 		
-		listSql.deleteCharAt(listSql.length() - 1).append(formPage.getTableName()).append(" where 1 = 1 \n");
+		listSql.deleteCharAt(listSql.length() - 1).append(" from ").append(formPage.getTableName()).append(" where 1 = 1 \n");
 		
 		select.setTextContent(listSql.toString());
 		
-		List<PageListCondition> condition = formPage.getListCondition();
+		List<ListPageCondition> condition = formPage.getListCondition();
 		
 		if (condition != null && condition.size() > 0) {
 
-			for (PageListCondition field : condition) {
+			for (ListPageCondition field : condition) {
 				
 				Element tagIf = document.createElement("if");
 				

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import com.nway.platform.wform.component.BaseComponent;
 import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.design.entity.Page;
-import com.nway.platform.wform.design.entity.PageForm;
+import com.nway.platform.wform.design.entity.FormPage;
 
 @Component
 public class TableGenerator {
@@ -43,9 +43,9 @@ public class TableGenerator {
 		
 		mainTableSql.append(page.getTableName()).append(" ( ");
 		
-		List<PageForm> form = page.getFormFields();
+		List<FormPage> form = page.getSimpleValueFormFields();
 		
-		for(PageForm field : form) {
+		for(FormPage field : form) {
 			
 			BaseComponent component = field.getObjType();
 			
@@ -59,14 +59,11 @@ public class TableGenerator {
 		
 		List<String> sql = new ArrayList<String>();
 		
-		for(PageForm field : page.getFormFields()) {
+		for(FormPage field : page.getMultiValueFormFields()) {
 			
-			BaseComponent component = field.getObjType();
+			MultiValueComponent component = (MultiValueComponent) field.getObjType();
 			
-			if(component instanceof MultiValueComponent) {
-				
-				sql.add(((MultiValueComponent) component).getDdlSql(page.getName(), field.getName()));
-			}
+			sql.add(component.getDdlSql(page.getName(), field.getName()));
 		}
 		
 		return sql;

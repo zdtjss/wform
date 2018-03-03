@@ -3,7 +3,7 @@ package com.nway.platform.wform.access.dao;
 import java.util.List;
 import java.util.Map;
 
-import com.nway.platform.wform.design.entity.Field;
+import com.nway.platform.wform.design.entity.FormField;
 import com.nway.platform.wform.design.entity.Page;
 
 public interface PageMapper {
@@ -18,5 +18,5 @@ public interface PageMapper {
 	
 	void saveFieldCustom(Map<String, String> field);
 	
-	List<Field> listFields(String pageId);
+	List<FormField> listFields(String pageId);
 }

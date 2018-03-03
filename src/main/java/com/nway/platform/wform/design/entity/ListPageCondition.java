@@ -1,6 +1,6 @@
 package com.nway.platform.wform.design.entity;
 
-public class PageListCondition extends Field {
+public class ListPageCondition extends FormField {
 	
 	private int rowNum;
 

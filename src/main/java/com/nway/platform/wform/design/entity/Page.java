@@ -1,7 +1,14 @@
 package com.nway.platform.wform.design.entity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.util.CollectionUtils;
+
+import com.nway.platform.wform.component.BaseComponent;
+import com.nway.platform.wform.component.MultiValueComponent;
 
 public class Page {
 
@@ -43,11 +50,11 @@ public class Page {
 	
 	private int status;
 
-	private List<PageForm> formFields;
+	private List<FormPage> formFields;
 	
-	private List<PageList> listFields;
+	private List<ListPage> listFields;
 	
-	private List<PageListCondition> listCondition;
+	private List<ListPageCondition> listCondition;
 	
 	private String keyName;
 
@@ -155,19 +162,49 @@ public class Page {
 		this.formId = formId;
 	}
 
-	public List<PageForm> getFormFields() {
+	public List<FormPage> getFormFields() {
 		return formFields;
 	}
 
-	public void setFormFields(List<PageForm> formFields) {
+	public void setFormFields(List<FormPage> formFields) {
 		this.formFields = formFields;
 	}
 
-	public List<PageList> getListFields() {
+	public List<FormPage> getSimpleValueFormFields() {
+		
+		List<FormPage> baseTypeFormFields = new ArrayList<FormPage>();
+		
+		for(FormPage form : this.formFields) {
+			
+			if(CollectionUtils.contains(Arrays.asList(form.getObjType().getClass().getInterfaces()).iterator(), BaseComponent.class)) {
+				
+				baseTypeFormFields.add(form);
+			}
+		}
+		
+		return baseTypeFormFields;
+	}
+	
+	public List<FormPage> getMultiValueFormFields() {
+		
+		List<FormPage> multiValueFormFields = new ArrayList<FormPage>();
+		
+		for(FormPage form : this.formFields) {
+			
+			if(CollectionUtils.contains(Arrays.asList(form.getObjType().getClass().getInterfaces()).iterator(), MultiValueComponent.class)) {
+				
+				multiValueFormFields.add(form);
+			}
+		}
+		
+		return multiValueFormFields;
+	}
+
+	public List<ListPage> getListFields() {
 		return listFields;
 	}
 
-	public void setListFields(List<PageList> listFields) {
+	public void setListFields(List<ListPage> listFields) {
 		this.listFields = listFields;
 	}
 
@@ -179,11 +216,11 @@ public class Page {
 		this.keyName = keyName;
 	}
 
-	public List<PageListCondition> getListCondition() {
+	public List<ListPageCondition> getListCondition() {
 		return listCondition;
 	}
 
-	public void setListCondition(List<PageListCondition> listCondition) {
+	public void setListCondition(List<ListPageCondition> listCondition) {
 		this.listCondition = listCondition;
 	}
 

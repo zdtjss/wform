@@ -26,10 +26,9 @@ import com.github.pagehelper.PageHelper;
 import com.nway.platform.wform.access.FormDataAccess;
 import com.nway.platform.wform.component.Initializable;
 import com.nway.platform.wform.component.MultiValueComponent;
-import com.nway.platform.wform.design.db.TableGenerator;
+import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.wform.design.entity.ListPageCondition;
 import com.nway.platform.wform.design.entity.Page;
-import com.nway.platform.wform.design.entity.PageForm;
-import com.nway.platform.wform.design.entity.PageListCondition;
 import com.nway.platform.wform.design.service.PageAccess;
 import com.nway.platform.wform.view.service.PageService;
 import com.nway.platform.workflow.entity.Handle;
@@ -52,8 +51,6 @@ public class PageController {
 	private PageService formPageService;
 	@Autowired
 	private Configuration freemarker;
-	@Autowired
-	private TableGenerator tableGenerator;
 	
 	@RequestMapping("toUI")
 	public ModelAndView toUI(HttpServletRequest request, HttpServletResponse reaponse) throws Exception {
@@ -90,7 +87,7 @@ public class PageController {
 		
 		Map<String, Object> workflowParam = new HashMap<String, Object>();
 		
-		for(PageForm field : formPage.getFormFields()) {
+		for(FormPage field : formPage.getFormFields()) {
 			
 			if(Initializable.class.isInstance(field.getObjType())) {
 				
@@ -161,14 +158,14 @@ public class PageController {
 		
 		if(Page.PAGE_TYPE_CREATE.equals(pageType) || Page.PAGE_TYPE_EDIT.equals(pageType)) {
 			
-			for(PageForm field : formPage.getFormFields()) {
+			for(FormPage field : formPage.getFormFields()) {
 				
 				formData.put(field.getName(), field.getObjType().getValue(pageData.get(field.getName())));
 			}
 		}
 		else {
 			
-			for(PageForm field : formPage.getFormFields()) {
+			for(FormPage field : formPage.getFormFields()) {
 				
 				if("key".equals(field.getType()) || null != field.getForWorkItem()) {
 					
@@ -192,7 +189,7 @@ public class PageController {
 		
 		Map<String,Object> queryParam = new HashMap<String, Object>();
 		
-		for (PageListCondition field : formPage.getListCondition()) {
+		for (ListPageCondition field : formPage.getListCondition()) {
 
 			queryParam.put(field.getName(), field.getObjType().getValue(pageParam.get(field.getName())));
 		}

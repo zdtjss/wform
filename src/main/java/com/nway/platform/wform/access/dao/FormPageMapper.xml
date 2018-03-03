@@ -55,7 +55,7 @@
 	    order by A.ROW_NUM,A.COLUMN_NUM
 	</select>
 	
-	<resultMap type="com.nway.platform.wform.design.entity.PageForm" id="queryPageFormFieldsMap">
+	<resultMap type="com.nway.platform.wform.design.entity.FormPage" id="queryPageFormFieldsMap">
 		<result column="ID" property="id"/>
 		<result column="NAME" property="name"/>
 		<result column="DISPLAY" property="display"/>
@@ -83,7 +83,7 @@
 	    order by A.FIELD_INDEX
 	</select>
 	
-	<resultMap type="com.nway.platform.wform.design.entity.PageList" id="queryPageListFieldsMap">
+	<resultMap type="com.nway.platform.wform.design.entity.ListPage" id="queryPageListFieldsMap">
 		<result column="ID" property="id"/>
 		<result column="NAME" property="name"/>
 		<result column="DISPLAY" property="display"/>
@@ -108,7 +108,7 @@
 	    order by A.ROW_NUM,A.COLUMN_NUM
 	</select>
 	
-	<resultMap type="com.nway.platform.wform.design.entity.PageListCondition" id="queryPageListConditionMap">
+	<resultMap type="com.nway.platform.wform.design.entity.ListPageCondition" id="queryPageListConditionMap">
 		<result column="ID" property="id"/>
 		<result column="NAME" property="name"/>
 		<result column="DISPLAY" property="display"/>
@@ -128,7 +128,7 @@
 		<result column="ATTR_VALUE" property="attrValue"/>
 	</resultMap>
 	
-	<select id="listFormPage" parameterType="string" resultType="com.nway.platform.wform.design.entity.PageForm">
+	<select id="listFormPage" parameterType="string" resultType="com.nway.platform.wform.design.entity.FormPage">
 		select 
 			id,
 		    name,
@@ -140,7 +140,7 @@
 		from t_form_page
 	</select>
 	
-	<resultMap id="formPageMap" type="com.nway.platform.wform.design.entity.PageForm">
+	<resultMap id="formPageMap" type="com.nway.platform.wform.design.entity.FormPage">
 		<result column="FORM_ID" property="id"/>
 		<result column="FORM_NAME" property="name"/>
 		<result column="page_type" property="pageType"/>
@@ -168,7 +168,7 @@
 		select FIELD_ID,PAGE_ID,NAME,DISPLAY,TYPE from T_FORM_FIELD where page_id = #{pageId}
 	</select>
 	
-	<resultMap type="com.nway.platform.wform.design.entity.Field" id="listFieldsMap">
+	<resultMap type="com.nway.platform.wform.design.entity.FormField" id="listFieldsMap">
 		<result column="FIELD_ID" property="id"/>
 		<result column="PAGE_ID" property="pageId"/>
 		<result column="NAME" property="name"/>

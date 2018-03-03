@@ -15,11 +15,11 @@ import com.nway.platform.wform.component.ComponentRegister;
 import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.component.impl.KeyComponent;
 import com.nway.platform.wform.design.db.TableGenerator;
-import com.nway.platform.wform.design.entity.Field;
+import com.nway.platform.wform.design.entity.FormField;
 import com.nway.platform.wform.design.entity.Page;
-import com.nway.platform.wform.design.entity.PageForm;
-import com.nway.platform.wform.design.entity.PageList;
-import com.nway.platform.wform.design.entity.PageListCondition;
+import com.nway.platform.wform.design.entity.FormPage;
+import com.nway.platform.wform.design.entity.ListPage;
+import com.nway.platform.wform.design.entity.ListPageCondition;
 
 @Component
 public class PageAccess {
@@ -40,7 +40,7 @@ public class PageAccess {
 		
 		Page page = formPageMapper.getFormPage(id);
 		
- 		for (PageForm field : page.getFormFields()) {
+ 		for (FormPage field : page.getFormFields()) {
 
 			field.setObjType(componentRegister.getComponent(field.getType()));
 			
@@ -55,7 +55,7 @@ public class PageAccess {
 			}
 		}
  		
- 		for (PageList field : page.getListFields()) {
+ 		for (ListPage field : page.getListFields()) {
  			
  			field.setObjType(componentRegister.getComponent(field.getType()));
  			
@@ -65,7 +65,7 @@ public class PageAccess {
 			}
  		}
  		
- 		for (PageListCondition field : page.getListCondition()) {
+ 		for (ListPageCondition field : page.getListCondition()) {
  			
  			field.setObjType(componentRegister.getComponent(field.getType()));
  			
@@ -152,7 +152,7 @@ public class PageAccess {
 		tableGenerator.createTable(page);
 	}
 	
-	public List<Field> listFields(String pageId) {
+	public List<FormField> listFields(String pageId) {
 		
 		return formPageMapper.listFields(pageId);
 	}

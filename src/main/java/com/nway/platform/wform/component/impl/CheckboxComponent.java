@@ -11,17 +11,17 @@ import org.springframework.stereotype.Component;
 
 import com.nway.platform.wform.component.Initializable;
 import com.nway.platform.wform.component.MultiValueComponent;
-import com.nway.platform.wform.component.impl.dao.MultiSelectMapper;
+import com.nway.platform.wform.component.impl.dao.CheckboxMapper;
 import com.nway.platform.wform.design.db.datatype.DataType;
 
-@Component("multiSelect")
-public class MultiSelectComponent implements MultiValueComponent, Initializable {
+@Component("checkbox")
+public class CheckboxComponent implements MultiValueComponent, Initializable {
 
 	@Autowired
 	private DataType dataType;
 	
 	@Autowired
-	private MultiSelectMapper multiSelectMapper;
+	private CheckboxMapper checkboxMapper;
 	
 	@Override
 	public Object getValue(Object value) {
@@ -37,11 +37,11 @@ public class MultiSelectComponent implements MultiValueComponent, Initializable 
 	@Override
 	public void save(String pageName, String bizId, Object compValue) {
 
-		multiSelectMapper.clear(pageName, bizId);
+		checkboxMapper.clear(pageName, bizId);
 		
 		if(compValue != null) {
 			
-			multiSelectMapper.save(pageName, bizId, compValue);
+			checkboxMapper.save(pageName, bizId, compValue);
 		}
 	}
 
@@ -54,7 +54,7 @@ public class MultiSelectComponent implements MultiValueComponent, Initializable 
 	@Override
 	public void remove(String pageName, String bizId) {
 
-		multiSelectMapper.clear(pageName, bizId);
+		checkboxMapper.clear(pageName, bizId);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class MultiSelectComponent implements MultiValueComponent, Initializable 
 		
 		List<String> retVal = new ArrayList<String>();
 		
-		List<Map<String, String>> values = multiSelectMapper.getValues(pageName, bizId);
+		List<Map<String, String>> values = checkboxMapper.getValues(pageName, bizId);
 		
 		for(Map<String, String> value : values) {
 			
