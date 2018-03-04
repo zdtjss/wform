@@ -9,11 +9,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nway.platform.wform.access.dao.PageMapper;
 import com.nway.platform.wform.access.mybatis.MybatisMapper;
 import com.nway.platform.wform.component.ComponentRegister;
 import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.component.impl.KeyComponent;
+import com.nway.platform.wform.design.dao.PageMapper;
 import com.nway.platform.wform.design.db.TableGenerator;
 import com.nway.platform.wform.design.entity.FormField;
 import com.nway.platform.wform.design.entity.Page;

@@ -1,4 +1,4 @@
-package com.nway.platform.wform.access.dao;
+package com.nway.platform.wform.design.dao;
 
 import java.util.List;
 import java.util.Map;

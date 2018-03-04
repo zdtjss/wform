@@ -12,14 +12,19 @@ import javax.sql.DataSource;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DatabaseInitListener implements ApplicationListener<ContextRefreshedEvent> {
 
 	private static final Logger log = LoggerFactory.getLogger(DatabaseInitListener.class);
+	
+	@Autowired
+	private DataSource dataSource;
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -28,7 +33,7 @@ public class DatabaseInitListener implements ApplicationListener<ContextRefreshe
 		Connection connection = null;
 		
 		try {
-			connection = event.getApplicationContext().getBean(DataSource.class).getConnection();
+			connection = DataSourceUtils.getConnection(dataSource);
 			
 			connection.setAutoCommit(false);
 			
@@ -78,7 +83,7 @@ public class DatabaseInitListener implements ApplicationListener<ContextRefreshe
 				
 				try {
 					connection.commit();
-					connection.close();
+					DataSourceUtils.releaseConnection(connection, dataSource);
 				} catch (SQLException e) {
 					log.warn("关于连接失败");
 				}
