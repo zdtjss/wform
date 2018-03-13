@@ -33,9 +33,9 @@ import com.nway.platform.wform.design.entity.ListPage;
 import com.nway.platform.wform.design.entity.ListPageCondition;
 
 @Component
-public class MybatisMapper {
+public class MybatisMapperGenerator {
 	
-	private static final Logger log = LoggerFactory.getLogger(MybatisMapper.class);
+	private static final Logger log = LoggerFactory.getLogger(MybatisMapperGenerator.class);
 	
 	private static final String CLASS_PATH = getClassPath();
 	public static final String BASE_NS = "com.nway.platform.wform.dynamic.";
@@ -399,9 +399,9 @@ public class MybatisMapper {
 	
 	private static String getClassPath() {
 
-		String path = MybatisMapper.class.getName().replace('.', File.separatorChar) + ".class";
+		String path = MybatisMapperGenerator.class.getName().replace('.', File.separatorChar) + ".class";
 
-		String classPathBase = MybatisMapper.class.getClassLoader().getResource(path).getFile();
+		String classPathBase = MybatisMapperGenerator.class.getClassLoader().getResource(path).getFile();
 
 		return classPathBase.substring(0, classPathBase.length() - path.length());
 	}

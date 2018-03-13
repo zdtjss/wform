@@ -103,7 +103,7 @@ public class FormDataAccess {
 		
 		Map<String, Object> pageData = Collections.emptyMap();
 		
-		Map<String, Object> param = Collections.<String, Object>singletonMap("pkId", dataId);
+		Map<String, Object> param = Collections.<String, Object>singletonMap(page.getKeyName(), dataId);
 		
 		PageDataHandler pageDataHandler = getPageDataHandler(page.getName());
 

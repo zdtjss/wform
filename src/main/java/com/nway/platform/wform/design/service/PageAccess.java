@@ -9,7 +9,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.nway.platform.wform.access.mybatis.MybatisMapper;
+import com.nway.platform.wform.access.mybatis.MybatisMapperGenerator;
 import com.nway.platform.wform.component.ComponentRegister;
 import com.nway.platform.wform.component.MultiValueComponent;
 import com.nway.platform.wform.component.impl.KeyComponent;
@@ -31,7 +31,7 @@ public class PageAccess {
 	private ComponentRegister componentRegister;
 	
 	@Autowired
-	private MybatisMapper mybatisMapper;
+	private MybatisMapperGenerator mybatisMapper;
 	
 	@Autowired
 	private TableGenerator tableGenerator;

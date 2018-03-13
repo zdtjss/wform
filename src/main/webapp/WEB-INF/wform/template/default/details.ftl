@@ -8,6 +8,7 @@
 <style type="text/css">
  table {
 	border-collapse: collapse;
+    width: 100%;
  }
 
  table, td, th {
@@ -16,6 +17,10 @@
  
  th {
     font-weight: normal;
+ }
+ 
+ tr{
+    height: 30px;
  }
  .easyui-linkbutton {
 	padding: 3px 10px;

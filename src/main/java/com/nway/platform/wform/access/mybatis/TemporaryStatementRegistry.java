@@ -9,7 +9,7 @@ public class TemporaryStatementRegistry {
 	
 	public static String getLastestName(String moduelName, String pageName, String type) {
 
-		String originMapperNS = MybatisMapper.getNS(pageName, moduelName);
+		String originMapperNS = MybatisMapperGenerator.getNS(pageName, moduelName);
 		
 		String temporaryStatement = STATEMENT_NAMES.get(originMapperNS);
 
