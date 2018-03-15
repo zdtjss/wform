@@ -66,7 +66,7 @@ public class MybatisMapperGenerator {
 	
 	public static String getNS(String pageName, String moduleName) {
 		
-		return BASE_NS + moduleName + "." + pageName;
+		return BASE_NS + moduleName + ".dao." + pageName;
 	}
 
 	private String buildMapperFilePath(String pageName, String moduleName) {

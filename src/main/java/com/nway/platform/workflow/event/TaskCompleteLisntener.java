@@ -65,6 +65,11 @@ public class TaskCompleteLisntener implements ApplicationListener<TaskCompleteEv
 							
 							workItem.put(field.getForWorkItem(), formData.get(field.getName()));
 						}
+						
+						if(event.getPage().getKeyName().equals(field.getName())) {
+							
+							workItem.put("bizId", formData.get(field.getName()));
+						}
 					}
 					
 					workFlowDao.createWorkItem(workItem);

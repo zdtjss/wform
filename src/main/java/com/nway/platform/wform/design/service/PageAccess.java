@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +18,10 @@ import com.nway.platform.wform.component.impl.KeyComponent;
 import com.nway.platform.wform.design.dao.PageMapper;
 import com.nway.platform.wform.design.db.TableGenerator;
 import com.nway.platform.wform.design.entity.FormField;
-import com.nway.platform.wform.design.entity.Page;
 import com.nway.platform.wform.design.entity.FormPage;
 import com.nway.platform.wform.design.entity.ListPage;
 import com.nway.platform.wform.design.entity.ListPageCondition;
+import com.nway.platform.wform.design.entity.Page;
 
 @Component
 public class PageAccess {
@@ -142,6 +144,9 @@ public class PageAccess {
 			}
 		}
 	}
+	
+	@Autowired
+	private DataSource ds;
 	
 	public void publishPage(String pageId) throws Exception {
 		
